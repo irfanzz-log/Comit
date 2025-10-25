@@ -5,7 +5,7 @@ import Loading from "@/component/Loading";
 import KegiatanCard from "@/component/kegiatan/KegiatanCard";
 import Form from "@/component/Form";
 import OnClick from "@/component/OnClick";
-import CardSelect from "@/component/CardSelect";
+import Kepengurusan from "@/component/Kepengurusan/Kepengurusan";
 
 export async function generateMetadata() {
 
@@ -29,7 +29,7 @@ export default function About() {
             link2="/Anouncement"
             textLink2="Anouncement"
           />
-          <section className="relative snap-start content-base flex w-full items-center justify-center p-5 h-full bg-red-500 flex-col bg-[url(/background/imgHero2.png)] bg-center bg-cover bg-linear-90 from-gray-800 to-gray-700">
+          <section className="relative snap-start content-base flex w-full items-center justify-center p-5 h-full bg-red-500 flex-col bg-[url(/background/imgHero3.png)] bg-center bg-cover bg-linear-90 from-gray-800 to-gray-700">
             <div className="absolute inset-0 bg-gradient-to-r from-gray-800/80 to-gray-700/50"></div>
             <div className="relative z-10 w-full flex flex-col items-center justify-center ">
               <h2 className="md:text-7xl text-2xl sm:text-4xl font-bold text-center text-white md:w-1/2 w-3/3 ">
@@ -42,16 +42,7 @@ export default function About() {
             </div>
           </section>
           <section id='kepengurusan' className='relative md:snap-start md:content-base flex w-full md:h-auto align-center items-center bg-white flex-col md:pb-0 pb-10'>
-            <div className="relative z-10 w-full flex flex-col items-center md:p-10">
-              <header className=' md:w-1/2 2-full text-center'>
-                <h2 className='text-5xl font-bold my-2'>Kepengurusan</h2>
-                <p className='text-lg my-2'>Kepengurusan COMIT 2024-2025
-                  (Sahitya Arsa). Kepengurusan COMIT merupakan wadah utama yang berperan dalam menggerakkan seluruh kegiatan organisasi, mulai dari perencanaan program kerja, pelaksanaan kegiatan, hingga pengembangan anggota.</p>
-              </header>
-              <div className="relative section-content w-full flex flex-wrap justify-center">
-                <CardSelect></CardSelect>
-              </div>
-            </div>
+            <Kepengurusan />
           </section>
           <section id='kegiatan' className='relative md:snap-start md:content-base flex w-full md:h-auto align-center items-center bg-white flex-col md:p-0 p-2'>
             <article className="relative z-10 w-full flex flex-col items-center md:p-10">

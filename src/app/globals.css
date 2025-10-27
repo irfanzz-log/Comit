@@ -19,10 +19,22 @@
   }
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hilangkan spinner di Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  cursor: default;
 }
 
 /* styles/globals.css */
@@ -54,36 +66,35 @@ body {
   animation: slide 40s linear infinite;
 }
 
-/* Loading screen */
-.loading {
-  animation: fadeOut 1s ease 1s forwards;
+/* Loading Screen */
+.loading-screen {
+  animation: fadeOut 0.5s ease 0.5s forwards;
 }
 
-.loading-bg {
-  position: absolute;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+.loading-screen__logo {
+  animation: pulse 1s infinite;
 }
 
-.loading-circle {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  background-color: white(62.3% 0.214 259.815);
-  border-top: 3px solid oklch(62.3% 0.214 259.815);
-  border-radius: 50%;
+.loading-screen__spinner {
   animation: spin 1s infinite linear;
 }
 
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+}
 
 @keyframes spin {
-  0% {
+  from {
     transform: rotate(0deg);
   }
-  100% {
+  to {
     transform: rotate(360deg);
   }
 }
@@ -91,8 +102,8 @@ body {
 @keyframes fadeOut {
   to {
     opacity: 0;
-    visibility: none;
-    z-index: -999;
+    visibility: hidden;
+    z-index: -1;
   }
 }
 
@@ -122,4 +133,32 @@ body {
 .slide {
   transform: translateX(0px) !important;
   opacity: 1 !important;
+}
+
+
+.vision-title::after, .mission-title::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: oklch(62.3% 0.214 259.815);
+}
+
+.line {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.line::after {
+  width: 0%;
+  height: 1px;
+  content: '';
+  display: block;
+  background-color: oklch(62.3% 0.214 259.815);
+  transition: all 0.3s ease-in-out;
+}
+
+.gallery_content:hover .line::after {
+  width: 100%;
 }

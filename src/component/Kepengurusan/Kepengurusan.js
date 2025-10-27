@@ -23,9 +23,9 @@ export default function Kepengurusan() {
     <>
       <div
         ref={el}
-        className="relative z-10 w-full flex flex-col items-center md:p-10 transition-all duration-2000 ease-out translate-x-100 opacity-0"
+        className="relative z-10 w-full flex flex-col items-center md:p-10 transition-all duration-1000 ease-out md:translate-x-100 translate-x-20 opacity-0"
       >
-        <header className=" md:w-1/2 2-full text-center">
+        <header className=" md:w-1/2 2-full text-center md:p-0 p-5">
           <h2 className="text-5xl font-bold my-2">Kepengurusan</h2>
           <p className="text-lg my-2">
             Kepengurusan COMIT 2024-2025 (Sahitya Arsa). Kepengurusan COMIT

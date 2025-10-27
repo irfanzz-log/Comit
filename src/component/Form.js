@@ -1,81 +1,139 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
-export default function Form() {
+/**
+ * ContactForm component with animation and form submission handling
+ */
+export default function ContactForm() {
+  // Form state management
+  const [status, setStatus] = useState('');
+  const [showStatus, setShowStatus] = useState(false);
+  const formRef = useRef(null);
 
-     // contact function ---------------------
-  const [status,setStatus] = useState();
-  const [log,setLog] = useState(true);
+  // Animation on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('translate-y-0', 'opacity-100');
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.2 }
+    );
 
-  async function handleButtonContact(e) {
+    if (formRef.current) {
+      observer.observe(formRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  /**
+   * Handle form submission
+   * @param {Event} e - Form submission event
+   */
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('api/contact', {
-      method : 'POST',
-      headers : {'Content-Type' : 'aplication/json'},
-      body : JSON.stringify({
-        name : e.target.name.value,
-        email : e.target.email.value,
-        message : e.target.email.value
-      }),
-    })
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: e.target.name.value,
+          email: e.target.email.value,
+          message: e.target.message.value // Fixed: was using email.value
+        }),
+      });
 
-    const data = await res.json();
-    setStatus(data.succes ? "Terkirim!" : "Gagal");
-    setLog(true);
-  }
+      const data = await res.json();
+      setStatus(data.success ? "Terkirim!" : "Gagal");
+      setShowStatus(true);
 
-  //------------------------------------------------------------------------------
+      // Reset form if successful
+      if (data.success) {
+        e.target.reset();
+        setTimeout(() => setShowStatus(false), 3000); // Hide status after 3s
+      }
+    } catch (error) {
+      setStatus("Gagal mengirim pesan");
+      setShowStatus(true);
+    }
+  };
 
   return (
-    <>
-      <form className="flex flex-col bg-blue-500 p-3 rounded-md my-5 md:w-1/3 w-5/6">
-        <label htmlFor="name" className="text-white">
-          Nama
-        </label>
-        <input
-          name="name"
-          placeholder="Nama"
-          className="bg-white border-1 border-blue-500 p-1 rounded-md focus:outline-blue-500"
-          required
-        />
-        <label htmlFor="email" className="text-white">
-          Email
-        </label>
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          className="bg-white border-1 border-blue-500 p-1 rounded-md focus:outline-blue-500"
-          required
-        />
-        <label htmlFor="message" className="text-white">
-          Pesan
-        </label>
-        <textarea
-          type="text"
-          name="message"
-          placeholder="Pesan"
-          className="bg-white resize-none border-1 border-blue-500 p-1 rounded-md focus:outline-blue-500"
-          required
-        />
+    <div className="contact-form w-full flex flex-col items-center">
+      {/* Contact Form */}
+      <form 
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="contact-form__container flex flex-col bg-blue-500 p-5 rounded-lg shadow-lg my-5 md:w-1/3 w-5/6 transform transition-all duration-1000 translate-y-10 opacity-0"
+      >
+        {/* Name Field */}
+        <div className="contact-form__field mb-4">
+          <label htmlFor="name" className="contact-form__label text-white block mb-2">
+            Nama
+          </label>
+          <input
+            id="name"
+            name="name"
+            placeholder="Masukkan nama Anda"
+            className="contact-form__input w-full bg-white border-2 border-blue-400 p-2 rounded-md focus:outline-none focus:border-blue-600 transition-colors"
+            required
+          />
+        </div>
+
+        {/* Email Field */}
+        <div className="contact-form__field mb-4">
+          <label htmlFor="email" className="contact-form__label text-white block mb-2">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Masukkan email Anda"
+            className="contact-form__input w-full bg-white border-2 border-blue-400 p-2 rounded-md focus:outline-none focus:border-blue-600 transition-colors"
+            required
+          />
+        </div>
+
+        {/* Message Field */}
+        <div className="contact-form__field mb-4">
+          <label htmlFor="message" className="contact-form__label text-white block mb-2">
+            Pesan
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Tulis pesan Anda"
+            rows="4"
+            className="contact-form__input w-full bg-white border-2 border-blue-400 p-2 rounded-md resize-none focus:outline-none focus:border-blue-600 transition-colors"
+            required
+          />
+        </div>
+
+        {/* Submit Button */}
         <button
-          className="bg-white text-blue-500 p-2 mt-3 rounded-md cursor-pointer hover:shadow-2xl"
           type="submit"
+          className="contact-form__submit mt-4 bg-white text-blue-500 py-2 px-6 rounded-md font-medium hover:bg-blue-50 transform hover:scale-105 transition-all duration-300"
         >
-          Kirim
+          Kirim Pesan
         </button>
       </form>
-      {log && (
-        <p
-          className={`${
-            status === "Terkirim" ? "bg-green-400" : "bg-red-500"
-          } w-full text-center text-white`}
+
+      {/* Status Message */}
+      {showStatus && (
+        <div 
+          className={`contact-form__status w-full md:w-1/3 text-center p-3 rounded-md mt-4 transition-all duration-300 ${
+            status === "Terkirim!" ? "bg-green-500" : "bg-red-500"
+          } text-white`}
         >
           {status}
-        </p>
+        </div>
       )}
-    </>
+    </div>
   );
 }

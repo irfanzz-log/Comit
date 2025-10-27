@@ -1,57 +1,57 @@
 export const data = [
   {
     nama: "Idham Mubarok S.kom",
-    imgurl: "./mentor/mentorProgramming/mentor-program-1.png",
+    imgurl: "/mentor/mentorProgramming/mentor-program-1.png",
     divisi: "Mentor Programming"
   },
   {
     nama: "Eko Aulian Saputra S.kom",
-    imgurl: "./mentor/mentorProgramming/mentor-program-2.png",
+    imgurl: "/mentor/mentorProgramming/mentor-program-2.png",
     divisi: "Mentor Programming"
   },
   {
     nama: "Hidayatullah S.kom",
-    imgurl: "./mentor/mentorDesign/mentor-design-1.png",
+    imgurl: "/mentor/mentorDesign/mentor-design-1.png",
     divisi: "Mentor Design Grafis"
   },
   {
     nama: "Aditya Anwary S.kom",
-    imgurl: "./mentor/mentorDesign/mentor-design-2.png",
+    imgurl: "/mentor/mentorDesign/mentor-design-2.png",
     divisi: "Mentor Design Grafis"
   },
   {
     nama: "Vikri Fahruroji S.kom",
-    imgurl: "./mentor/mentorDesign/mentor-design-3.png",
+    imgurl: "/mentor/mentorDesign/mentor-design-3.png",
     divisi: "Mentor Design Grafis"
   },
   {
     nama: "Duta Kusuma Dewa S.kom",
-    imgurl: "./mentor/mentorNet/mentor-comp-and-network-1.png",
+    imgurl: "/mentor/mentorNet/mentor-comp-and-network-1.png",
     divisi: "Mentor Comp & Network"
   },
   {
     nama: "Romi Aji S.kom",
-    imgurl: "./mentor/mentorNet/mentor-comp-and-network-2.png",
+    imgurl: "/mentor/mentorNet/mentor-comp-and-network-2.png",
     divisi: "Mentor Comp & Network"
   },
   {
     nama: "M Hussein Hamid S.kom",
-    imgurl: "./mentor/mentorNet/mentor-comp-and-network-3.png",
+    imgurl: "/mentor/mentorNet/mentor-comp-and-network-3.png",
     divisi: "Mentor Comp & Network"
   },
   {
     nama: "Ahmad Iif Muhili S.kom",
-    imgurl: "./mentor/mentorNet/mentor-comp-and-network-4.png",
+    imgurl: "/mentor/mentorNet/mentor-comp-and-network-4.png",
     divisi: "Mentor Comp & Network"
   },
   {
     nama: "Risna Ayu Lestari S.kom",
-    imgurl: "./mentor/mentorMs/mentor-ms-office-1.png",
+    imgurl: "/mentor/mentorMs/mentor-ms-office-1.png",
     divisi: "Mentor Microsoft Office"
   },
   {
     nama: "Yumita Aprina",
-    imgurl: "./mentor/mentorMs/mentor-ms-office-2.png",
+    imgurl: "/mentor/mentorMs/mentor-ms-office-2.png",
     divisi: "Mentor Microsoft Office"
   },
   
@@ -200,33 +200,33 @@ export const pengurus = [
     imgUrl: "/pengurus/humas-eksternal-4.png"
   },
   {
-    posisi: "Kordinator",
+    posisi: "Koordinator",
     nama: "Arif Rhamadan",
-    jabatan: "Kordinator SDM",
+    jabatan: "Koordinator SDM",
     imgUrl: "/pengurus/koor-sdm.png"
   },
   {
-    posisi: "Kordinator",
+    posisi: "Koordinator",
     nama: "Rio Pratama",
-    jabatan: "Kordinator Humas",
+    jabatan: "Koordinator Humas",
     imgUrl: "/pengurus/koor-humas.png"
   },
   {
-    posisi: "Kordinator",
+    posisi: "Koordinator",
     nama: "Alfian Akmal Fauzan",
-    jabatan: "Kordinator Prasarana",
+    jabatan: "Koordinator Prasarana",
     imgUrl: "/pengurus/koor-prasarana.png"
   },
   {
-    posisi: "Kordinator",
+    posisi: "Koordinator",
     nama: "Rilla Destiani",
-    jabatan: "Kordinator Kominfo",
+    jabatan: "Koordinator Kominfo",
     imgUrl: "/pengurus/koor-kominfo.png"
   },
   {
-    posisi: "Kordinator",
+    posisi: "Koordinator",
     nama: "M Mupid Ahmadiawan",
-    jabatan: "Kordinator Akademik",
+    jabatan: "Koordinator Akademik",
     imgUrl: "/pengurus/koor-akademik.png"
   },
   {

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import useDesktopOpen from "@/hooks/ui/useDesktopOpen";
 
 /**
  * Navigation component with responsive design and mobile menu
@@ -13,10 +13,8 @@ import Image from "next/image";
  * @param {string} props.textLink2 - Text for second navigation link
  */
 export default function Navigation({ link1, link2, textLink1, textLink2 }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  
+  const {isDesktop, isMenuOpen, toggleMenu} = useDesktopOpen();
 
   // Navigation links configuration
   const navLinks = [
@@ -29,21 +27,6 @@ export default function Navigation({ link1, link2, textLink1, textLink2 }) {
     { href: '#', text: 'Login', isPrimary: true },
     { href: '#', text: 'Daftar', isPrimary: false }
   ];
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768 && isMenuOpen) {
-        setIsDesktop(true);
-      } else {
-        setIsDesktop(false);
-      }
-    }
-
-    handleResize(); // Initial check
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  })
 
   return (
     <header className="navbar relative flex justify-center mx-2">

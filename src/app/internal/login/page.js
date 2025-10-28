@@ -4,7 +4,7 @@ import Link from "next/link"
 export default function LoginPage() {
     return (
         <div className="login-page-container w-full bg-blue-500 h-screen flex flex-col justify-center items-center">
-            <div className="login-page w-1/2 p-10 flex flex-col justify-center items-center">
+            <div className="login-page md:w-1/2 p-10 flex flex-col justify-center items-center">
                 <div className="login-page_header flex flex-row justify-center items-center mb-5">
                     <Image src="/logo/commitLogo.png" width={300} height={300} alt="comit logo" className="max-w-1/4" />
                     <div className="header_body p-5">

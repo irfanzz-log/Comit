@@ -47,8 +47,8 @@ export default function TentangKamiSlide() {
                 {/* Vision Mission Section */}
                 <div className="tentang-kami__vision-mission md:flex-row md:mt-2 mt-10 flex-col flex">
                     {/* Image Section */}
-                    <div className="tentang-kami__image p-3 md:block md:w-1/2 hidden">
-                        <Image width={600} height={400} className="max-w-full rounded-lg" src="/background/imgHero5.png" alt="Tentang Kami" />
+                    <div className="tentang-kami__image flex justify-center md:block mx-2 md:w-1/2 hidden">
+                        <Image width={1000} height={600} className="max-w-full rounded-lg" src="/background/imgHero5.png" alt="Tentang Kami" />
                     </div>
 
                     {/* Vision Mission Content */}

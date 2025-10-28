@@ -1,0 +1,1 @@
+export { default as useLastPath } from './ui/useLastPath';

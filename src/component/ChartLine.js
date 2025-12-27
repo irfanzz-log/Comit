@@ -9,7 +9,6 @@ import {
   Tooltip,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { dataTransaksi } from "@/lib/dataKas";
 import useDateFilter from "@/hooks/ui/useDateFilter";
 
 ChartJS.register(

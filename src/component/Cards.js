@@ -37,7 +37,7 @@ export default function MentorCard({
 
             />
             <div className="mentor-card__content my-2 text-center">
-                <h3 className={`mentor-card__name text-sm font-bold w-full ${nameStyle || ''}`}>
+                <h3 className={`mentor-card__name md:text-sm text-xs font-bold w-full ${nameStyle || ''}`}>
                     {nama}
                 </h3>
                 <p className="mentor-card__division text-xs">

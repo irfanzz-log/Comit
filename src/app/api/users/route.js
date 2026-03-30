@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const res = await query('SELECT user_name, user_npm, user_role FROM users');
+        const res = await query('SELECT user_npm, password, user_role FROM users');
         const users = res.rows;
-
+        
         return NextResponse.json(
             { users }, 
             { status: 200 }

@@ -64,12 +64,12 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="contact-form w-full flex flex-col items-center">
+    <div className="contact-form w-full flex flex-col pb-20 items-center">
       {/* Contact Form */}
       <form 
         ref={formRef}
         onSubmit={handleSubmit}
-        className="contact-form__container flex flex-col bg-blue-500 p-5 rounded-lg shadow-lg my-5 md:w-1/3 w-5/6 transform transition-all duration-1000 translate-y-10 opacity-0"
+        className="contact-form__container flex flex-col bg-blue-500 p-5 rounded-lg shadow-lg my-5 md:w-full w-5/6 transform transition-all duration-1000 translate-y-10 opacity-0"
       >
         {/* Name Field */}
         <div className="contact-form__field mb-4">

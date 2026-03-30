@@ -10,6 +10,12 @@ import { useState } from "react";
 export default function Home() {
     const [dateInput, setDateInput] = useState({});
     const data = useDateFilter(dateInput.keyStart, dateInput.keyEnd);
+    const date = new Date().toLocaleString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+    
     return (
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
             <Aside />
@@ -60,7 +66,7 @@ export default function Home() {
                             </div>
                         </div>
                         <div className="info absolute right-10 bottom-2">
-                            <span className="text-sm text-gray-600">Updated: 02 November 2025</span>
+                            <span className="text-sm text-gray-600">Updated: {date}</span>
                         </div>
                     </div>
                     <div className="detail w-full flex md:flex-row flex-col items-center p-5 pb-10">

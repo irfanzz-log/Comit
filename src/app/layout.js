@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { SlideNavProvider } from "@/hooks/ui/useSlideNav";
+import { AuthProvider } from "./context/AuthContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,7 +28,9 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SlideNavProvider>
-        {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </SlideNavProvider>
       </body>
     </html>

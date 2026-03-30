@@ -59,8 +59,8 @@ export default function Home() {
                 <p className='text-lg my-2'>Kami mempunyai beberapa mentor yang sudah berpengalaman di bidangnya masing-masing</p>
               </header>
               <CardParent
-                imgStyle="w-3/4 rounded-full shadow-xl"
-                cardStyle="mentor__card flex justify-center items-center max-w-1/2 flex-col my-3 transform transition duration-300 hover:scale-125 cursor-pointer"
+                imgStyle="md:w-35 md:h-35 w-40 h-40  object-cover rounded-full shadow-xl"
+                cardStyle="mentor__card flex lg:mx-10 md:mx-7 sm:mx-3 mx-2 justify-center items-center max-w-full flex-col my-3 transform transition duration-300 hover:scale-125 cursor-pointer"
               />
             </div>
           </section>

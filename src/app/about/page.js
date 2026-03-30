@@ -60,15 +60,15 @@ export default function About() {
 
           {/* Contact section */}
           <section className="contact relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col md:pb-0 pb-10">
-            <div className="contact__content relative z-10 w-full flex flex-col items-center md:p-10 p-5">
-              <header className="contact__header md:w-1/2 text-center">
+            <div className="contact__content relative z-10 w-full flex flex-col items-center md:p-10 ">
+              <header className="contact__header md:w-1/2 text-center p-5">
                 <h2 className="text-5xl font-bold my-2">Hubungi Kami</h2>
                 <p className="text-lg my-2">
                   Punya pertanyaan, ide, atau ingin berkolaborasi?
                   Tim COMIT (Community of Information Technology) selalu terbuka untuk berdiskusi dan berbagi inspirasi di dunia teknologi informasi.
                 </p>
               </header>
-              <div className="contact__form w-full flex flex-col items-center justify-center">
+              <div className="contact__form md:w-1/2 w-full flex flex-col items-center justify-center">
                 <Form />
               </div>
             </div>

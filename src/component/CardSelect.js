@@ -37,7 +37,7 @@ export default function StaffFilter() {
   return (
     <>
       {/* Position Selector Dropdown */}
-      <div className="relative staff-filter relative md:w-1/3 w-3/4 z-10">
+      <div className="relative mt-10 staff-filter relative md:w-1/3 w-3/4 z-10">
         <button
           className="staff-filter__button flex justify-between items-center p-3 w-full bg-blue-500 text-white rounded-xl shadow-lg transition-colors hover:bg-blue-600"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -80,7 +80,7 @@ export default function StaffFilter() {
       </div>
 
       {/* Staff Cards Grid */}
-      <div className="staff-grid mt-20 w-full flex flex-wrap justify-center">
+      <div className="staff-grid mt-10 w-full flex flex-wrap justify-center">
         {filteredStaff.map((staff, index) => (
           <Card
             key={index}
@@ -88,8 +88,8 @@ export default function StaffFilter() {
             nama={staff.nama}
             url={staff.imgUrl}
             divisi={staff.jabatan}
-            imgStyle="staff-grid__image w-3/4 rounded-full shadow-xl"
-            cardStyle="staff-grid__card flex justify-center items-center max-w-1/2 flex-col my-3 transform transition duration-300 hover:scale-125 cursor-pointer"
+            imgStyle="staff-grid__image w-full rounded-full shadow-xl"
+            cardStyle="staff-grid__card flex justify-center items-center max-w-full mx-5 flex-col my-3 transform transition duration-300 hover:scale-125 cursor-pointer"
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-import Nav from '@/component/Nav';
+import Navigation from '@/component/Nav';
 import Footer from '@/component/Footer';
 import Loading from '@/component/Loading';
 import Divisi from '@/component/divisi/Divisi';
@@ -18,11 +18,13 @@ export default function Home() {
         {/* Content Wrapper */}
         <section className='home__content md:rounded-xl overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide'>
           {/* Navigation */}
-          <Nav  
-            link1="/about"
-            textLink1="About Us"
-            link2="/anouncement"
-            textLink2="Anouncement"
+          < Navigation  
+            link1="/"
+            textLink1="Home"
+            link2="/about"
+            textLink2="About Us"
+            link3="/announcement"
+            textLink3="Announcement"
           />
 
           {/* Hero Section */}

@@ -3,81 +3,13 @@
 import Aside from "@/component/internal/Aside";
 import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import Pagination from "@/hooks/ui/pagination";
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useRef } from "react";
+import useUserFilter from "@/hooks/useUserFilter";
+import ToggleFilterButton from "@/hooks/ui/useToggleFilter";
 
 export default function DataAnggota() {
-    const searchParams = useSearchParams();
-
-    const [dataAnggota, setDataAnggota] = useState([]);
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [totalUsers, setTotalUsers] = useState(0);
-    const [name, setName] = useState('');
-
-    const statusOptions = ["Aktif", "Tidak Aktif"];
-    const posisiOptions = ["Ketua", "Wakil Ketua", "Sekretaris", "Bendahara", "Koordinator Akademik", "Koordinator Humas", "Koordinator SDM", "Koordinator Prasarana", "Koordinator Kominfo", "SDM", "Humas Internal", "Humas Eksternal", "Prasarana", "Kominfo", "Staff Programming", "Staff Design", "Staff Comnet", "Staff Office"];
-    const minatOptions = ["Programming", "Design", "Comnet", "Office"];
-
-    const [toggleStatus, setToggleStatus] = useState('Filter by status');
-    const [toggleMinat, setToggleMinat] = useState('Filter by minat');
-    const [togglePosisi, setTogglePosisi] = useState('Filter by posisi');
-
-    const [filterOpen, setFilterOpen] = useState({
-        status: false,
-        posisi: false,
-        minat: false,
-    });
-
-    function handleToggleFilter(e, type) {
-        e.stopPropagation();
-        setFilterOpen((prev) => ({
-            status: false,
-            posisi: false,
-            minat: false,
-            [type]: !prev[type],
-        }));
-    }
-
-    // sync URL → state
-    const pathPage = searchParams.get('page');
-    useEffect(() => {
-        if (pathPage) {
-            setPage(Number(pathPage));
-        }
-    }, [pathPage]);
-
-    //search name
-    function handleSearch(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const searchName = formData.get('searchName');
-        setName(searchName);
-    }
-
-    // fetch data saat page berubah
-    useEffect(() => {
-
-        const params = new URLSearchParams();
-        if (name) params.set('name', name);
-        if (toggleStatus !== 'Filter by status') params.set('status', toggleStatus);
-        if (togglePosisi !== 'Filter by posisi') params.set('posisi', togglePosisi);
-        if (toggleMinat !== 'Filter by minat') params.set('minat', toggleMinat);
-        params.set('page', page);
-
-        fetch(`/api/userInfo?${params.toString()}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setDataAnggota(data.users);
-                setTotalPages(data.totalPages);
-                setTotalUsers(data.totalUsers);
-            })
-            .catch((error) => console.error('Error fetching data:', error));
-
-        window.history.replaceState(null, '', `?${params.toString()}`);
-    }, [page, name, toggleStatus, togglePosisi, toggleMinat]);
-
+    const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, toggleStatus, setToggleStatus, togglePosisi, setTogglePosisi, toggleMinat, setToggleMinat, handleToggleFilter, filterOpen, setFilterOpen, statusOptions, posisiOptions, minatOptions, handleSearch } = useUserFilter();
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -107,57 +39,28 @@ export default function DataAnggota() {
 
                                 <div className="dataFilter p-2">
                                     <form onSubmit={handleSearch} className="flex flex-row md:p-2 w-full">
-                                        <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 outline-none focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." />
+                                        <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 outline-none focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
                                     </form>
 
                                     <div ref={dropdownRef} className="flex md:flex-row md:ml-0 ml-1 flex-col w-full text-sm items-center md:items-start mt-2 mb-2">
-                                        <div className="relative md:w-2/3 w-full m-2">
-                                            <button onClick={(e) => {
-                                                handleToggleFilter(e, 'posisi');
-                                            }} className="md:ml-0 -ml-1 relative bg-white border-[0.5px] border-gray-600/10 rounded-md p-2 shadow-sm w-full text-left">{togglePosisi}<span className="absolute right-2 top-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down size-4 opacity-50" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span></button>
-                                            <div className={` ${filterOpen.posisi ? 'block' : 'hidden'} z-10 absolute max-h-60 overflow-y-auto flex flex-col bg-white border-[0.5px] border-gray-600/10 rounded-md w-full p-2 mt-1 shadow-sm`}>
-                                                {posisiOptions.map((option) => (
-                                                    <button onClick={(e) => {
-                                                        setTogglePosisi(option);
-                                                        handleToggleFilter(e, 'posisi');
-                                                    }} className="text-left hover:bg-blue-200/50 px-2 py-1 rounded-sm" key={option}>{option}</button>
-                                                ))}
-                                            </div>
-                                        </div>
+
+                                        <ToggleFilterButton handleToggleFilter={(e) => handleToggleFilter(e, 'posisi')} type="posisi" filterOpen={filterOpen} options={posisiOptions} setToggle={setTogglePosisi} toggle={togglePosisi} setPage={setPage} />
+
+                                        <ToggleFilterButton handleToggleFilter={(e) => handleToggleFilter(e, 'status')} type="status" filterOpen={filterOpen} options={statusOptions} setToggle={setToggleStatus} toggle={toggleStatus} setPage={setPage} />
+
+                                        <ToggleFilterButton handleToggleFilter={(e) => handleToggleFilter(e, 'minat')} type="minat" filterOpen={filterOpen} options={minatOptions} setToggle={setToggleMinat} toggle={toggleMinat} setPage={setPage} />
 
                                         <div className="relative md:w-2/3 w-full m-2">
-                                            <button onClick={(e) => handleToggleFilter(e, 'minat')} className="md:ml-0 -ml-1 relative bg-white border-[0.5px] border-gray-600/10 rounded-md p-2 shadow-sm w-full text-left">{toggleMinat}<span className="absolute right-2 top-3 "><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down size-4 opacity-50" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span></button>
-                                            <div className={` ${filterOpen.minat ? 'block' : 'hidden'} z-10 absolute max-h-60 overflow-y-auto flex flex-col bg-white border-[0.5px] border-gray-600/10 rounded-md w-full p-2 mt-1 shadow-sm`}>
-                                                {minatOptions.map((option) => (
-                                                    <button onClick={(e) => {
-                                                        handleToggleFilter(e, 'minat');
-                                                        setToggleMinat(option);
-                                                    }} className="text-left hover:bg-blue-200/50 px-2 py-1 rounded-sm" key={option}>{option}</button>
-                                                ))}
-                                            </div>
+                                            <button onClick={() => {
+                                            setToggleMinat('Filter by minat');
+                                            setTogglePosisi('Filter by posisi');
+                                            setToggleStatus('Filter by status');
+                                            setName('');
+                                        }} className="md:ml-0 -ml-1 relative bg-white border-[0.5px] border-gray-600/10 rounded-md p-2 shadow-sm w-full text-left">
+                                            Reset Filter
+                                        </button>
                                         </div>
 
-                                        <div className="relative md:w-2/3 w-full m-2">
-                                            <button onClick={(e) => handleToggleFilter(e, 'status')} className="md:ml-0 -ml-1 relative bg-white border-[0.5px] border-gray-600/10 rounded-md p-2 shadow-sm w-full text-left">{toggleStatus}<span className="absolute right-2 top-3 "><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down size-4 opacity-50" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span></button>
-                                            <div className={` ${filterOpen.status ? 'block' : 'hidden'} z-10 absolute max-h-60 overflow-y-auto flex flex-col bg-white border-[0.5px] border-gray-600/10 rounded-md w-full p-2 mt-1 shadow-sm`}>
-                                                {statusOptions.map((option) => (
-                                                    <button onClick={(e) => {
-                                                        handleToggleFilter(e, 'status');
-                                                        setToggleStatus(option);
-                                                    }} className="text-left hover:bg-blue-200/50 px-2 py-1 rounded-sm" key={option}>{option}</button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div className="relative md:w-2/3 w-full m-2">
-                                            <button className="md:ml-0 -ml-1 relative bg-white border-[0.5px] border-gray-600/10 rounded-md p-2 shadow-sm w-full text-left" onClick={() => {
-                                                setToggleStatus('Filter by status');
-                                                setToggleMinat('Filter by minat');
-                                                setTogglePosisi('Filter by posisi');
-                                                setName('');
-                                            }}>
-                                                Reset Filter
-                                            </button>
-                                        </div>
                                     </div>
                                 </div>
 

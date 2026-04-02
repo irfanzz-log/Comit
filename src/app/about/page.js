@@ -2,7 +2,6 @@ import Nav from "@/component/Nav";
 import Link from "next/link";
 import Footer from "@/component/Footer";
 import Loading from "@/component/Loading";
-import KegiatanCard from "@/component/kegiatan/KegiatanCard";
 import Form from "@/component/Form";
 import OnClick from "@/component/OnClick";
 import Kepengurusan from "@/component/Kepengurusan/Kepengurusan";
@@ -28,8 +27,10 @@ export default function About() {
           <Nav
             link1="/"
             textLink1="Home"
-            link2="/Anouncement"
-            textLink2="Anouncement"
+            link2="/about"
+            textLink2="About Us"
+            link3="/announcement"
+            textLink3="Announcement"
           />
 
           {/* Hero section */}

@@ -11,21 +11,23 @@ import useDesktopOpen from "@/hooks/ui/useDesktopOpen";
  * @param {string} props.link2 - URL for second navigation link
  * @param {string} props.textLink1 - Text for first navigation link
  * @param {string} props.textLink2 - Text for second navigation link
+ * @param {string} props.textLink3 - Text for third navigation link
  */
-export default function Navigation({ link1, link2, textLink1, textLink2 }) {
+export default function Navigation({ link1, link2, link3, textLink1, textLink2, textLink3 }) {
   
   const {isDesktop, isMenuOpen, toggleMenu} = useDesktopOpen();
 
   // Navigation links configuration
   const navLinks = [
     { href: link1, text: textLink1 },
-    { href: link2, text: textLink2 }
+    { href: link2, text: textLink2 },
+    { href: link3, text: textLink3 }
   ];
 
   // Auth links configuration
   const authLinks = [
-    { href: '#', text: 'Login', isPrimary: true },
-    { href: '#', text: 'Daftar', isPrimary: false }
+    { href: '/internal', text: 'Login', isPrimary: true },
+    { href: '/internal/sign', text: 'Daftar', isPrimary: false }
   ];
 
   return (
@@ -44,8 +46,8 @@ export default function Navigation({ link1, link2, textLink1, textLink2 }) {
 
         {/* Desktop Navigation Links */}
         <ul className="navbar__links md:flex flex-row hidden space-x-4">
-          {navLinks.map(({ href, text }) => (
-            <li key={text} className="navbar__link">
+          {navLinks.map(({ href, text }, idx) => (
+            <li key={idx} className="navbar__link">
               <Link 
                 href={href}
                 className="text-white hover:text-blue-100 transition-colors"

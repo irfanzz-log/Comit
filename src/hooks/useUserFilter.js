@@ -11,7 +11,7 @@ export default function useUserFilter() {
         const [name, setName] = useState("");
     
         const statusOptions = ["Aktif", "Tidak Aktif"];
-        const posisiOptions = ["Ketua", "Wakil Ketua", "Sekretaris", "Bendahara", "Koordinator Akademik", "Koordinator Humas", "Koordinator SDM", "Koordinator Prasarana", "Koordinator Kominfo", "SDM", "Humas Internal", "Humas Eksternal", "Prasarana", "Kominfo", "Staff Programming", "Staff Design", "Staff Comnet", "Staff Office"];
+        const posisiOptions = ["Ketua Umum", "Wakil Ketua Umum", "Sekretaris", "Bendahara", "Koordinator Akademik", "Koordinator Humas", "Koordinator SDM", "Koordinator Prasarana", "Koordinator Kominfo", "SDM", "Humas Internal", "Humas Eksternal", "Prasarana", "Kominfo", "Staff Programming", "Staff Design", "Staff Comnet", "Staff Office", "Anggota", "Alumni"];
         const minatOptions = ["Programming", "Design", "Comnet", "Office"];
     
         const [toggleStatus, setToggleStatus] = useState('Filter by status');

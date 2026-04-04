@@ -4,6 +4,7 @@ import Aside from "@/component/internal/Aside";
 import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import { useState, useEffect } from "react";
 import Pagination from "@/hooks/ui/pagination";
+import CameraAbsensi from "@/hooks/ui/useCamera";
 
 export default function Absensi() {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -12,6 +13,7 @@ export default function Absensi() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalUsers, setTotalUsers] = useState(0);
+    const [isCameraActive, setIsCameraActive] = useState(false);
 
     useEffect(() => {
         // Fetch leaderboard data
@@ -33,7 +35,7 @@ export default function Absensi() {
     }, [page]);
 
     console.log(leaderboard);
-    
+
     return (
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
             <Aside />
@@ -46,6 +48,22 @@ export default function Absensi() {
                         <div className="main-section_content">
                             <div className="content-head">
                                 <h1 className="text-xl font-bold">Dashboard Absensi</h1>
+                            </div>
+                            <div className="w-full mt-10 flex md:justify-end justify-center border border-[0.5px] border-gray-600/80 p-5 rounded-md">
+                                {isCameraActive ? (
+                                <div className="w-full flex justify-center">
+                                    <div className="md:w-1/3 w-full flex items-center flex-col">
+                                        
+                                    </div>
+                                </div>
+                            ) : (
+                                <button 
+                                    onClick={() => setIsCameraActive(true)}
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                    Aktifkan Kamera
+                                </button>
+                            )}
                             </div>
                             <div className="content-body mt-10">
                                 <div className="leaderboard border border-[0.5px] border-gray-600/80 rounded-md p-5 mb-10">

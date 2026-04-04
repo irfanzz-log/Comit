@@ -1,77 +1,73 @@
-"use client";
+"use client"; // Wajib jika menggunakan Next.js App Router
+
 import {
   Chart as ChartJS,
-  LineElement,
   CategoryScale,
   LinearScale,
   PointElement,
-  Legend,
+  LineElement,
+  Title,
   Tooltip,
+  Legend,
+  Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import useDateFilter from "@/hooks/ui/useDateFilter";
+import useGetAmountTransactions from "@/hooks/useGetAmountTransactions";
 
 ChartJS.register(
-  LineElement,
   CategoryScale,
   LinearScale,
   PointElement,
+  LineElement,
+  Title,
+  Tooltip,
   Legend,
-  Tooltip
+  Filler //
 );
 
-const monthNames = ["January", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+export default function ChartLine() {
 
-export default function ChartLine({date}) {
-    const dateMonthNum = date?.map(item => {
-      const [year,month] = item.month.split("-");
-      return {
-        ...item,
-        month : monthNames[Number(month) -1]
-      }
-    }) || [] ;
+  const { dataForChartByMonth } = useGetAmountTransactions();
 
-    //DefaultData
-    const defaultData = useDateFilter("2025-1", "2025-12");
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
-    const dateMonth = dateMonthNum?.length > 0 ? dateMonthNum.map(date => date.month) : monthNames ;
-
-    const dateAmount = date?.length > 0 ? date?.map(date => date.amount) : defaultData.map(item => item.amount) ;
-    console.log(defaultData);
-    
-
-  const data = {
-    labels: dateMonth,
-    datasets: [
-      {
-        label: "Pemasukkan",
-        data: dateAmount,
-        fill: false,
-        borderColor: "rgb(0, 255, 0)",
-        tension: 0.1,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      title: { display: true, text: "Judul Chart" },
-      legend: { position: "top" },
-      tooltip: { enabled: true },
+  const chartData = {
+  labels: monthNames, 
+  datasets: [
+    {
+      label: "Pemasukkan",
+      data: dataForChartByMonth.Pemasukkan, 
+      fill: true,
+      backgroundColor: "rgba(75, 192, 192, 0.2)",
+      borderColor: "rgba(75, 192, 192, 1)",
+      tension: 0.4,
     },
-    interaction: {
-      mode: "index", // hover akan tampil untuk semua dataset pada posisi x yang sama
-      intersect: false,
+    {
+      label: "Pengeluaran",
+      data: dataForChartByMonth.Pengeluaran, 
+      fill: true,
+      backgroundColor: "rgba(255, 99, 132, 0.2)",
+      borderColor: "rgba(255, 99, 132, 1)",
+      tension: 0.4,
+    }
+  ],
+};
+
+// Di dalam komponen ChartLine.js
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: "top",
     },
-  };
+  },
+};
 
-  return ( 
-
-    <div className="relative h-80">
-      <Line data={data} options={options} />
+  return (
+    <div className="bg-white p-4 md:h-100 h-100 rounded-xl border border-gray-100 shadow-sm mb-6">
+      <h2 className="text-lg font-semibold text-gray-700 mb-4">Grafik Pemasukkan</h2>
+      <Line data={chartData} options={options} />
     </div>
-
-   )
+  );
 }

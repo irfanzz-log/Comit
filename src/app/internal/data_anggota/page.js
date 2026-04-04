@@ -83,7 +83,7 @@ export default function DataAnggota() {
                                                     <tbody className="bg-white divide-y divide-gray-200">
                                                         {dataAnggota.map((data, idx) => (
                                                             <tr key={idx} className="even:bg-gray-50">
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{idx + 1}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700">{(page - 1) * 10 + idx + 1}</td>
                                                                 <td className="px-4 py-2 text-sm text-gray-700">{data.nama}</td>
                                                                 <td className="px-4 py-2 text-sm text-gray-700">{data.user_npm}</td>
                                                                 <td className="px-4 py-2 text-sm text-gray-700">{data.jurusan}</td>

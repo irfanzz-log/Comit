@@ -7,7 +7,7 @@ export async function POST(req) {
     const { npm, password } = await req.json();
 
     //user
-    const res = await query('SELECT id, user_name, user_npm, password, user_role FROM users WHERE user_npm = $1', [npm]);
+    const res = await query('SELECT id, user_npm, password, user_role FROM users WHERE user_npm = $1', [npm]);
     const user = res.rows[0];
     
     

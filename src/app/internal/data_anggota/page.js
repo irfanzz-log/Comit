@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import useUserFilter from "@/hooks/useUserFilter";
 import ToggleFilterButton from "@/hooks/ui/useToggleFilter";
+import ExportTableButton from "@/component/ExportTableButton";
 
 export default function DataAnggota() {
     const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, toggleStatus, setToggleStatus, togglePosisi, setTogglePosisi, toggleMinat, setToggleMinat, handleToggleFilter, filterOpen, setFilterOpen, statusOptions, posisiOptions, minatOptions, handleSearch } = useUserFilter();
@@ -62,13 +63,14 @@ export default function DataAnggota() {
                                         </div>
 
                                     </div>
+                                    <div className="w-full flex justify-end"><ExportTableButton /></div>
                                 </div>
 
                                 <div className="content-body_data p-5">
                                     <div className="head flex ">
                                         <div className="dataView w-screen">
                                             <div className="hidden lg:block overflow-x-auto border border-1 border-black/10 rounded-md">
-                                                <table className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
+                                                <table id="table-data" className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
                                                     <thead className="bg-gray-50">
                                                         <tr>
                                                             <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">No</th>

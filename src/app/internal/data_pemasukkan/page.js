@@ -6,6 +6,7 @@ import Pagination from "@/hooks/ui/pagination";
 import { useEffect } from "react";
 import { useRef } from "react";
 import useTransactions from "@/hooks/useTransactions";
+import ExportTableButton from "@/component/ExportTableButton";
 
 export default function DataAnggota() {
     const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, handleSearch } = useTransactions({ tipe: 'Pemasukkan', kategori: '' });
@@ -36,16 +37,17 @@ export default function DataAnggota() {
                             <div className="content-body">
 
                                 <div className="dataFilter p-2">
-                                    <form onSubmit={handleSearch} className="flex flex-row md:p-2 w-full">
+                                    <form onSubmit={handleSearch} className="flex flex-row md:p-2 w-full mb-4">
                                         <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 outline-none focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
                                     </form>
+                                    <div className="w-full flex justify-end"><ExportTableButton /></div>
                                 </div>
 
                                 <div className="content-body_data p-5">
                                     <div className="head flex ">
                                         <div className="dataView w-screen">
                                             <div className="hidden lg:block overflow-x-auto border border-1 border-black/10 rounded-md">
-                                                <table className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
+                                                <table id="table-data" className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
                                                     <thead className="bg-gray-50">
                                                         <tr>
                                                             <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">No</th>

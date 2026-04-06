@@ -4,7 +4,7 @@ import Aside from "@/component/internal/Aside";
 import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import { useState, useEffect } from "react";
 import Pagination from "@/hooks/ui/pagination";
-import CameraAbsensi from "@/hooks/ui/useCamera";
+import ExportTableButton from "@/component/ExportTableButton";
 
 export default function Absensi() {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -49,22 +49,7 @@ export default function Absensi() {
                             <div className="content-head">
                                 <h1 className="text-xl font-bold">Dashboard Absensi</h1>
                             </div>
-                            <div className="w-full mt-10 flex md:justify-end justify-center border border-[0.5px] border-gray-600/80 p-5 rounded-md">
-                                {isCameraActive ? (
-                                <div className="w-full flex justify-center">
-                                    <div className="md:w-1/3 w-full flex items-center flex-col">
-                                        
-                                    </div>
-                                </div>
-                            ) : (
-                                <button 
-                                    onClick={() => setIsCameraActive(true)}
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                >
-                                    Aktifkan Kamera
-                                </button>
-                            )}
-                            </div>
+                           
                             <div className="content-body mt-10">
                                 <div className="leaderboard border border-[0.5px] border-gray-600/80 rounded-md p-5 mb-10">
                                     <div className="leaderboard_head flex items-center mb-4">
@@ -85,11 +70,12 @@ export default function Absensi() {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="w-full flex justify-end"><ExportTableButton /></div>
                                 <div className="content-body_data p-5">
                                     <div className="head flex ">
                                         <div className="dataView w-screen">
                                             <div className="hidden lg:block overflow-x-auto border border-1 border-black/10 rounded-md">
-                                                <table className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
+                                                <table id="table-data" className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
                                                     <thead className="bg-gray-50">
                                                         <tr>
                                                             <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">No</th>

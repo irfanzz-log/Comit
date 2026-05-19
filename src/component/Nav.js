@@ -82,7 +82,7 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
         <div className="md:hidden flex items-center">
           <button
             onClick={toggleMenu}
-            className="navbar__menu-button relative text-white focus:outline-none"
+            className={`navbar__menu-button relative text-white focus:outline-none`}
             aria-label="Toggle menu"
           >
             
@@ -120,7 +120,7 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
 
         {/* Mobile Menu Dropdown */}
         <div
-          className={`navbar__mobile-menu absolute top-0 left-0 w-full pb-5 rounded-xl shadow-lg bg-blue-500 transition-all duration-300 transform -z-10 ${isMenuOpen ? 'translate-y-10 opacity-100' : '-translate-y-0 opacity-0'
+          className={`navbar__mobile-menu absolute top-0 left-0 w-full pb-5 rounded-xl shadow-lg bg-blue-500 transition-all duration-300 transform -z-10 ${isMenuOpen ? 'translate-y-10 opacity-100' : '-translate-y-0 opacity-0 hidden'
             } ${isDesktop ? 'hidden' : 'block'}`}
         >
           <div className="flex flex-col items-center mt-20 space-y-5 px-6">

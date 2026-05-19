@@ -1,0 +1,143 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/announcement",
+      "regex": "^/announcement(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/announcement(?:/)?$"
+    },
+    {
+      "page": "/internal",
+      "regex": "^/internal(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal(?:/)?$"
+    },
+    {
+      "page": "/internal/absensi",
+      "regex": "^/internal/absensi(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/absensi(?:/)?$"
+    },
+    {
+      "page": "/internal/data_absensi",
+      "regex": "^/internal/data_absensi(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/data_absensi(?:/)?$"
+    },
+    {
+      "page": "/internal/data_anggota",
+      "regex": "^/internal/data_anggota(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/data_anggota(?:/)?$"
+    },
+    {
+      "page": "/internal/data_kegiatan",
+      "regex": "^/internal/data_kegiatan(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/data_kegiatan(?:/)?$"
+    },
+    {
+      "page": "/internal/data_pemasukkan",
+      "regex": "^/internal/data_pemasukkan(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/data_pemasukkan(?:/)?$"
+    },
+    {
+      "page": "/internal/data_pengeluaran",
+      "regex": "^/internal/data_pengeluaran(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/data_pengeluaran(?:/)?$"
+    },
+    {
+      "page": "/internal/data_uang_kas",
+      "regex": "^/internal/data_uang_kas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/data_uang_kas(?:/)?$"
+    },
+    {
+      "page": "/internal/home",
+      "regex": "^/internal/home(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/home(?:/)?$"
+    },
+    {
+      "page": "/internal/login",
+      "regex": "^/internal/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/login(?:/)?$"
+    },
+    {
+      "page": "/internal/profil_pengguna",
+      "regex": "^/internal/profil_pengguna(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/profil_pengguna(?:/)?$"
+    },
+    {
+      "page": "/internal/sign",
+      "regex": "^/internal/sign(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/internal/sign(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

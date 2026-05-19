@@ -8,8 +8,9 @@ import { useRef } from "react";
 import useUserFilter from "@/hooks/useUserFilter";
 import ToggleFilterButton from "@/hooks/ui/useToggleFilter";
 import ExportTableButton from "@/component/ExportTableButton";
+import { Suspense } from "react";
 
-export default function DataAnggota() {
+export function DataAnggota() {
     const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, toggleStatus, setToggleStatus, togglePosisi, setTogglePosisi, toggleMinat, setToggleMinat, handleToggleFilter, filterOpen, setFilterOpen, statusOptions, posisiOptions, minatOptions, handleSearch } = useUserFilter();
     const dropdownRef = useRef(null);
 
@@ -143,4 +144,12 @@ export default function DataAnggota() {
 
         </div >
     );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <DataAnggota />
+        </Suspense>
+    )
 }

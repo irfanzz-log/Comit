@@ -5,12 +5,32 @@ import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import ToggleFilterButton from "@/hooks/ui/useToggleFilter";
 import useUserFilter from "@/hooks/useAttendanceFilter";
 import Pagination from "@/hooks/ui/pagination";
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import ExportTableButton from "@/component/ExportTableButton";
+import useAttendanceInput from "@/hooks/useAttendanceInput";
+import { useAuth } from "@/app/context/AuthContext";
+import { Suspense } from "react";
 
-export default function DataAbsensi() {
+export function DataAbsensi() {
     const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, toggleStatusAbsen, setToggleStatusAbsen, togglePosisi, setTogglePosisi, handleToggleFilter, filterOpen, setFilterOpen, statusOptions, posisiOptions, handleSearch, toggleAcara, setToggleAcara, acaraOptions } = useUserFilter();
     const dropdownRef = useRef(null);
+    const { form,setForm, handleChange, submitAbsensi, loading, userSuggestions, pilihUser } = useAttendanceInput();
+    const { user } = useAuth();
+
+    const [acara, setAcara] = useState('Pilih acara');
+    const [acaraList, setAcaraList] = useState([]);
+    const [isListVisible, setIsListVisible] = useState(false);
+
+    useEffect(() => {
+        fetch(`/api/events`)
+            .then(res => res.json())
+            .then(data => {
+                setAcaraList(data.map(event => event.nama_acara));
+            })
+            .catch(err => {
+                console.error("Error fetching events:", err);
+            });
+    }, []);
 
     useEffect(() => {
         function handleClickOutside(e) {
@@ -21,6 +41,11 @@ export default function DataAbsensi() {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    function submmitBtn(e) {
+        e.preventDefault();
+        submitAbsensi();
+    }
 
     return (
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
@@ -36,6 +61,72 @@ export default function DataAbsensi() {
                                 <h1 className="text-xl font-bold">Data Absensi</h1>
                             </div>
                             <div className="content-body">
+
+                                {user?.user_role === 'admin' && (<div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
+                                    <h2 className="font-bold m-2">Input Absensi</h2>
+                                    <div className="flex flex-col relative">
+                                        <label className="m-2" htmlFor="">Nama</label>
+                                        <input name="namaUser" value={form?.namaUser || ''} onChange={handleChange} className="relative m-2 bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
+                                        {userSuggestions.length > 0 && (
+                                            <div className="absolute top-[100px] left-0 right-0 bg-white border border-gray-300 rounded-md z-[100] shadow-lg m-2">
+                                                {userSuggestions.map(user => (
+                                                    <div
+                                                        key={user.id}
+                                                        onClick={() => pilihUser(user)}
+                                                        className="p-3 cursor-pointer hover:bg-blue-50"
+                                                    >
+                                                        {user.nama}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex flex-row items-center">
+                                        <div className="w-full m-2">
+                                            <label htmlFor="m-2">Keterangan</label>
+                                            <input name="keterangan" value={form.keterangan} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-row items-center">
+                                        <div className="w-full m-2">
+                                            <label htmlFor="m-2">Status</label>
+                                            <input name="status_absen" value={form.status_absen} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex md:flex-row flex-col md:m-0 m-2 items-center">
+                                        <div className="w-full m-2">
+                                            <label className="" htmlFor="">Acara</label>
+                                            <div className="w-full relative">
+                                                <button onClick={() => setIsListVisible(!isListVisible)} name="acara" value={acara} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md text-left hover:bg-blue-600/80 hover:text-white">
+                                                    {acara}
+                                                </button>
+                                                {isListVisible && (
+                                                    <div className="absolute w-full my-2 bg-white border border-gray-600/20 border-[0.5px] rounded-md z-10 overflow-hidden">
+                                                        {acaraList.map((event, index) => (
+                                                            <div key={index} onClick={() => {
+                                                                setAcara(event);
+                                                                setForm(prev => ({ ...prev, acara: event }));
+                                                            }} className="cursor-pointer hover:bg-blue-600/80 text-black hover:text-white p-2">
+                                                                <button className="w-full text-left" onClick={() => setIsListVisible(!isListVisible)}>{event}</button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="md:w-1/4 w-full md:2 mx-2">
+                                            <label className="invisible" htmlFor="">#</label>
+                                            <button onClick={submmitBtn} disabled={loading} className="w-full bg-blue-600/80 rounded-md p-2 flex items-center justify-center text-white cursor-pointer hover:bg-blue-700/80">
+                                                {loading ? 'Loading...' : 'Input Absensi'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>)}
+
                                 <div className="dataFilter p-2">
                                     <form onSubmit={handleSearch} className="flex flex-row md:p-2 w-full">
                                         <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 outline-none focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
@@ -134,4 +225,12 @@ export default function DataAbsensi() {
 
         </div>
     );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <DataAbsensi />
+        </Suspense>
+    )
 }

@@ -187,7 +187,7 @@ export default function ProfilPengguna() {
                                                 <input
                                                     value={name}
                                                     onChange={(e) => setName(e.target.value)}
-                                                    className="border rounded-lg p-2 text-sm"
+                                                    className="shadow-md rounded-lg p-2 text-sm"
                                                 />
                                             </div>
 
@@ -197,7 +197,7 @@ export default function ProfilPengguna() {
                                                     type="email"
                                                     value={email}
                                                     onChange={(e) => setEmail(e.target.value)}
-                                                    className="border rounded-lg p-2 text-sm"
+                                                    className="shadow-md rounded-lg p-2 text-sm"
                                                 />
                                             </div>
 
@@ -207,7 +207,7 @@ export default function ProfilPengguna() {
                                                     value={phone}
                                                     type="number"
                                                     onChange={(e) => setPhone(e.target.value)}
-                                                    className="border rounded-lg p-2 text-sm"
+                                                    className="shadow-md rounded-lg p-2 text-sm"
                                                 />
                                             </div>
 
@@ -218,7 +218,7 @@ export default function ProfilPengguna() {
                                                 <button
                                                     type="button"
                                                     onClick={() => setIsOpen(prev => !prev)}
-                                                    className="border rounded-lg p-2 text-left"
+                                                    className="shadow-md rounded-lg p-2 text-left"
                                                 >
                                                     {prodi}
                                                 </button>
@@ -264,7 +264,7 @@ export default function ProfilPengguna() {
                                                     type="password"
                                                     value={oldPassword}
                                                     onChange={(e) => setOldPassword(e.target.value)}
-                                                    className="border rounded-lg p-2"
+                                                    className="shadow-md rounded-lg p-2"
                                                 />
                                             </div>
 
@@ -274,7 +274,7 @@ export default function ProfilPengguna() {
                                                     type="password"
                                                     value={newPassword}
                                                     onChange={(e) => setNewPassword(e.target.value)}
-                                                    className="border rounded-lg p-2"
+                                                    className="shadow-md rounded-lg p-2"
                                                 />
                                             </div>
 
@@ -284,7 +284,7 @@ export default function ProfilPengguna() {
                                                     type="password"
                                                     value={confirmPassword}
                                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                                    className="border rounded-lg p-2"
+                                                    className="shadow-md rounded-lg p-2"
                                                 />
                                             </div>
 

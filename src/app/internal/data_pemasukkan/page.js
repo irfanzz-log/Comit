@@ -7,10 +7,23 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import useTransactions from "@/hooks/useTransactions";
 import ExportTableButton from "@/component/ExportTableButton";
+import userInsertTransactions from "@/hooks/useInsertTransactions";
+import { useAuth } from "@/app/context/AuthContext";
+import { Suspense } from "react";
 
-export default function DataAnggota() {
+export function DataAnggota() {
     const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, handleSearch } = useTransactions({ tipe: 'Pemasukkan', kategori: '' });
     const dropdownRef = useRef(null);
+
+    const { user } = useAuth();
+
+    const { form, handleChange, submitTransaksi, loading } = userInsertTransactions({ tipe: 'Pemasukkan', kategori: 'Lainnya' });
+
+    function submmitBtn(e) {
+        e.preventDefault();
+        if (!form.deskripsi || !form.jumlah) return alert("Isi data dengan lengkap!");
+        submitTransaksi();
+    }
 
     useEffect(() => {
         function handleClickOutside(e) {
@@ -36,7 +49,37 @@ export default function DataAnggota() {
                             </div>
                             <div className="content-body">
 
+                                {user?.user_role === 'admin' && (<div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
+                                    <h2 className="font-bold m-2">Tambah Pemasukkan</h2>
+                                    {/* <div className="flex flex-col">
+                                        <label className="m-2" htmlFor="">Nama</label>
+                                        <input value={form.target_user_id} onChange={handleChange} className="m-2 bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
+                                    </div> */}
+
+                                    <div className="flex flex-row items-center">
+                                        <div className="w-full m-2">
+                                            <label htmlFor="m-2">Deskripsi</label>
+                                            <input name="deskripsi" value={form.deskripsi} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex md:flex-row flex-col md:m-0 m-2 items-center">
+                                        <div className="w-full m-2">
+                                            <label className="m-2" htmlFor="">Jumlah</label>
+                                            <input name="jumlah" value={form.jumlah} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="number" />
+                                        </div>
+
+                                        <div className="md:w-1/4 w-full md:2 mx-2">
+                                            <label className="invisible" htmlFor="">#</label>
+                                            <button onClick={submmitBtn} disabled={loading} className="w-full bg-blue-600/80 rounded-md p-2 flex items-center justify-center text-white cursor-pointer hover:bg-blue-700/80">
+                                                {loading ? 'Loading...' : 'Input Pemasukkan'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>)}
+
                                 <div className="dataFilter p-2">
+                                    <h2 className="font-bold">Filter Data</h2>
                                     <form onSubmit={handleSearch} className="flex flex-row md:p-2 w-full mb-4">
                                         <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 outline-none focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
                                     </form>
@@ -46,7 +89,7 @@ export default function DataAnggota() {
                                 <div className="content-body_data p-5">
                                     <div className="head flex ">
                                         <div className="dataView w-screen">
-                                            <div className="hidden lg:block overflow-x-auto border border-1 border-black/10 rounded-md">
+                                            <div className="lg:block hidden overflow-x-auto border border-1 border-black/10 rounded-md">
                                                 <table id="table-data" className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
                                                     <thead className="bg-gray-50">
                                                         <tr>
@@ -111,4 +154,12 @@ export default function DataAnggota() {
 
         </div >
     );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <DataAnggota />
+        </Suspense>
+    )
 }

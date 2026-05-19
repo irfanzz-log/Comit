@@ -6,7 +6,7 @@ export const ourFileRouter = {
   // Tentukan endpoint "imageUploader"
   imageUploader: f({ 
     image: { 
-      maxFileSize: "1MB", 
+      maxFileSize: "5MB", 
       maxFileCount: 1 
     } 
   })

@@ -3,7 +3,6 @@
 import Aside from "@/component/internal/Aside";
 import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import ChartLine from "@/component/ChartLine";
-import DataFilter from "@/component/DateFilter";
 import { useState } from "react";
 import useGetAmountTransactions from "@/hooks/useGetAmountTransactions";
 

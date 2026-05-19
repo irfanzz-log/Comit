@@ -10,7 +10,6 @@ export async function POST(req) {
     const res = await query('SELECT id, user_npm, password, user_role FROM users WHERE user_npm = $1', [npm]);
     const user = res.rows[0];
     
-    
     //check npm
     if (!user) {
       return Response.json({error : "NPM tidak ditemukan"}, {status: 401});

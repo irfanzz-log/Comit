@@ -13,7 +13,6 @@ export default function Absensi() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalUsers, setTotalUsers] = useState(0);
-    const [isCameraActive, setIsCameraActive] = useState(false);
 
     useEffect(() => {
         // Fetch leaderboard data
@@ -51,14 +50,14 @@ export default function Absensi() {
                             </div>
                            
                             <div className="content-body mt-10">
-                                <div className="leaderboard border border-[0.5px] border-gray-600/80 rounded-md p-5 mb-10">
+                                <div className="leaderboard shadow-md rounded-md p-5 mb-10">
                                     <div className="leaderboard_head flex items-center mb-4">
                                         <h2 className="text-xl font-bold">Leaderboard Absensi</h2>
                                     </div>
                                     <div className="leaderboard_body ">
                                         <div className="card_users flex md:flex-row flex-col w-full">
                                             {leaderboard.map((user, index) => (
-                                                <div key={index} className="card_user w-full mx-2 flex items-center p-5 border border-1 border-black/10 rounded-md mb-2">
+                                                <div key={index} className="card_user transition-transform duration-300 ease-out hover:scale-105 w-full mx-2 flex items-center p-5 border border-1 border-black/10 rounded-md mb-2">
                                                     <div className="rank w-10 h-10 flex items-center justify-center bg-gray-300 rounded-full mr-4">{index + 1}</div>
                                                     <div className="profile w-15 h-15 rounded-full bg-gray-300 mr-4"></div>
                                                     <div className="user_info">

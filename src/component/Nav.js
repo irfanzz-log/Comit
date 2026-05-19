@@ -13,7 +13,7 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
     { href: link1, text: textLink1 },
     { href: link2, text: textLink2 },
     { href: link3, text: textLink3 }
-  ].filter(link => link.href); // Filter agar tidak render link kosong
+  ].filter(link => link.href);
 
   const authLinks = [
     { href: '/internal', text: 'Login', isPrimary: true },
@@ -24,15 +24,15 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
   if (loading) return null;
 
   return (
-    <header className="navbar relative flex justify-center mx-2">
-      <nav className="navbar__container flex md:absolute fixed z-30 justify-between items-center shadow-lg p-3 m-2 md:w-11/12 w-5/6 bg-blue-500 rounded-xl transition-all duration-300">
-        
+    <header className="navbar flex justify-center mx-2">
+      <nav className="navbar__container relative flex md:absolute fixed z-30 justify-between items-center shadow-lg p-3 m-2 md:w-11/12 w-5/6 bg-blue-500 rounded-xl transition-all duration-300">
+
         {/* Logo */}
         <div className="navbar__logo flex items-center">
-          <Image 
-            className="max-w-12 h-auto" 
-            src="/logo/commitLogo.png" 
-            alt="COMIT Logo" 
+          <Image
+            className="max-w-12 h-auto"
+            src="/logo/commitLogo.png"
+            alt="COMIT Logo"
             width={50} // Perkecil width agar build size lebih ringan
             height={50}
           />
@@ -54,7 +54,7 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
           {user ? (
             <div className="flex items-center space-x-4 text-white">
               <span className="font-medium">Halo, <span className="font-bold">{user.nama}</span></span>
-              <button 
+              <button
                 onClick={logout}
                 className="bg-red-500 hover:bg-red-500  px-4 py-2 rounded-lg transition-all"
               >
@@ -65,11 +65,10 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
             <ul className="navbar__auth flex flex-row space-x-4">
               {authLinks.map(({ href, text, isPrimary }, idx) => (
                 <li key={idx}>
-                  <Link 
+                  <Link
                     href={href}
-                    className={`px-4 py-2 rounded-lg transition-colors ${
-                      isPrimary ? 'bg-white text-blue-500 hover:bg-gray-100' : 'text-white hover:text-blue-100'
-                    }`}
+                    className={`px-4 py-2 rounded-lg transition-colors ${isPrimary ? 'bg-white text-blue-500 hover:bg-gray-100' : 'text-white hover:text-blue-100'
+                      }`}
                   >
                     {text}
                   </Link>
@@ -83,22 +82,46 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
         <div className="md:hidden flex items-center">
           <button
             onClick={toggleMenu}
-            className="navbar__menu-button bg-white p-2 rounded-xl text-blue-500 shadow-lg focus:outline-none"
+            className="navbar__menu-button relative text-white focus:outline-none"
             aria-label="Toggle menu"
           >
-            <div className="navbar__menu-icon space-y-1">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="w-6 h-0.5 bg-blue-500 rounded-lg" />
-              ))}
-            </div>
+            
+              <div className={`navbar__menu-icon absolute right-2 -top-4 space-y-1 transition-all duration-700 ease-out ${isMenuOpen ? 'opacity-100 rotate-180' : 'opacity-0 rotate-0'}`}>
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                fill="currentColor"
+                className="bi bi-x-lg"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+              </div>
+            
+              <div className={`navbar__menu-icon absolute right-2 -top-4 space-y-1 transition-all duration-700 ease-out ${isMenuOpen ? 'opacity-0 rotate-0' : 'opacity-100 rotate-180'}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="35"
+                  height="35"
+                  fill="currentColor"
+                  className="bi bi-list"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                  />
+                </svg>
+              </div>
+            
           </button>
         </div>
 
         {/* Mobile Menu Dropdown */}
-        <div 
-          className={`navbar__mobile-menu absolute top-0 left-0 w-full pb-5 rounded-xl shadow-lg bg-blue-500 transition-all duration-300 transform -z-10 ${
-            isMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-          } ${isDesktop ? 'hidden' : 'block'}`}
+        <div
+          className={`navbar__mobile-menu absolute top-0 left-0 w-full pb-5 rounded-xl shadow-lg bg-blue-500 transition-all duration-300 transform -z-10 ${isMenuOpen ? 'translate-y-10 opacity-100' : '-translate-y-0 opacity-0'
+            } ${isDesktop ? 'hidden' : 'block'}`}
         >
           <div className="flex flex-col items-center mt-20 space-y-5 px-6">
             {navLinks.map(({ href, text }) => (
@@ -118,9 +141,9 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
             ) : (
               <div className="w-full flex flex-col space-y-3">
                 {authLinks.map(({ href, text, isPrimary }) => (
-                  <Link 
-                    key={text} 
-                    href={href} 
+                  <Link
+                    key={text}
+                    href={href}
                     className={`text-center py-2 rounded-lg ${isPrimary ? 'bg-white text-blue-500' : 'text-white border border-white'}`}
                   >
                     {text}

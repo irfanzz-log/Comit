@@ -88,7 +88,7 @@ export default function StaffFilter() {
             nama={staff.nama}
             url={staff.imgUrl}
             divisi={staff.jabatan}
-            imgStyle="staff-grid__image w-full rounded-full shadow-xl"
+            imgStyle="staff-grid__image w-full object-cover rounded-xl"
             cardStyle="staff-grid__card flex justify-center items-center max-w-full mx-5 flex-col my-3 transform transition duration-300 hover:scale-125 cursor-pointer"
           />
         ))}

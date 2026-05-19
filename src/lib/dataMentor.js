@@ -93,7 +93,7 @@ export const kegiatan = [
 export const pengurus = [
   {
     posisi: "Ketua & Wakil Ketua Umum",
-    nama: "M Ridho Amin",
+    nama: "Danang Prasetio",
     jabatan: "Ketua Umum",
     imgUrl: "/pengurus/ketua-umum.png"
   },
@@ -144,12 +144,6 @@ export const pengurus = [
     nama: "Komalasari",
     jabatan: "SDM",
     imgUrl: "/pengurus/sdm-3.png"
-  },
-  {
-    posisi: "SDM",
-    nama: "Cahaya Dewi P",
-    jabatan: "SDM",
-    imgUrl: "/pengurus/sdm-4.png"
   },
   {
     posisi: "Humas Internal",
@@ -213,18 +207,6 @@ export const pengurus = [
   },
   {
     posisi: "Koordinator",
-    nama: "Alfian Akmal Fauzan",
-    jabatan: "Koordinator Prasarana",
-    imgUrl: "/pengurus/koor-prasarana.png"
-  },
-  {
-    posisi: "Koordinator",
-    nama: "Rilla Destiani",
-    jabatan: "Koordinator Kominfo",
-    imgUrl: "/pengurus/koor-kominfo.png"
-  },
-  {
-    posisi: "Koordinator",
     nama: "M Mupid Ahmadiawan",
     jabatan: "Koordinator Akademik",
     imgUrl: "/pengurus/koor-akademik.png"
@@ -248,12 +230,6 @@ export const pengurus = [
     imgUrl: "/pengurus/prasarana-3.png"
   },
   {
-    posisi: "Prasarana",
-    nama: "Pahrurrozi Ishaq",
-    jabatan: "Prasarana",
-    imgUrl: "/pengurus/prasarana-4.png"
-  },
-  {
     posisi: "Kominfo",
     nama: "Siti Salwa Salsabila",
     jabatan: "Kominfo",
@@ -264,18 +240,6 @@ export const pengurus = [
     nama: "Nur Rokhman",
     jabatan: "Kominfo",
     imgUrl: "/pengurus/kominfo-2.png"
-  },
-  {
-    posisi: "Kominfo",
-    nama: "Indah Febriyani",
-    jabatan: "Kominfo",
-    imgUrl: "/pengurus/kominfo-3.png"
-  },
-  {
-    posisi: "Kominfo",
-    nama: "Nisa Risqiyani",
-    jabatan: "Kominfo",
-    imgUrl: "/pengurus/kominfo-4.png"
   },
   {
     posisi: "Staff Programming",
@@ -296,12 +260,6 @@ export const pengurus = [
     imgUrl: "/pengurus/program-3.png"
   },
   {
-    posisi: "Staff Programming",
-    nama: "Erik Susanto",
-    jabatan: "Staff Programming",
-    imgUrl: "/pengurus/program-4.png"
-  },
-  {
     posisi: "Staff Design Grafis",
     nama: "Abella Pinkan Ham",
     jabatan: "Staff Design Grafis",
@@ -320,12 +278,6 @@ export const pengurus = [
     imgUrl: "/pengurus/design-3.png"
   },
   {
-    posisi: "Staff Design Grafis",
-    nama: "Rangga Andika",
-    jabatan: "Staff Design Grafis",
-    imgUrl: "/pengurus/design-4.png"
-  },
-  {
     posisi: "Staff Comp & Network",
     nama: "Kosasih",
     jabatan: "Staff Comp & Network",
@@ -342,12 +294,6 @@ export const pengurus = [
     nama: "Devi Benyamin",
     jabatan: "Staff Comp & Network",
     imgUrl: "/pengurus/comp-and-network-3.png"
-  },
-  {
-    posisi: "Staff Comp & Network",
-    nama: "Evelina Wulandari",
-    jabatan: "Staff Comp & Network",
-    imgUrl: "/pengurus/comp-and-network-4.png"
   },
   {
     posisi: "Staff Microsoft Office",

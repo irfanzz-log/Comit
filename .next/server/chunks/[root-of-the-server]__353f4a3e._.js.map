@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
-    {"offset": {"line": 55, "column": 0}, "map": {"version":3,"sources":["file:///Users/irfanzzs/File/COMIT/src/app/api/auth/logout/route.js"],"sourcesContent":["import { NextResponse } from 'next/server';\n\nexport async function POST(req) {\n  const response = NextResponse.json({ success: true });\n  response.cookies.set({\n    name: 'token',\n    value: '',\n    path: '/',\n    maxAge: 0, // hapus cookie\n    httpOnly: true,\n  });\n  return response;\n}"],"names":[],"mappings":";;;;AAAA;;AAEO,eAAe,KAAK,GAAG;IAC5B,MAAM,WAAW,gJAAY,CAAC,IAAI,CAAC;QAAE,SAAS;IAAK;IACnD,SAAS,OAAO,CAAC,GAAG,CAAC;QACnB,MAAM;QACN,OAAO;QACP,MAAM;QACN,QAAQ;QACR,UAAU;IACZ;IACA,OAAO;AACT","debugId":null}}]
-}

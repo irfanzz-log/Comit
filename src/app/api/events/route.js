@@ -1,13 +1,17 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const limit = searchParams.get("limit") || 5;
+
   try {
     const result = await query(
       `SELECT *
        FROM events
        ORDER BY tanggal_acara ASC
-       LIMIT 5`
+       LIMIT $1`,
+      [limit]
     );
 
     const res = result.rows;

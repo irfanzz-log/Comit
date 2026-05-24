@@ -5,9 +5,22 @@ import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import ChartLine from "@/component/ChartLine";
 import { useState } from "react";
 import useGetAmountTransactions from "@/hooks/useGetAmountTransactions";
+const { useEffect } = require("react");
 
 export default function Home() {
     const { pemasukkan, pengeluaran, kas } = useGetAmountTransactions();
+    const [totalUsers, setTotalUsers] = useState(0);
+
+    useEffect(() => {
+        async function getUsers() {
+            const res = await fetch('/api/userAttendance');
+            const data = await res.json();
+
+            setTotalUsers(data.totalUsers);
+        }
+
+        getUsers();
+    }, []);
 
     return (
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
@@ -60,7 +73,7 @@ export default function Home() {
                             </div>
                         </div>
                         <div className="info absolute right-10 bottom-2">
-                            <span className="text-sm text-gray-600">Updated: { }</span>
+                            <span className="text-sm text-gray-600">Updated: {new Date().toLocaleDateString('id-ID')}</span>
                         </div>
                     </div>
                     <div className="detail w-full flex md:flex-row flex-col items-center p-5 pb-10">
@@ -70,7 +83,7 @@ export default function Home() {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-users h-4 w-4 text-blue-500"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             </div>
                             <div className="detail_body flex flex-col my-4">
-                                <span className="text-2xl font-bold">268</span>
+                                <span className="text-2xl font-bold">{totalUsers}</span>
                                 <span className="text-sm text-gray-600">Total semua anggota aktif</span>
                             </div>
                         </div>
@@ -80,7 +93,7 @@ export default function Home() {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-circle-check-big h-4 w-4 text-green-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
                             </div>
                             <div className="detail_body flex flex-col my-4">
-                                <span className="text-2xl font-bold">268</span>
+                                <span className="text-2xl font-bold">{totalUsers}</span>
                                 <span className="text-sm text-gray-600">Total semua anggota aktif</span>
                             </div>
                         </div>
@@ -90,7 +103,7 @@ export default function Home() {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clock h-4 w-4 text-yellow-500"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             </div>
                             <div className="detail_body flex flex-col my-4">
-                                <span className="text-2xl font-bold">268</span>
+                                <span className="text-2xl font-bold">{totalUsers}</span>
                                 <span className="text-sm text-gray-600">Total semua anggota aktif</span>
                             </div>
                         </div>
@@ -100,7 +113,7 @@ export default function Home() {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user-cog h-4 w-4 text-purple-500"><circle cx="18" cy="15" r="3"></circle><circle cx="9" cy="7" r="4"></circle><path d="M10 15H6a4 4 0 0 0-4 4v2"></path><path d="m21.7 16.4-.9-.3"></path><path d="m15.2 13.9-.9-.3"></path><path d="m16.6 18.7.3-.9"></path><path d="m19.1 12.2.3-.9"></path><path d="m19.6 18.7-.4-1"></path><path d="m16.8 12.3-.4-1"></path><path d="m14.3 16.6 1-.4"></path><path d="m20.7 13.8 1-.4"></path></svg>
                             </div>
                             <div className="detail_body flex flex-col my-4">
-                                <span className="text-2xl font-bold">268</span>
+                                <span className="text-2xl font-bold">{totalUsers}</span>
                                 <span className="text-sm text-gray-600">Total semua anggota aktif</span>
                             </div>
                         </div>

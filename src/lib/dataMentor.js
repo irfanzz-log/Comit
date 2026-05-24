@@ -99,223 +99,199 @@ export const pengurus = [
   },
   {
     posisi: "Ketua & Wakil Ketua Umum",
-    nama: "Riska Amalia",
+    nama: "Erik Susanto",
     jabatan: "Wakil Ketua Umum",
     imgUrl: "/pengurus/wakil-ketua-umum.png"
   },
   {
     posisi: "Sekretaris",
-    nama: "Miftah Fadhillah",
+    nama: "Putriyana",
     jabatan: "Sekretaris 1",
     imgUrl: "/pengurus/sekretaris-1.png"
   },
   {
     posisi: "Sekretaris",
-    nama: "Revalia Nur Rahmat",
+    nama: "Abella Pinkan Ham",
     jabatan: "Sekretaris 2",
     imgUrl: "/pengurus/sekretaris-2.png"
   },
   {
     posisi: "Bendahara",
-    nama: "Latifah Alawiyah",
+    nama: "Sofi Utami",
     jabatan: "Bendahara 1",
     imgUrl: "/pengurus/bendahara-1.png"
   },
   {
     posisi: "Bendahara",
-    nama: "Nurlia Efrianti Rambe",
+    nama: "Eva Fauziah",
     jabatan: "Bendahara 2",
     imgUrl: "/pengurus/bendahara-2.png"
   },
   {
     posisi: "SDM",
-    nama: "Maulana Laksana Putra",
+    nama: "Ahmad Rohman",
     jabatan: "SDM",
     imgUrl: "/pengurus/sdm-1.png"
   },
   {
     posisi: "SDM",
-    nama: "Cindy Febry Yani",
+    nama: "Crisvin",
     jabatan: "SDM",
     imgUrl: "/pengurus/sdm-2.png"
   },
   {
     posisi: "SDM",
-    nama: "Komalasari",
+    nama: "Dewi Fatimah Nurhasiya",
     jabatan: "SDM",
     imgUrl: "/pengurus/sdm-3.png"
   },
   {
     posisi: "Humas Internal",
-    nama: "Harits Al Gibran",
+    nama: "Dita Resty Pauji",
     jabatan: "Humas Internal",
     imgUrl: "/pengurus/humas-internal-1.png"
   },
   {
     posisi: "Humas Internal",
-    nama: "Ririn Risqi Sulistya",
+    nama: "Ihya Ulumudin",
     jabatan: "Humas Internal",
     imgUrl: "/pengurus/humas-internal-2.png"
   },
   {
-    posisi: "Humas Internal",
-    nama: "Amelia Aulia Pradita",
-    jabatan: "Humas Internal",
-    imgUrl: "/pengurus/humas-internal-3.png"
-  },
-  {
-    posisi: "Humas Internal",
-    nama: "Syafira Khairunnisa",
-    jabatan: "Humas Internal",
-    imgUrl: "/pengurus/humas-internal-4.png"
-  },
-  {
     posisi: "Humas Eksternal",
-    nama: "Azzrah Zerlinda Putri",
+    nama: "Komalasari",
     jabatan: "Humas Eksternal",
     imgUrl: "/pengurus/humas-eksternal-1.png"
   },
   {
     posisi: "Humas Eksternal",
-    nama: "Kadek Budayana",
+    nama: "Ryan Adi Prasetyo",
     jabatan: "Humas Eksternal",
     imgUrl: "/pengurus/humas-eksternal-2.png"
   },
   {
     posisi: "Humas Eksternal",
-    nama: "Nurfail Jazali",
+    nama: "Chesa Aulia",
     jabatan: "Humas Eksternal",
     imgUrl: "/pengurus/humas-eksternal-3.png"
   },
   {
-    posisi: "Humas Eksternal",
-    nama: "M Teuku Rizal",
-    jabatan: "Humas Eksternal",
-    imgUrl: "/pengurus/humas-eksternal-4.png"
-  },
-  {
     posisi: "Koordinator",
-    nama: "Arif Rhamadan",
-    jabatan: "Koordinator SDM",
-    imgUrl: "/pengurus/koor-sdm.png"
-  },
-  {
-    posisi: "Koordinator",
-    nama: "Rio Pratama",
+    nama: "Muhammad Teuku Rizal",
     jabatan: "Koordinator Humas",
     imgUrl: "/pengurus/koor-humas.png"
   },
   {
     posisi: "Koordinator",
-    nama: "M Mupid Ahmadiawan",
+    nama: "M Irfansyah",
     jabatan: "Koordinator Akademik",
     imgUrl: "/pengurus/koor-akademik.png"
   },
   {
     posisi: "Prasarana",
-    nama: "Iman Rizki Yuda",
+    nama: "Bayu Indra Setiawan",
     jabatan: "Prasarana",
     imgUrl: "/pengurus/prasarana-1.png"
   },
   {
     posisi: "Prasarana",
-    nama: "Danang Prasetio",
+    nama: "Muhammad Chandra Wijaya",
     jabatan: "Prasarana",
     imgUrl: "/pengurus/prasarana-2.png"
   },
   {
     posisi: "Prasarana",
-    nama: "Reza Adi Firmansyah",
+    nama: "Agustian Sadovin",
     jabatan: "Prasarana",
     imgUrl: "/pengurus/prasarana-3.png"
   },
   {
     posisi: "Kominfo",
-    nama: "Siti Salwa Salsabila",
+    nama: "Nufail Jazali",
     jabatan: "Kominfo",
     imgUrl: "/pengurus/kominfo-1.png"
   },
   {
     posisi: "Kominfo",
-    nama: "Nur Rokhman",
+    nama: "Zunda Melandari",
     jabatan: "Kominfo",
     imgUrl: "/pengurus/kominfo-2.png"
   },
   {
     posisi: "Staff Programming",
-    nama: "Crisvin",
+    nama: "Galih Eza Kurniawansyah",
     jabatan: "Staff Programming",
     imgUrl: "/pengurus/program-1.png"
   },
   {
     posisi: "Staff Programming",
-    nama: "Ahmad Rohman",
+    nama: "Rifki Dwi Al Zari",
     jabatan: "Staff Programming",
     imgUrl: "/pengurus/program-2.png"
   },
   {
     posisi: "Staff Programming",
-    nama: "Muhammad Wildan",
+    nama: "Reva Andini",
     jabatan: "Staff Programming",
     imgUrl: "/pengurus/program-3.png"
   },
   {
     posisi: "Staff Design Grafis",
-    nama: "Abella Pinkan Ham",
+    nama: "Nabila Salsabila",
     jabatan: "Staff Design Grafis",
     imgUrl: "/pengurus/design-1.png"
   },
   {
     posisi: "Staff Design Grafis",
-    nama: "Rieska Ayu Aprelia",
+    nama: "Fikriyah",
     jabatan: "Staff Design Grafis",
     imgUrl: "/pengurus/design-2.png"
   },
   {
     posisi: "Staff Design Grafis",
-    nama: "Sofi Utami",
+    nama: "Meysha Shifa Ayudia",
     jabatan: "Staff Design Grafis",
     imgUrl: "/pengurus/design-3.png"
   },
   {
     posisi: "Staff Comp & Network",
-    nama: "Kosasih",
+    nama: "Haikal Rifalda",
     jabatan: "Staff Comp & Network",
     imgUrl: "/pengurus/comp-and-network-1.png"
   },
   {
     posisi: "Staff Comp & Network",
-    nama: "Utama Perwira",
+    nama: "Rusminah",
     jabatan: "Staff Comp & Network",
     imgUrl: "/pengurus/comp-and-network-2.png"
   },
   {
     posisi: "Staff Comp & Network",
-    nama: "Devi Benyamin",
+    nama: "Ripki Dimas Andrea",
     jabatan: "Staff Comp & Network",
     imgUrl: "/pengurus/comp-and-network-3.png"
   },
   {
     posisi: "Staff Microsoft Office",
-    nama: "Dinda Angraini",
+    nama: "Giany Syahnariza Haura",
     jabatan: "Staff Microsoft Office",
     imgUrl: "/pengurus/ms-office-1.png"
   },
   {
     posisi: "Staff Microsoft Office",
-    nama: "Nabila Zahira",
+    nama: "Dona Raflina",
     jabatan: "Staff Microsoft Office",
     imgUrl: "/pengurus/ms-office-2.png"
   },
   {
     posisi: "Staff Microsoft Office",
-    nama: "Bunga Dwi",
+    nama: "Andini  Rahmayati",
     jabatan: "Staff Microsoft Office",
     imgUrl: "/pengurus/ms-office-3.png"
   },
   {
     posisi: "Staff Microsoft Office",
-    nama: "Amelia Pramesti",
+    nama: "Yuliyanti",
     jabatan: "Staff Microsoft Office",
     imgUrl: "/pengurus/ms-office-4.png"
   },

@@ -7,7 +7,7 @@ import { useAuth } from "@/app/context/AuthContext";
 
 export default function Navigation({ link1, link2, link3, textLink1, textLink2, textLink3 }) {
   const { isDesktop, isMenuOpen, toggleMenu } = useDesktopOpen();
-  const { user, logout, loading } = useAuth(); // Tambahkan logout & loading
+  const { user, logout, loading } = useAuth();
 
   const navLinks = [
     { href: link1, text: textLink1 },
@@ -20,12 +20,9 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
     { href: '/internal/sign', text: 'Daftar', isPrimary: false }
   ];
 
-  // Cegah flickering saat loading auth
-  if (loading) return null;
-
   return (
-    <header className="navbar flex justify-center mx-2">
-      <nav className="navbar__container relative flex md:absolute fixed z-30 justify-between items-center shadow-lg p-3 m-2 md:w-11/12 w-5/6 bg-blue-500 rounded-xl transition-all duration-300">
+    <header className="navbar relative flex justify-center mx-2 w-full">
+      <nav className="navbar__container flex fixed z-30 justify-between w-4/5 items-center shadow-lg p-3 m-2 bg-blue-500 rounded-xl">
 
         {/* Logo */}
         <div className="navbar__logo flex items-center">
@@ -33,7 +30,7 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
             className="max-w-12 h-auto"
             src="/logo/commitLogo.png"
             alt="COMIT Logo"
-            width={50} // Perkecil width agar build size lebih ringan
+            width={50} //
             height={50}
           />
         </div>

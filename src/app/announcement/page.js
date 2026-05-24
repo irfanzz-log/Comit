@@ -11,7 +11,8 @@ export default function Announcement() {
     const [dataAcara, setDataAcara] = useState();
 
     useEffect(() => {
-        fetch('/api/events')
+        fetch('/api/events',
+        )
             .then((res) => res.json())
             .then((data) => setDataAcara(data)
             )
@@ -84,11 +85,13 @@ export default function Announcement() {
                                     className="w-full"
                                 >
                                     <div className="flex w-full md:flex-row flex-col my-3 shadow-lg hover:scale-101 transition-transform duration-300 ease-out overflow-hidden rounded-md">
-                                        <div className="md:w-1/2 w-full bg-blue-500 overflow-hidden h-100"><img src={data.file_url} className="w-full h-full object-cover" /></div>
+                                        <div className="md:w-1/2 w-full bg-blue-500 overflow-hidden h-100"><img src={data.file_url || '/background/imgHero3.png'} onError={(e) => {
+                                            e.currentTarget.src = "/background/imgHero3.png";
+                                        }} className="w-full h-full object-cover" /></div>
                                         <div className="p-10 relative md:w-3/4 w-full">
-                                            <h2 className="font-bold text-3xl">COMTECH 2026</h2>
+                                            <h2 className="font-bold text-3xl">{data.nama_acara}</h2>
                                             <p>{data.komentar}</p>
-                                            <div className="md:absolute bottom-5">
+                                            <div className="my-20">
                                                 <p>Tanggal Acara</p>
                                                 <span className="text-gray-600/80">12 April 2026</span>
                                             </div>

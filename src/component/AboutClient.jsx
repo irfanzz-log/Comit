@@ -18,12 +18,8 @@ export default function AboutClient() {
         <Loading />
         
         {/* Content wrapper */}
-        <motion.section
-          initial={{ opacity: 0 , x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: "easeOut"}}
-          viewport={{ once: true }}
-          className="about__content md:rounded-xl overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide">
+        <section
+          className="about__content md:rounded-xl overflow-x-hidden overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide">
           {/* Navigation */}
           <Nav
             link1="/"
@@ -35,11 +31,7 @@ export default function AboutClient() {
           />
 
           {/* Hero section */}
-          <motion.section
-            initial={{ opacity: 0 , x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut"}}
-            viewport={{ once: true }}
+          <section
             className="hero relative snap-start flex w-full items-center justify-center p-5 h-full flex-col bg-[url(/background/imgHero3.png)] bg-center bg-cover">
             <div className="hero__overlay absolute inset-0 bg-gradient-to-r from-gray-800/80 to-gray-700/50"></div>
             <div className="hero__content relative z-10 w-full flex flex-col items-center justify-center">
@@ -51,40 +43,28 @@ export default function AboutClient() {
               </p>
               <OnClick targetId="kepengurusan" content="Eksplorasi" />
             </div>
-          </motion.section>
+          </section>
 
           {/* Management section */}
-          <motion.section
-            initial={{ opacity: 0 , x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut"}}
-            viewport={{ once: true }}
+          <section
             id="kepengurusan"
             className="management relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col md:pb-0 pb-10"
           >
             <Kepengurusan />
-          </motion.section>
+          </section>
 
           {/* Gallery section */}
-          <motion.section
-            initial={{ opacity: 0 , x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut"}}
-            viewport={{ once: true }}
+          <section
             id="kegiatan"
             className="gallery relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col md:p-0 p-2"
           >
             <article className="gallery__content relative z-10 w-full flex flex-col items-center md:p-10">
               <Galeri />
             </article>
-          </motion.section>
+          </section>
 
           {/* Contact section */}
-          <motion.section
-            initial={{ opacity: 0 , x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut"}}
-            viewport={{ once: true }}
+          <section
             className="contact relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col md:pb-0 pb-10"
           >
             <div className="contact__content relative z-10 w-full flex flex-col items-center md:p-10 ">
@@ -99,10 +79,10 @@ export default function AboutClient() {
                 <Form />
               </div>
             </div>
-          </motion.section>
+          </section>
 
           <Footer />
-        </motion.section>
+        </section>
       </main>
     </>
   );

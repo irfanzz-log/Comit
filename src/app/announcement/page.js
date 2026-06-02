@@ -23,17 +23,13 @@ export default function Announcement() {
 
     return (
         <>
-            <main className="about__container w-screen h-screen bg-gray-200 flex justify-center md:p-10 bg-[url(/background/imgHero4.png)]">
+            <main className="about__container w-screen h-screen bg-gray-200 flex justify-center md:p-10 bg-[url(/background/imgHero4.png)] overflow-x-hidden">
                 <div className="about__overlay absolute inset-0 bg-black/70 backdrop-blur-md"></div>
                 <Loading />
 
                 {/* Content wrapper */}
-                <motion.section
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1 }}
-                    viewport={{ once: true }}
-                    className="about__content md:rounded-xl overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide"
+                <section
+                    className="about__content md:rounded-xl overflow-x-hidden overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide"
                 >
                     {/* Navigation */}
                     <Nav
@@ -46,11 +42,7 @@ export default function Announcement() {
                     />
 
                     {/* Hero section */}
-                    <motion.section
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1 }}
-                        viewport={{ once: true }}
+                    <section
                         className="hero relative snap-start flex w-full items-center justify-center p-5 h-full flex-col bg-[url(/background/imgHero3.png)] bg-center bg-cover"
                     >
                         <div className="hero__overlay absolute inset-0 bg-gradient-to-r from-gray-800/80 to-gray-700/50"></div>
@@ -63,13 +55,9 @@ export default function Announcement() {
                             </p>
                             <OnClick targetId="kepengurusan" content="Eksplorasi" />
                         </div>
-                    </motion.section>
+                    </section>
 
-                    <motion.section
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1 }}
-                        viewport={{ once: true }}
+                    <section
                         id="events"
                         className="relative flex w-full items-center snap-start justify-center p-5 flex-col bg-white"
                     >
@@ -101,10 +89,10 @@ export default function Announcement() {
 
                             ))}
                         </div>
-                    </motion.section>
+                    </section>
 
                     <Footer />
-                </motion.section>
+                </section>
             </main>
         </>
     )

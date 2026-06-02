@@ -48,7 +48,7 @@ export function DataAnggota() {
                             </div>
                             <div className="content-body">
 
-                                {user?.user_role === 'admin' && (
+                                {(user?.user_role === 'developer' || user?.user_role === 'bendahara') && (
                                     <div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
                                         <h2 className="font-bold m-2">Tambah Pengeluaran</h2>
                                         {/* <div className="flex flex-col">

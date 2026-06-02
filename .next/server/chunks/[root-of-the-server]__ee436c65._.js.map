@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 43, "column": 0}, "map": {"version":3,"sources":["file:///Users/irfanzzs/File/COMIT/src/app/api/uploadthing/route.js"],"sourcesContent":["import { createUploadthing, createRouteHandler } from \"uploadthing/next\";\n\nconst f = createUploadthing();\n\nexport const ourFileRouter = {\n  imageUploader: f({ image: { maxFileSize: \"4MB\" } })\n    .onUploadComplete(async ({ file }) => {\n      return { url: file.url, key: file.key };\n    }),\n};\n\nexport const { GET, POST } = createRouteHandler({\n  router: ourFileRouter,\n});"],"names":[],"mappings":";;;;;;;;AAAA;;AAEA,MAAM,IAAI,IAAA,mLAAiB;AAEpB,MAAM,gBAAgB;IAC3B,eAAe,EAAE;QAAE,OAAO;YAAE,aAAa;QAAM;IAAE,GAC9C,gBAAgB,CAAC,OAAO,EAAE,IAAI,EAAE;QAC/B,OAAO;YAAE,KAAK,KAAK,GAAG;YAAE,KAAK,KAAK,GAAG;QAAC;IACxC;AACJ;AAEO,MAAM,EAAE,GAAG,EAAE,IAAI,EAAE,GAAG,IAAA,oLAAkB,EAAC;IAC9C,QAAQ;AACV","debugId":null}}]
+}

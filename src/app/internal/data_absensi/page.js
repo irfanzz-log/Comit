@@ -62,12 +62,13 @@ export function DataAbsensi() {
                             </div>
                             <div className="content-body">
 
-                                {user?.user_role === 'admin' && (<div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
-                                    <h2 className="font-bold m-2">Input Absensi</h2>
-                                    <div className="flex flex-col relative">
-                                        <label className="m-2" htmlFor="">Nama</label>
-                                        <input name="namaUser" value={form?.namaUser || ''} onChange={handleChange} className="relative m-2 bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
-                                        {userSuggestions.length > 0 && (
+                                {(user?.user_role === 'developer' || user?.user_role === 'sekretaris') && (
+                                    <div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
+                                        <h2 className="font-bold m-2">Input Absensi</h2>
+                                        <div className="flex flex-col relative">
+                                            <label className="m-2" htmlFor="">Nama</label>
+                                            <input name="namaUser" value={form?.namaUser || ''} onChange={handleChange} className="relative m-2 bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
+                                            {userSuggestions.length > 0 && (
                                             <div className="absolute top-[100px] left-0 right-0 bg-white border border-gray-300 rounded-md z-[100] shadow-lg m-2">
                                                 {userSuggestions.map(user => (
                                                     <div

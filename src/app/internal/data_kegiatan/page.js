@@ -52,6 +52,10 @@ export default function DataKegiatan() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if  (user?.user_role !== 'developer' && user?.user_role !== 'sekretaris' && user?.user_role !== 'staff') {
+            alert("Anda tidak memiliki izin untuk membuat acara.");
+            return;
+        }
         try {
             await fetch('/api/addEvents', {
             method : "POST",

@@ -14,6 +14,11 @@ const jurusanOptions = [
 export default function SignPage() {
     const [selectedJurusan, setSelectedJurusan] = useState('Pilih Jurusan');
     const [isOpen, setIsOpen] = useState(false);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        alert("Form pendaftaran masih dalam tahap pengembangan. Harap tunggu informasi selanjutnya.");
+    }
     return (
         <div className="login-page-container w-full h-screen bg-blue-500 flex flex-col justify-center items-center">
             <div className="login-page md:w-1/2 w-full md:h-auto h-full p-10 flex flex-col justify-center items-center">
@@ -31,7 +36,7 @@ export default function SignPage() {
                     </div>
                 </div>
                 <div className="login-page_body w-full">
-                    <form className="">
+                    <form onSubmit={handleSubmit} className="">
                         <div className="form-input flex md:flex-row flex-col gap-5">
                             <div className="left-side md:w-1/2 w-full">
                                 <div className="name w-full my-3">

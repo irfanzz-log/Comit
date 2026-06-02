@@ -14,7 +14,7 @@ import useGetEvent from '@/hooks/useGetEvent';
 export default function Home() {
   const event = useGetEvent(20);
   console.log(event);
-  
+
   return (
     <>
       {/* Main Container */}
@@ -23,12 +23,8 @@ export default function Home() {
         <Loading />
 
         {/* Content Wrapper */}
-        <motion.section
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className='home__content md:rounded-xl overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide'>
+        <section
+          className='home__content md:rounded-xl overflow-x-hidden overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide'>
           {/* Navigation */}
           < Navigation
             link1="/"
@@ -40,11 +36,7 @@ export default function Home() {
           />
 
           {/* Hero Section */}
-          <motion.section
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            viewport={{ once: true }}
+          <section
             className='hero relative snap-start flex w-full items-center justify-center p-5 h-full bg-[url(/background/imgHero2.png)] bg-center bg-cover'>
             <div className="hero__overlay absolute inset-0 bg-gradient-to-r from-gray-800/80 to-gray-700/50" />
             <div className="hero__content relative z-10 w-full flex flex-col items-center justify-center">
@@ -52,24 +44,16 @@ export default function Home() {
               <p className='hero__subtitle m-5 text-white text-center'>Semangat COMIT, salam teknologi!</p>
               <OnClick targetId="tentangKami" content="Eksplorasi" />
             </div>
-          </motion.section>
+          </section>
 
           {/* About Section */}
-          <motion.section
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            viewport={{ once: true }}
+          <section
             id='tentangKami' className='about relative md:snap-start flex w-full md:h-full h-auto items-center p-5 bg-white flex-col overflow-hidden'>
             <TentangKamiSlide />
-          </motion.section>
+          </section>
 
           {/* Division Section */}
-          <motion.section
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            viewport={{ once: true }}
+          <section
             id='divisi' className='division relative md:snap-start flex w-full md:h-auto items-center p-5 bg-blue-500 flex-col'>
             <div className="division__content relative z-10 w-full flex flex-col md:p-10">
               <header className='division__header text-white lg:w-full md:w-1/2 w-full text-center md:text-left'>
@@ -78,14 +62,10 @@ export default function Home() {
               </header>
               <Divisi />
             </div>
-          </motion.section>
+          </section>
 
           {/* Mentor Section */}
-          <motion.section
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            viewport={{ once: true }}
+          <section
             id='mentor' className='mentor relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col'>
             <div className="mentor__content relative z-10 w-full flex flex-col md:mt-0 mt-10 items-center md:p-10">
               <header className='mentor__header md:w-1/2 w-full text-center'>
@@ -114,45 +94,47 @@ export default function Home() {
                 })}
               </div>
             </div>
-          </motion.section>
+          </section>
 
           {/* Activities Section */}
-          <motion.section
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            viewport={{ once: true }}
+          <section
             id='kegiatan' className='activities relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col md:px-0 px-10'>
 
-            <div className='w-full px-20 my-20'>
+            <div className='w-full my-20'>
               <header className='activities__header w-full flex justify-center flex-col text-center'>
                 <h2 className='text-5xl font-bold my-2'>Kegiatan Kami</h2>
                 <p className='text-lg my-2'>Kami mempunyai beberapa kegiatan yang sudah kami lakukan selama ini</p>
               </header>
-              <div className='w-full flex flex-wrap justify-center items-center'>
-                {event && event.length > 0 ? (
-                  event.map((event, idx) => {
-                    return (
-                      <div key={idx} className='md:w-1/4 w-1/2 hover:scale-105 transition-transform duration-600 ease-out flex flex-wrap justify-center items-center m-10 text-center'>
-                        <div className='w-full'>
-                          <Image src="/background/imgHero1.png" alt="Activity" width={400} height={300} />
-                        </div>
-                        <div className='my-2'>
-                          <h3 className='font-bold text-2xl'>{event.nama_acara}</h3>
-                          <p className='text-sm'>{event.komentar}</p>
-                        </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:px-20 px-0">
+                {event?.map((item, idx) => (
+                  <div key={idx} className="h-full">
+                    <div className="h-full flex flex-col rounded-lg p-4">
+                      <Image
+                        src="/background/imgHero1.png"
+                        alt="Activity"
+                        width={400}
+                        height={300}
+                        className="w-full"
+                      />
+
+                      <div className="flex-1 mt-4">
+                        <h3 className="font-bold text-2xl mb-2">
+                          {item.nama_acara}
+                        </h3>
+
+                        <p className="text-sm">
+                          {item.komentar}
+                        </p>
                       </div>
-                    )
-                  })
-                ) : (
-                  <p className='text-center w-full'>No events found.</p>
-                )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </motion.section>
+          </section>
 
           <Footer />
-        </motion.section>
+        </section>
 
         {/* Popup Button */}
         <div className="popup md:block hidden shadow-xl cursor-pointer" />

@@ -14,9 +14,16 @@ export default function LoginPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (!npm || !password) {
+            alert("NPM dan password harus diisi.");
+            return;
+        }
+        if (npm.length < 8 && password.length < 8) {
+            alert("NPM dan password harus minimal 8 karakter.");
+            return;
+        }
         try {
             await login(npm, password);
-            // Redirect to dashboard or home page after successful login
             router.push('/internal/home');
         } catch (error) {
             alert(error.message);

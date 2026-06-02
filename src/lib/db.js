@@ -1,9 +1,17 @@
 import { Pool } from "pg";
 
+// const pool = new Pool({
+//   host: "103.247.9.247",
+//   user: "comit",
+//   password: "fz$W9YNE6$WVFW",
+//   database: "comit_db",
+//   port: 5432,
+// });
+
 const pool = new Pool({
-  host: "103.247.9.247",
-  user: "comit",
-  password: "fz$W9YNE6$WVFW",
+  host: "localhost",
+  user: "irfanzzs",
+  password: "",
   database: "comit_db",
   port: 5432,
 });

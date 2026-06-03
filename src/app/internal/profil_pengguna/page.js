@@ -259,7 +259,7 @@ export default function ProfilPengguna() {
                                         <form onSubmit={handlePasswordSubmit} className="mt-5">
 
                                             <div className="flex flex-col mt-2">
-                                                <label>Password Lama</label>
+                                                <label className="text-sm">Password Lama</label>
                                                 <input
                                                     type="password"
                                                     value={oldPassword}
@@ -269,7 +269,7 @@ export default function ProfilPengguna() {
                                             </div>
 
                                             <div className="flex flex-col mt-2">
-                                                <label>Password Baru</label>
+                                                <label className="text-sm">Password Baru</label>
                                                 <input
                                                     type="password"
                                                     value={newPassword}
@@ -279,7 +279,7 @@ export default function ProfilPengguna() {
                                             </div>
 
                                             <div className="flex flex-col mt-2">
-                                                <label>Konfirmasi Password</label>
+                                                <label className="text-sm">Konfirmasi Password</label>
                                                 <input
                                                     type="password"
                                                     value={confirmPassword}

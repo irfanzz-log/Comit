@@ -206,7 +206,7 @@ async function POST(req) {
         });
     }
     //check password
-    const isPasswordValid = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$hash$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["comparePassword"])(password, user.password);
+    const isPasswordValid = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$hash$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["comparePassword"])(password, user.password);
     if (!isPasswordValid) {
         return Response.json({
             error: "Password salah"

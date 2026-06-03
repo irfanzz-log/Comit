@@ -290,7 +290,6 @@
     --color-blue-500: #3080ff;
     --color-blue-600: #155dfc;
     --color-blue-700: #1447e6;
-    --color-blue-800: #193cb8;
     --color-purple-500: #ac4bff;
     --color-purple-600: #9810fa;
     --color-gray-50: #f9fafb;
@@ -358,7 +357,6 @@
       --color-blue-500: color(display-p3 .266422 .491219 .988624);
       --color-blue-600: color(display-p3 .174493 .358974 .950247);
       --color-blue-700: color(display-p3 .1379 .274983 .867624);
-      --color-blue-800: color(display-p3 .134023 .230646 .695537);
       --color-purple-500: color(display-p3 .629519 .30089 .990817);
       --color-purple-600: color(display-p3 .546729 .130167 .94439);
       --color-gray-50: color(display-p3 .977213 .98084 .985102);
@@ -390,7 +388,6 @@
       --color-blue-500: lab(54.1736% 13.3369 -74.6839);
       --color-blue-600: lab(44.0605% 29.0279 -86.0352);
       --color-blue-700: lab(36.9089% 35.0961 -85.6872);
-      --color-blue-800: lab(30.2514% 27.7853 -70.2699);
       --color-purple-500: lab(52.0183% 66.11 -78.2316);
       --color-purple-600: lab(43.0295% 75.21 -86.5669);
       --color-gray-50: lab(98.2596% -.247031 -.706708);
@@ -901,10 +898,6 @@
     margin: calc(var(--spacing) * 5);
   }
 
-  .m-10 {
-    margin: calc(var(--spacing) * 10);
-  }
-
   .mx-2 {
     margin-inline: calc(var(--spacing) * 2);
   }
@@ -1103,16 +1096,8 @@
     max-height: calc(var(--spacing) * 4);
   }
 
-  .max-h-10 {
-    max-height: calc(var(--spacing) * 10);
-  }
-
   .max-h-40 {
     max-height: calc(var(--spacing) * 40);
-  }
-
-  .max-h-50 {
-    max-height: calc(var(--spacing) * 50);
   }
 
   .max-h-60 {
@@ -1121,10 +1106,6 @@
 
   .max-h-80 {
     max-height: calc(var(--spacing) * 80);
-  }
-
-  .max-h-100 {
-    max-height: calc(var(--spacing) * 100);
   }
 
   .min-h-screen {
@@ -1922,10 +1903,6 @@
     padding-inline: calc(var(--spacing) * 10);
   }
 
-  .px-20 {
-    padding-inline: calc(var(--spacing) * 20);
-  }
-
   .py-1 {
     padding-block: calc(var(--spacing) * 1);
   }
@@ -2350,12 +2327,6 @@
   }
 
   @media (hover: hover) {
-    .hover\:bg-blue-800:hover {
-      background-color: var(--color-blue-800);
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:bg-gray-100:hover {
       background-color: var(--color-gray-100);
     }
@@ -2418,12 +2389,6 @@
   @media (hover: hover) {
     .hover\:text-blue-100:hover {
       color: var(--color-blue-100);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:text-blue-700:hover {
-      color: var(--color-blue-700);
     }
   }
 
@@ -2757,12 +2722,6 @@
   @media (min-width: 48rem) {
     .md\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 48rem) {
-    .md\:grid-cols-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 

@@ -16,7 +16,7 @@ export async function POST(req) {
     }
         
     //check password
-    const isPasswordValid = comparePassword(password, user.password);
+    const isPasswordValid = await comparePassword(password, user.password);
     if (!isPasswordValid) {
         return Response.json({error : "Password salah"}, {status:401});
     }

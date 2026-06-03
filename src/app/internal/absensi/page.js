@@ -34,6 +34,7 @@ export default function Absensi() {
     }, [page]);
 
     console.log(leaderboard);
+    
 
     return (
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">

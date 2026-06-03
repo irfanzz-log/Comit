@@ -1,7 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/about/page": "app/about/page.js",
-  "/announcement/page": "app/announcement/page.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
   "/api/auth/logout/route": "app/api/auth/logout/route.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
@@ -10,7 +7,6 @@
   "/api/uploadthing/route": "app/api/uploadthing/route.js",
   "/api/userAttendance/route": "app/api/userAttendance/route.js",
   "/api/userInfo/route": "app/api/userInfo/route.js",
-  "/api/userSearch/route": "app/api/userSearch/route.js",
   "/internal/absensi/page": "app/internal/absensi/page.js",
   "/internal/data_absensi/page": "app/internal/data_absensi/page.js",
   "/internal/data_anggota/page": "app/internal/data_anggota/page.js",
@@ -20,6 +16,5 @@
   "/internal/data_uang_kas/page": "app/internal/data_uang_kas/page.js",
   "/internal/home/page": "app/internal/home/page.js",
   "/internal/login/page": "app/internal/login/page.js",
-  "/internal/sign/page": "app/internal/sign/page.js",
-  "/page": "app/page.js"
+  "/internal/profil_pengguna/page": "app/internal/profil_pengguna/page.js"
 }

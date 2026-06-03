@@ -18,7 +18,7 @@ export default function LoginPage() {
             alert("NPM dan password harus diisi.");
             return;
         }
-        if (npm.length < 8 && password.length < 8) {
+        if (npm.length < 8 || password.length < 8) {
             alert("NPM dan password harus minimal 8 karakter.");
             return;
         }
@@ -26,7 +26,7 @@ export default function LoginPage() {
             await login(npm, password);
             router.push('/internal/home');
         } catch (error) {
-            alert(error.message);
+            alert("NPM atau password salah.");
         }
     }
     

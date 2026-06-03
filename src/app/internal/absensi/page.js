@@ -2,9 +2,10 @@
 
 import Aside from "@/component/internal/Aside";
 import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import Pagination from "@/hooks/ui/pagination";
 import ExportTableButton from "@/component/ExportTableButton";
+import Image from "next/image";
 
 export default function Absensi() {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -13,9 +14,9 @@ export default function Absensi() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalUsers, setTotalUsers] = useState(0);
+    const [linkImg, setLinkImg] = useState([]);
 
     useEffect(() => {
-        // Fetch leaderboard data
         async function fetchLeaderboard() {
             try {
                 const res = await fetch(`/api/userAttendance?page=${page}`);
@@ -23,7 +24,7 @@ export default function Absensi() {
                 setLeaderboard(data.leaderboard);
                 setLeaderboardAll(data.leaderboardAll);
                 setDataAnggota(data.users);
-                setTotalPages(data.totalPages);
+                setTotalPages(data.pageAll);
                 setTotalUsers(data.totalLeaderboard.length);
             } catch (error) {
                 console.error('Error fetching leaderboard:', error);
@@ -33,9 +34,20 @@ export default function Absensi() {
         fetchLeaderboard();
     }, [page]);
 
-    console.log(leaderboard);
-    
+    useEffect(() => {
+        async function fetchUserProfile() {
+            try {
+                const res = await fetch('/api/userInfo');
+                const data = await res.json();
+                setLinkImg(data.allUsers);
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching user profile:', error);
+            }
+        }
 
+        fetchUserProfile();
+    }, []);
     return (
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
             <Aside />
@@ -49,7 +61,7 @@ export default function Absensi() {
                             <div className="content-head">
                                 <h1 className="text-xl font-bold">Dashboard Absensi</h1>
                             </div>
-                           
+
                             <div className="content-body mt-10">
                                 <div className="leaderboard shadow-md rounded-md p-5 mb-10">
                                     <div className="leaderboard_head flex items-center mb-4">
@@ -60,8 +72,29 @@ export default function Absensi() {
                                             {leaderboard.map((user, index) => (
                                                 <div key={index} className="card_user transition-transform duration-300 ease-out hover:scale-105 w-full mx-2 flex items-center p-5 border border-1 border-black/10 rounded-md mb-2">
                                                     <div className="rank w-10 h-10 flex items-center justify-center bg-gray-300 rounded-full mr-4">{index + 1}</div>
-                                                    <div className="profile w-15 h-15 rounded-full bg-gray-300 mr-4"></div>
-                                                    <div className="user_info">
+                                                    <div className="profile w-15 h-15 rounded-full bg-gray-300 mr-4">
+                                                        {(() => {
+                                                            const matched = linkImg.find(img => img.nama === user.nama);
+
+                                                            if (!matched) {
+                                                                console.warn(`Gagal mencari gambar untuk: "${user.nama}"`);
+                                                            } else {
+                                                                console.log(`Berhasil menemukan gambar untuk: "${matched.nama}"`);
+                                                            }
+
+                                                            return (
+                                                                <Image
+                                                                    width={60}
+                                                                    height={60}
+                                                                    priority={true}
+                                                                    className="profile_img w-full h-full rounded-full object-cover"
+                                                                    src={`/pengurus/${matched?.linkimg}`}
+                                                                    alt={`${user.nama}'s profile picture`}
+                                                                />
+                                                            );
+                                                        })()}
+                                                    </div>
+                                                    <div className="user_info md:w-1/2 w-1/3">
                                                         <p className="name font-bold">{user.nama}</p>
                                                         <p className="status text-sm text-gray-600/80">Total Kehadiran: {user.hadir}</p>
                                                     </div>
@@ -98,6 +131,7 @@ export default function Absensi() {
                                                     </tbody>
                                                 </table>
                                             </div>
+
                                             <div className="dataView_card lg:hidden">
                                                 {leaderboardAll.map((data, index) => {
                                                     return (

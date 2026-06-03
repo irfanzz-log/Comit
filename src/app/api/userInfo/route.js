@@ -68,11 +68,15 @@ export async function GET(req) {
         `;
 
         const dataRes = await query(dataQuery, [...values, limit, offset]);
-
+        const allUsersQuery = `
+            SELECT * FROM users_info
+        `;
+        const allUsersRes = await query(allUsersQuery);
         return NextResponse.json({
             users: dataRes.rows,
             totalPages,
-            totalUsers
+            totalUsers,
+            allUsers: allUsersRes.rows
         });
 
     } catch (error) {

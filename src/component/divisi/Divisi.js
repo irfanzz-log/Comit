@@ -63,7 +63,7 @@ export default function DivisiSection() {
         {/* Member Counter */}
         <div
           ref={counterRef}
-          className="divisi__counter md:w-1/2 w-full text-white md:text-right text-center flex justify-center"
+          className="divisi__counter md:w-1/2 w-full md:mt-0 mt-5 text-white md:text-right text-center flex justify-center"
         >
           <p className="font-bold md:text-5xl text-4xl text-center md:w-full w-1/2">
             {memberCount}+ Anggota

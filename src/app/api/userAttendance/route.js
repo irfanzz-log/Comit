@@ -52,6 +52,12 @@ export async function GET(req) {
             ${whereClause}
         `;
 
+        // PAGE ALL
+        const countQueryAll = `
+            SELECT COUNT(*)
+            FROM users `
+            ;
+
         const countAcara = `
             SELECT a.acara
             FROM attendance a 
@@ -113,6 +119,9 @@ export async function GET(req) {
         const countRes = await query(countQuery, values);
         const totalUsers = parseInt(countRes.rows[0].count);
         const totalPages = Math.ceil(totalUsers / limit);
+        const pageAllUsersRes = await query(countQueryAll);
+        const pageAllUsers = parseInt(pageAllUsersRes.rows[0].count);
+        const pageAll = Math.ceil(pageAllUsers / limit);
 
         const acaraRes = await query(countAcara);
         const acara = acaraRes.rows;
@@ -140,6 +149,7 @@ export async function GET(req) {
         return NextResponse.json({
             users: dataRes.rows,
             totalPages,
+            pageAll,
             totalUsers,
             leaderboard,
             leaderboardAll,

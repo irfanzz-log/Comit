@@ -80,7 +80,7 @@ export default function Home() {
                       initial={{ opacity: 0, x: 20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5 }}
-                      className='relative hover:scale-105 transition-transform duration-600 ease-out md:w-1/6 w-1/2 md:m-10 md:p-0 p-10'
+                      className='relative hover:scale-105 transition-transform duration-600 ease-out md:w-1/6 w-full md:m-10 md:p-0 p-10'
                     >
                       <div className='relative w-full overflow-hidden rounded-full shadow-xl'>
                         <Image src={data.imgurl} height={400} width={400} alt="Mentor" />

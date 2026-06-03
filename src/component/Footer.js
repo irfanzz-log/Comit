@@ -20,9 +20,6 @@ const SmoothScrollLink = ({ targetId, children }) => (
   </Link>
 );
 
-/**
- * Footer component containing site navigation, logos, and copyright information
- */
 export default function Footer() {
   // Navigation links configuration
   const navLinks = [
@@ -37,7 +34,8 @@ export default function Footer() {
     'Workshop Data Analyst',
     'Workshop Arduino',
     'LDC',
-    'Digidraw'
+    'Digidraw',
+    'Comtech 2026'
   ];
 
   return (

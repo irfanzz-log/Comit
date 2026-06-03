@@ -132,8 +132,8 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
             {/* Mobile Auth Links */}
             {user ? (
               <div className="flex flex-col items-center space-y-3 w-full">
-                <span className="text-white">User: {user.name}</span>
-                <button onClick={logout} className="text-red-200 font-bold">Logout</button>
+                <span className="text-white">{user.nama}</span>
+                <button onClick={logout} className="text-white bg-red-500 p-2 px-5 rounded-lg">Logout</button>
               </div>
             ) : (
               <div className="w-full flex flex-col space-y-3">

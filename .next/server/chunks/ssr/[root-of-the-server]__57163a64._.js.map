@@ -1,0 +1,1 @@
+{"version":3,"sources":["turbopack:///[project]/src/app/admin/page.js"],"sourcesContent":["export default function Admin() {\n    return (\n        <>\n            <p>Ini Halaman Admin</p>\n        </>\n    )\n}"],"names":[],"mappings":"kRAAe,SAAS,IACpB,MACI,CAAA,EAAA,EAAA,GAAA,EAAA,EAAA,QAAA,CAAA,UACI,CAAA,EAAA,EAAA,GAAA,EAAC,IAAA,UAAE,uBAGf"}

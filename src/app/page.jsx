@@ -13,8 +13,6 @@ import useGetEvent from '@/hooks/useGetEvent';
 
 export default function Home() {
   const event = useGetEvent(20);
-  console.log(event);
-
   return (
     <>
       {/* Main Container */}
@@ -80,7 +78,7 @@ export default function Home() {
                       initial={{ opacity: 0, x: 20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5 }}
-                      className='relative hover:scale-105 transition-transform duration-600 ease-out md:w-1/6 w-full md:m-10 md:p-0 p-10'
+                      className='relative hover:scale-105 transition-transform duration-600 ease-out md:w-1/6 w-1/2 md:m-10 md:p-0 p-5'
                     >
                       <div className='relative w-full overflow-hidden rounded-full shadow-xl'>
                         <Image src={data.imgurl} height={400} width={400} alt="Mentor" />
@@ -92,43 +90,6 @@ export default function Home() {
                     </motion.div>
                   )
                 })}
-              </div>
-            </div>
-          </section>
-
-          {/* Activities Section */}
-          <section
-            id='kegiatan' className='activities relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col md:px-0 px-10'>
-
-            <div className='w-full my-20'>
-              <header className='activities__header w-full flex justify-center flex-col text-center'>
-                <h2 className='text-5xl font-bold my-2'>Kegiatan Kami</h2>
-                <p className='text-lg my-2'>Kami mempunyai beberapa kegiatan yang sudah kami lakukan selama ini</p>
-              </header>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:px-20 px-0">
-                {event?.map((item, idx) => (
-                  <div key={idx} className="h-full">
-                    <div className="h-full flex flex-col rounded-lg p-4">
-                      <Image
-                        src="/background/imgHero1.png"
-                        alt="Activity"
-                        width={400}
-                        height={300}
-                        className="w-full"
-                      />
-
-                      <div className="flex-1 mt-4">
-                        <h3 className="font-bold text-2xl mb-2">
-                          {item.nama_acara}
-                        </h3>
-
-                        <p className="text-sm">
-                          {item.komentar}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </section>

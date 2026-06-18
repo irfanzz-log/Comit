@@ -77,9 +77,9 @@ export default function Absensi() {
                                                             const matched = linkImg.find(img => img.nama === user.nama);
 
                                                             if (!matched) {
-                                                                console.warn(`Gagal mencari gambar untuk: "${user.nama}"`);
+                                                                console.warn(`Gagal mencari gambar untuk leaderboard"`);
                                                             } else {
-                                                                console.log(`Berhasil menemukan gambar untuk: "${matched.nama}"`);
+                                                                console.log(`Berhasil menemukan gambar untuk leaderboard"`);
                                                             }
 
                                                             return (
@@ -88,7 +88,7 @@ export default function Absensi() {
                                                                     height={60}
                                                                     priority={true}
                                                                     className="profile_img w-full h-full rounded-full object-cover"
-                                                                    src={`/pengurus/${matched?.linkimg}`}
+                                                                    src={`/pengurus/${matched?.linkimg}.png`}
                                                                     alt={`${user.nama}'s profile picture`}
                                                                 />
                                                             );

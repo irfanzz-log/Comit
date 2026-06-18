@@ -9,7 +9,7 @@ export async function GET(req) {
     const result = await query(
       `SELECT *
        FROM events
-       ORDER BY tanggal_acara ASC
+       ORDER BY tanggal_acara DESC
        LIMIT $1`,
       [limit]
     );

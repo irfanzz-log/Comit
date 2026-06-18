@@ -28,14 +28,14 @@ export function AuthProvider({ children }) {
         fetchUser();
     }, []);
 
-    async function login(npm,password) {
+    async function login(npm,password,remembered) {
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ npm, password }),
+                body: JSON.stringify({ npm, password, remembered }),
                 credentials: 'include',
             });
 

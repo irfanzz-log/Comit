@@ -9,6 +9,7 @@ import { useAuth } from "@/app/context/AuthContext"
 export default function LoginPage() {
     const [npm, setNpm] = useState("");
     const [password, setPassword] = useState("");
+    const [remembered, setIsRemembered] = useState(false);
     const router = useRouter();
     const { login } = useAuth();
 
@@ -23,7 +24,11 @@ export default function LoginPage() {
             return;
         }
         try {
-            await login(npm, password);
+            const result = await login(npm, password, remembered);
+            if (result.error) {
+            alert("NPM atau Password Salah!");
+            return;
+    }
             router.push('/internal/home');
         } catch (error) {
             alert("NPM atau password salah.");
@@ -55,7 +60,7 @@ export default function LoginPage() {
 
                     <div className="form-content w-full flex justify-between items-center text-white text-sm">
                         <div className="form-content_info flex items-center gap-2">
-                            <input type="checkbox" id="checkbox" name="checkbox" className="w-4 h-4 cursor-pointer" />
+                            <input type="checkbox" id="checkbox" name="checkbox" className="w-4 h-4 cursor-pointer" checked={remembered} onChange={(e)=> setIsRemembered(e.target.checked)} />
                             <label htmlFor="checkbox" className="cursor-pointer">Ingat saya</label>
                         </div>
                         <Link href="#">Lupa Password?</Link>

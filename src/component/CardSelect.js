@@ -5,16 +5,11 @@ import { pengurus } from "@/lib/dataMentor";
 import Card from "./Cards";
 import Image from "next/image";
 
-/**
- * StaffFilter component for filtering and displaying organization staff members
- */
 export default function StaffFilter() {
-  // State management for dropdown and selection
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("Pilih Posisi");
   const [currentRole, setCurrentRole] = useState('Ketua & Wakil Ketua Umum');
 
-  // Available positions in the organization
   const positions = [
     "Ketua & Wakil Ketua Umum",
     "Sekretaris",
@@ -31,12 +26,10 @@ export default function StaffFilter() {
     "Staff Microsoft Office"
   ];
 
-  // Filter staff members based on selected position
   const filteredStaff = pengurus.filter(member => member.posisi === currentRole);
 
   return (
     <>
-      {/* Position Selector Dropdown */}
       <div className="relative mt-10 staff-filter relative md:w-1/3 w-3/4 z-10">
         <button
           className="staff-filter__button flex justify-between items-center p-3 w-full bg-blue-500 text-white rounded-xl shadow-lg transition-colors hover:bg-blue-600"
@@ -54,7 +47,6 @@ export default function StaffFilter() {
           />
         </button>
 
-        {/* Dropdown Options */}
         {isDropdownOpen && (
           <ul 
             className="absolute staff-filter__options overflow-y-scroll scrollbar-hide max-h-80 -mt-3 rounded-b-xl -z-1 w-full"

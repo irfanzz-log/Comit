@@ -4,7 +4,7 @@ import { query } from "@/lib/db";
 import { comparePassword } from "@/lib/hash";
 
 export async function POST(req) {
-    const { npm, password } = await req.json();
+    const { npm, password, remembered } = await req.json();
 
     //user
     const res = await query('SELECT id, user_npm, password, user_role FROM users WHERE user_npm = $1', [npm]);
@@ -33,7 +33,7 @@ export async function POST(req) {
         value: token,
         httpOnly: true,
         path: "/",
-        maxAge: 86400,
+        maxAge: remembered ? 60 * 60 * 24 * 30 : undefined,
         sameSite: "lax",
     });
 

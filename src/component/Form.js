@@ -44,7 +44,7 @@ export default function ContactForm() {
         body: JSON.stringify({
           name: e.target.name.value,
           email: e.target.email.value,
-          message: e.target.message.value // Fixed: was using email.value
+          message: e.target.message.value 
         }),
       });
 
@@ -52,10 +52,9 @@ export default function ContactForm() {
       setStatus(data.success ? "Terkirim!" : "Gagal");
       setShowStatus(true);
 
-      // Reset form if successful
       if (data.success) {
         e.target.reset();
-        setTimeout(() => setShowStatus(false), 3000); // Hide status after 3s
+        setTimeout(() => setShowStatus(false), 3000);
       }
     } catch (error) {
       setStatus("Gagal mengirim pesan");
@@ -65,13 +64,13 @@ export default function ContactForm() {
 
   return (
     <div className="contact-form w-full flex flex-col pb-20 items-center">
-      {/* Contact Form */}
+  
       <form 
         ref={formRef}
         onSubmit={handleSubmit}
         className="contact-form__container flex flex-col bg-blue-500 p-5 rounded-lg shadow-lg my-5 md:w-full w-5/6 transform transition-all duration-1000 translate-y-10 opacity-0"
       >
-        {/* Name Field */}
+       
         <div className="contact-form__field mb-4">
           <label htmlFor="name" className="contact-form__label text-white block mb-2">
             Nama
@@ -85,7 +84,7 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Email Field */}
+        
         <div className="contact-form__field mb-4">
           <label htmlFor="email" className="contact-form__label text-white block mb-2">
             Email
@@ -100,7 +99,7 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Message Field */}
+        
         <div className="contact-form__field mb-4">
           <label htmlFor="message" className="contact-form__label text-white block mb-2">
             Pesan
@@ -115,7 +114,7 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Submit Button */}
+        
         <button
           type="submit"
           className="contact-form__submit mt-4 bg-white text-blue-500 py-2 px-6 rounded-md font-medium hover:bg-blue-50 transform hover:scale-105 transition-all duration-300"
@@ -124,7 +123,7 @@ export default function ContactForm() {
         </button>
       </form>
 
-      {/* Status Message */}
+      
       {showStatus && (
         <div 
           className={`contact-form__status w-full md:w-1/3 text-center p-3 rounded-md mt-4 transition-all duration-300 ${

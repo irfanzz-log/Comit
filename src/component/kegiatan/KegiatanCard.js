@@ -4,16 +4,10 @@ import { kegiatan } from "@/lib/dataMentor";
 import Card from "../Cards";
 import { useEffect, useRef } from "react";
 
-/**
- * ActivitySection component displays a list of activities with fade-in animations
- * Combines both section and card animations with a single observer
- */
 export default function ActivitySection() {
-  // Refs for intersection observer
   const sectionRef = useRef(null);
   const cardRefs = useRef([]);
 
-  // Setup intersection observer for fade-in animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -27,12 +21,10 @@ export default function ActivitySection() {
       { threshold: 0.2 }
     );
 
-    // Observe section header
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
 
-    // Observe all card elements
     cardRefs.current.forEach(el => {
       if (el) observer.observe(el);
     });
@@ -42,7 +34,6 @@ export default function ActivitySection() {
 
   return (
     <article className="activities relative z-10 w-full md:pt-0 pt-5">
-      {/* Section Header with Animation */}
       <div 
         ref={sectionRef}
         className="activities__content w-full opacity-0 transition-all duration-1000 ease-out flex flex-col items-center md:p-10"

@@ -26,7 +26,7 @@ export default function MyUploadButton({ setImgUrl, setFileKey }) {
 
   return (
     <div className="flex flex-col items-center gap-3 w-full">
-      <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md cursor-pointer">
+      <label className="bg-blue-600/80 hover:bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
         {isUploading ? "Uploading..." : "Pilih Foto Acara"}
         <input
           type="file"

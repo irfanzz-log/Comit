@@ -5,9 +5,9 @@ import Footer from "@/component/Footer";
 import Loading from "@/component/Loading";
 import Form from "@/component/Form";
 import OnClick from "@/component/OnClick";
-import Kepengurusan from "@/component/Kepengurusan/Kepengurusan";
 import Galeri from "@/component/Galeri/Galeri";
 import { motion } from "motion/react";
+import CardSelect from "@/component/CardSelect";
 
 export default function AboutClient() {
   return (
@@ -16,7 +16,7 @@ export default function AboutClient() {
       <main className="about__container w-screen h-screen bg-gray-200 flex justify-center md:p-10 bg-[url(/background/imgHero4.png)]">
         <div className="about__overlay absolute inset-0 bg-black/70 backdrop-blur-md"></div>
         <Loading />
-        
+
         {/* Content wrapper */}
         <section
           className="about__content md:rounded-xl overflow-x-hidden overflow-y-auto md:snap-y md:snap-mandatory scrollbar-hide">
@@ -50,7 +50,25 @@ export default function AboutClient() {
             id="kepengurusan"
             className="management relative md:snap-start flex w-full md:h-auto items-center bg-white flex-col md:pb-0 pb-10"
           >
-            <Kepengurusan />
+            <motion.div
+              initial={{ x: 400, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 2, ease: "easeInOut" }}
+              className="relative z-10 w-full flex flex-col items-center md:p-10"
+            >
+              <header className=" md:w-1/2 2-full text-center md:p-0 p-5">
+                <h2 className="text-5xl font-bold my-2">Kepengurusan</h2>
+                <p className="text-lg my-2">
+                  Kepengurusan COMIT 2025-2026 (Avantera). Kepengurusan COMIT
+                  merupakan wadah utama yang berperan dalam menggerakkan seluruh
+                  kegiatan organisasi, mulai dari perencanaan program kerja,
+                  pelaksanaan kegiatan, hingga pengembangan anggota.
+                </p>
+              </header>
+              <div className="relative section-content w-full flex flex-wrap justify-center">
+                <CardSelect></CardSelect>
+              </div>
+            </motion.div>
           </section>
 
           {/* Gallery section */}

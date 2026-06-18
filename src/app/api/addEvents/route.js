@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try {
-        const { fileUrl, fileKey, user_id, nameEvent, date, comment } = await req.json();
+        const { fileUrl, fileKey, user_id, nameEvent, date, comment, tipe } = await req.json();
 
-        const res = await query(`INSERT INTO events (nama_acara,tanggal_acara,komentar,file_url,file_key,user_id) VALUES ($1,$2,$3,$4,$5,$6) returning *`, [nameEvent,date,comment,fileUrl,fileKey,user_id]);
+        const res = await query(`INSERT INTO events (nama_acara,tanggal_acara,komentar,tipe_acara,file_url,file_key,user_id) VALUES ($1,$2,$3,$4,$5,$6,$7) returning *`, [nameEvent,date,comment,tipe,fileUrl,fileKey,user_id]);
 
         return NextResponse.json(res.rows[0], { status: 201 });
     } catch (error) {

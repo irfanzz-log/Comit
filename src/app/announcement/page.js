@@ -70,7 +70,7 @@ export default function Announcement() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 1 }}
                                     viewport={{ once: true }}
-                                    className="w-full"
+                                    className={`w-full ${dataAcara.tipe_acara === 'internal' ? 'none' : ''}`}
                                 >
                                     <div className="flex w-full md:flex-row flex-col my-3 shadow-lg hover:scale-101 transition-transform duration-300 ease-out overflow-hidden rounded-md">
                                         <div className="md:w-1/2 w-full bg-blue-500 overflow-hidden h-100"><img src={data.file_url || '/background/imgHero3.png'} onError={(e) => {

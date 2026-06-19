@@ -35,7 +35,13 @@ export default function Scanner() {
             const devices = await Html5Qrcode.getCameras();
             if (!devices?.length) return;
 
-            const cameraId = devices[0].id;
+            const backCamera = devices.find(camera =>
+                camera.label.toLowerCase().includes("back") ||
+                camera.label.toLowerCase().includes("environment") ||
+                camera.label.toLowerCase().includes("rear")
+            );
+
+            const cameraId = backCamera ? backCamera.id : devices[0].id;
 
             isRunningRef.current = true;
             setIsRunning(true);
@@ -45,7 +51,6 @@ export default function Scanner() {
                 {
                     fps: 10,
                     qrbox: 300,
-                    facingMode: "environment"
                 },
                 async (decodedText) => {
 

@@ -45,6 +45,7 @@ export default function Scanner() {
                 {
                     fps: 10,
                     qrbox: 300,
+                    facingMode: "environment"
                 },
                 async (decodedText) => {
 

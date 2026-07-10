@@ -8,6 +8,8 @@ export async function POST(req) {
     path: '/',
     maxAge: 0, // hapus cookie
     httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
   });
   return response;
 }

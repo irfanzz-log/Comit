@@ -5,6 +5,7 @@ import OnClick from "@/component/OnClick";
 import Footer from "@/component/Footer";
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
+import { div } from "motion/react-client";
 
 export default function Announcement() {
 
@@ -20,6 +21,9 @@ export default function Announcement() {
             );
 
     }, []);
+
+    console.log(dataAcara);
+    
 
     return (
         <>
@@ -62,15 +66,16 @@ export default function Announcement() {
                         className="relative flex w-full items-center snap-start justify-center p-5 flex-col bg-white"
                     >
                         <div className="md:w-3/4 w-full my-20 flex flex-col items-center justify-center">
-                            {dataAcara?.map((data, index) => (
-
-                                <motion.div
-                                    key={index}
+                            {dataAcara?.map((data, index) => {
+                                return (
+                                    <div key={index}>
+                                        {data.tipe_acara === 'internal' ? '' : <motion.div
+                                    
                                     initial={{ opacity: 0, x: -20 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 1 }}
                                     viewport={{ once: true }}
-                                    className={`w-full ${dataAcara.tipe_acara === 'internal' ? 'none' : ''}`}
+                                    className={`w-full`}
                                 >
                                     <div className="flex w-full md:flex-row flex-col my-3 shadow-lg hover:scale-101 transition-transform duration-300 ease-out overflow-hidden rounded-md">
                                         <div className="md:w-1/2 w-full bg-blue-500 overflow-hidden h-100"><img src={data.file_url || '/background/imgHero3.png'} onError={(e) => {
@@ -85,9 +90,10 @@ export default function Announcement() {
                                             </div>
                                         </div>
                                     </div>
-                                </motion.div>
-
-                            ))}
+                                </motion.div>}
+                                    </div>
+                                )
+                            })}
                         </div>
                     </section>
 

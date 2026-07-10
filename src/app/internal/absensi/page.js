@@ -25,7 +25,7 @@ export default function Absensi() {
                 setLeaderboardAll(data.leaderboardAll);
                 setDataAnggota(data.users);
                 setTotalPages(data.pageAll);
-                setTotalUsers(data.totalLeaderboard.length);
+                setTotalUsers(data.totalLeaderboard?.length || []);
             } catch (error) {
                 console.error('Error fetching leaderboard:', error);
             }

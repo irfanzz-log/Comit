@@ -11,7 +11,7 @@ import userInsertTransactions from "@/hooks/useInsertTransactions";
 import { useAuth } from "@/app/context/AuthContext";
 import { Suspense } from "react";
 
-export function DataAnggota() {
+export function DataPemasukkan() {
     const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, handleSearch } = useTransactions({ tipe: 'Pemasukkan', kategori: '' });
     const dropdownRef = useRef(null);
 
@@ -105,7 +105,7 @@ export function DataAnggota() {
                                                             <tr key={idx} className="even:bg-gray-50">
                                                                 <td className="px-4 py-2 text-sm text-gray-700">{(page - 1) * 10 + idx + 1}</td>
                                                                 <td className="px-4 py-2 text-sm text-gray-700">{data.nama_penginput}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.deskripsi}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700">{(data.deskripsi)}</td>
                                                                 <td className="px-4 py-2 text-sm text-gray-700">Rp{Number(data.jumlah).toLocaleString('id-ID')}</td>
                                                                 <td className="px-4 py-2 text-sm text-gray-700">{new Date(data.created_at).toLocaleString('id-ID', {
                                                                     dateStyle: 'medium',
@@ -159,7 +159,7 @@ export function DataAnggota() {
 export default function Page() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <DataAnggota />
+            <DataPemasukkan />
         </Suspense>
     )
 }

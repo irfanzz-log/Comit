@@ -5,22 +5,33 @@ import { useRouter } from "next/navigation";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [user,setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     async function fetchUser() {
         try {
-            const res = await fetch('/api/auth/me', {credentials: 'include'});
-            if (res.ok) {
-                const userData = await res.json();
-                setUser(userData.user);
+            const res = await fetch('/api/auth/me', {
+                credentials: 'include'
+            });
+
+            if (res.status === 401) {
+                setUser(null);
+                router.replace('/internal/login');
+                return;
             }
+
+            if (!res.ok) {
+                throw new Error('Failed to fetch user');
+            }
+
+            const userData = await res.json();
+            setUser(userData.user);
         } catch (error) {
             setUser(null);
-            console.error('Error fetching user:', error);
+            console.error(error);
         } finally {
-            setLoading(false);  
+            setLoading(false);
         }
     }
 
@@ -28,7 +39,7 @@ export function AuthProvider({ children }) {
         fetchUser();
     }, []);
 
-    async function login(npm,password,remembered) {
+    async function login(npm, password, remembered) {
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -41,7 +52,7 @@ export function AuthProvider({ children }) {
 
             if (!res.ok) throw new Error('Login failed');
 
-            const me = await fetch('/api/auth/me', {credentials: 'include'});
+            const me = await fetch('/api/auth/me', { credentials: 'include' });
             const userData = await me.json();
             setUser(userData.user);
 

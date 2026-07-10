@@ -21,7 +21,7 @@ export default function Navigation({ link1, link2, link3, textLink1, textLink2, 
   ];
 
   return (
-    <header className="navbar relative flex justify-center mx-2 w-full">
+    <header className="navbar relative flex justify-center w-full">
       <nav className="navbar__container flex fixed z-30 justify-between w-4/5 items-center shadow-lg p-3 m-2 bg-blue-500 rounded-xl">
 
         {/* Logo */}

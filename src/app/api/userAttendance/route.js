@@ -7,6 +7,8 @@ export async function GET(req) {
     const page = parseInt(searchParams.get('page')) || 1;
     const limit = 10;
     const offset = (page - 1) * limit;
+    const userIdRaw = parseInt(searchParams.get('userId'));
+    const userId = userIdRaw ? parseInt(userIdRaw) : null;
 
     try {
         let conditions = [];
@@ -114,7 +116,7 @@ export async function GET(req) {
         const leaderboardAll = leaderboardAllRes.rows;
 
         const leaderboardAllRows = await query(leaderboardAllrows);
-        const totalLeaderboard = leaderboardAllRows.rows;
+        const totalLeaderboard = leaderboardAllRows?.rows || [];
 
         const countRes = await query(countQuery, values);
         const totalUsers = parseInt(countRes.rows[0].count);
@@ -144,7 +146,12 @@ export async function GET(req) {
             LIMIT $${idx} OFFSET $${idx + 1}
         `;
 
+        const dataAttendance = `
+        SELECT acara FROM attendance 
+        WHERE user_id = $1`;
+
         const dataRes = await query(dataQuery, [...values, limit, offset]);
+        const resAttendance = await query(dataAttendance, [userId]);
 
         return NextResponse.json({
             users: dataRes.rows,
@@ -154,7 +161,8 @@ export async function GET(req) {
             leaderboard,
             leaderboardAll,
             totalLeaderboard,
-            acara
+            acara,
+            resAttendance: resAttendance.rows
         });
 
     } catch (error) {

@@ -1,15 +1,19 @@
-    import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-    const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
-    export function signToken(payload) {
-        return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d'});
-    }
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined");
+}
 
-    export function verifyToken(token) {
-        try {
-            return jwt.verify(token, JWT_SECRET);
-        } catch (error) {
-            return null;
-        }
-    }
+export function signToken(payload, expiresIn = "1d") {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn });
+}
+
+export function verifyToken(token) {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (err) {
+    return null;
+  }
+}

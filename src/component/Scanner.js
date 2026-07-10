@@ -13,16 +13,19 @@ export default function Scanner() {
     const isStoppingRef = useRef(false);
     const isProcessingRef = useRef(false);
     const lastScanRef = useRef("");
+    const [dataAcara, setDataAcara] = useState({});
 
     const [isRunning, setIsRunning] = useState(false);
 
     useEffect(() => {
-        const scanner = new Html5Qrcode("reader");
-        scannerRef.current = scanner;
+        if (!scannerRef.current) {
+            scannerRef.current = new Html5Qrcode("reader");
+        }
 
         return () => {
             safeStop();
-            scanner.clear?.();
+            scannerRef.current?.clear?.();
+            scannerRef.current = null;
         };
     }, []);
 
@@ -50,34 +53,63 @@ export default function Scanner() {
                 cameraId,
                 {
                     fps: 10,
-                    qrbox: 300,
+                    qrbox: (viewfinderWidth, viewfinderHeight) => {
+                        const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+
+                        const qrboxSize = minEdge < 400
+                            ? Math.floor(minEdge * 0.7)
+                            : 250;
+
+                        return {
+                            width: qrboxSize,
+                            height: qrboxSize
+                        };
+                    },
                 },
                 async (decodedText) => {
-
-                    if (isProcessingRef.current) return;
-                    if (lastScanRef.current === decodedText) return;
+                    if (isProcessingRef.current || lastScanRef.current === decodedText) return;
 
                     isProcessingRef.current = true;
                     lastScanRef.current = decodedText;
 
+                    console.log("QR TERBACA:", decodedText);
+
                     try {
+                        await safeStop();
+
                         const event = await getDataEvents(decodedText);
                         if (!event) {
                             alert('Acara tidak ditemukan');
+                            startScanner();
                             return;
                         }
 
-                        await sendData(event.nama_acara);
+                        const attendance = await getDataAttendance(user.id);
 
-                        alert("Absen Berhasil!");
+                        const sudahAbsen = attendance.some(
+                            item => item.acara === event.nama_acara
+                        );
 
-                        await safeStop();
+                        if (sudahAbsen) {
+                            alert("Anda sudah absen di acara ini");
+                            startScanner();
+                            return;
+                        }
+
+                        const success = await sendData(event.nama_acara);
+                        if (success) {
+                            alert("Absen Berhasil!");
+                        } else {
+                            startScanner();
+                        }
                     } catch (err) {
                         console.error("SCAN ERROR:", err);
+                        startScanner();
                     } finally {
                         setTimeout(() => {
                             isProcessingRef.current = false;
-                        }, 1200);
+                            lastScanRef.current = ""; // Reset agar bisa scan ulang nanti
+                        }, 2000);
                     }
                 }
             );
@@ -121,6 +153,7 @@ export default function Scanner() {
             if (!res.ok) {
                 console.log('Kode Qr salah');
             }
+            console.log(result[0]);
 
             return result[0];
         } catch (error) {
@@ -128,32 +161,47 @@ export default function Scanner() {
         }
     }
 
+    async function getDataAttendance(data) {
+        const res = await fetch(`/api/userAttendance?userId=${data}`);
+        const result = await res.json();
+        return result.resAttendance;
+
+
+    }
     async function sendData(data) {
-        try {
-            const res = await fetch('/api/insertAttendance', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    user_id: user?.id,
-                    status_absen: "Hadir",
-                    keterangan: `Hadir di acara ${data}`,
-                    acara: data,
-                })
-            });
 
-            if (!res.ok) {
-                const errText = await res.text();
-                throw new Error(`HTTP ${res.status}: ${errText}`);
-            }
-
-            const result = await res.json();
-            console.log("SUCCESS:", result);
-
-        } catch (error) {
-            console.error("SEND DATA ERROR:", error);
+        if (!user?.id) {
+            console.log("USER BELUM ADA:", user);
+            throw new Error("User belum login");
         }
+
+        if (data)
+
+            try {
+                const res = await fetch('/api/insertAttendance', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        user_id: user?.id,
+                        status_absen: "Hadir",
+                        keterangan: `Hadir di acara ${data}`,
+                        acara: data,
+                    })
+                });
+
+                if (!res.ok) {
+                    const errText = await res.text();
+                    throw new Error(`HTTP ${res.status}: ${errText}`);
+                }
+
+
+                return true;
+
+            } catch (error) {
+                console.error("SEND DATA ERROR:", error);
+            }
     }
 
     return (

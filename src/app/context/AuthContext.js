@@ -17,7 +17,6 @@ export function AuthProvider({ children }) {
 
             if (res.status === 401) {
                 setUser(null);
-                router.replace('/internal/login');
                 return;
             }
 

@@ -24,7 +24,9 @@ export async function POST(req) {
     const token = signToken({
         id: user.id,
         npm: user.user_npm,
-        role: user.user_role
+        role: user.user_role,
+    }, {
+        expiresIn: remembered ? '30d' : '1d'
     });
 
     const response = NextResponse.json({ success: true});
@@ -33,7 +35,7 @@ export async function POST(req) {
         value: token,
         httpOnly: true,
         path: "/",
-        maxAge: remembered ? 60 * 60 * 24 * 30 : undefined,
+        maxAge: remembered ? 30 * 24 * 60 * 60 : 24 * 60 * 60,
         sameSite: "lax",
     });
 

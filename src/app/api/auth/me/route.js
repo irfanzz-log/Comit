@@ -21,4 +21,4 @@ export async function GET(req) {
     } catch (error) {
         return NextResponse.json({ error : "Invalid token"}, {status: 401});
     }
-}
+}   

@@ -40,9 +40,10 @@ export default function MentorCard({
                 <div className="relative w-50 h-50 rounded-full overflow-hidden">
                     <Image
                     fill
-                    className={`mentor-card__image object-cover object-center ${imgStyle || ''}`}
+                    className={`mentor-card__image bg-gray-200 object-cover object-center ${imgStyle || ''}`}
                     src={url}
                     alt={`${nama} - ${divisi}`}
+                    preload='true'
                 />
                 </div>
                 

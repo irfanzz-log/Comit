@@ -12,26 +12,27 @@ export default function LoginPage() {
     const [remembered, setIsRemembered] = useState(false);
     const router = useRouter();
     const { login } = useAuth();
+    const [error, setError] = useState("");
 
     const handleLogin = async (e) => {
         e.preventDefault();
         if (!npm || !password) {
-            alert("NPM dan password harus diisi.");
+            setError("NPM dan password harus diisi.");
             return;
         }
         if (npm.length < 8 || password.length < 8) {
-            alert("NPM dan password harus minimal 8 karakter.");
+            setError("NPM dan password harus minimal 8 karakter.");
             return;
         }
         try {
             const result = await login(npm, password, remembered);
-            if (result.error) {
-            alert("NPM atau Password Salah!");
+            if (!result.success) {
+            setError("NPM atau Password Salah!");
             return;
     }
             router.push('/internal/home');
         } catch (error) {
-            alert("NPM atau password salah.");
+            throw new Error("Login gagal.");
         }
     }
     
@@ -63,12 +64,14 @@ export default function LoginPage() {
                             <input type="checkbox" id="checkbox" name="checkbox" className="w-4 h-4 cursor-pointer" checked={remembered} onChange={(e)=> setIsRemembered(e.target.checked)} />
                             <label htmlFor="checkbox" className="cursor-pointer">Ingat saya</label>
                         </div>
+                        
                         <Link href="#">Lupa Password?</Link>
                     </div>
 
                     <button type="submit" className="w-full bg-white text-blue-500 p-2 rounded-lg my-3 cursor-pointer hover:scale-102 transition transition-duration-300 ease-out">Masuk</button>
-
+                    
                     <div className="form-footer text-center">
+                        <p className={`text-sm text-red-500 ${!error ? 'hidden' : ''}`}>{error}</p>
                         <p className="text-white text-sm">Belum punya akun? <Link href="/internal/sign" className="font-bold underline">Daftar disini</Link></p>
                     </div>
                     </form>

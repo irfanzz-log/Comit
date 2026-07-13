@@ -8,15 +8,11 @@ export async function middleware(req) {
    }
 
    if (!token) {
+        console.log('tidak ada token');
         return NextResponse.redirect(new URL("/internal/login", req.url));
    }
 
-   try {
-    verifyToken(token);
     return NextResponse.next();
-   } catch (error) {
-    return NextResponse.redirect(new URL("/internal/login", req.url));
-   }
 }
 
 export const config = {

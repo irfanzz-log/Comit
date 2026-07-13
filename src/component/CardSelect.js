@@ -44,6 +44,7 @@ export default function StaffFilter() {
             className="max-w-4 max-h-4"
             width={200}
             height={200}
+            preload='true'
           />
         </button>
 

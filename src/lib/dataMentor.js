@@ -105,13 +105,13 @@ export const pengurus = [
   },
   {
     posisi: "Sekretaris",
-    nama: "Putriyana",
+    nama: "Abella Pinkan Ham",
     jabatan: "Sekretaris 1",
     imgUrl: "/pengurus/sekretaris-1.png"
   },
   {
     posisi: "Sekretaris",
-    nama: "Abella Pinkan Ham",
+    nama: "Putriyana",
     jabatan: "Sekretaris 2",
     imgUrl: "/pengurus/sekretaris-2.png"
   },

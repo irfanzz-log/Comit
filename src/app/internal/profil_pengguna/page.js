@@ -27,6 +27,8 @@ export default function ProfilPengguna() {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    
+    const [error, setError] = useState("");
 
     const [loading, setLoading] = useState(false);
 
@@ -77,7 +79,7 @@ export default function ProfilPengguna() {
                 phone: phone || user.phone,
                 jurusan: prodi || user.jurusan
             });
-        } 
+        }
         finally {
             setLoading(false);
             setName("");
@@ -90,15 +92,24 @@ export default function ProfilPengguna() {
     async function handlePasswordSubmit(e) {
         e.preventDefault();
 
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            setError("Semua field harus diisi");
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            setError("Password harus memiliki minimal 8 karakter");
+            return;
+        }
+
         if (newPassword !== confirmPassword) {
-            alert("Konfirmasi password tidak cocok");
+            setError("Konfirmasi password tidak cocok");
             return;
         }
 
         setLoading(true);
 
         try {
-            // await fetch('/api/user/password', ...)
             await fetch('/api/users/password', {
                 method: 'PUT',
                 headers: {
@@ -121,7 +132,7 @@ export default function ProfilPengguna() {
 
             <main className="py-2 px-2 w-full h-screen overflow-y-scroll">
                 <section className="bg-white min-h-screen w-full rounded-lg shadow-md">
-                    
+
                     <HeaderSectionBody title="Profil Pengguna" />
 
                     <div className="p-5">
@@ -134,16 +145,15 @@ export default function ProfilPengguna() {
                         </div>
 
                         <div className="flex flex-row my-10">
-                            
+
                             {/* Sidebar */}
                             <div className="w-1/3">
                                 <ul>
                                     <li
-                                        className={`p-2 mt-1 rounded-md ${
-                                            route === ROUTES.PROFILE
+                                        className={`p-2 mt-1 rounded-md ${route === ROUTES.PROFILE
                                                 ? "bg-gray-100"
                                                 : "hover:bg-gray-300/10"
-                                        }`}
+                                            }`}
                                     >
                                         <p
                                             onClick={() => handleRoute(ROUTES.PROFILE)}
@@ -154,11 +164,10 @@ export default function ProfilPengguna() {
                                     </li>
 
                                     <li
-                                        className={`p-2 mt-1 rounded-md ${
-                                            route === ROUTES.PASSWORD
+                                        className={`p-2 mt-1 rounded-md ${route === ROUTES.PASSWORD
                                                 ? "bg-gray-100"
                                                 : "hover:bg-gray-300/10"
-                                        }`}
+                                            }`}
                                     >
                                         <p
                                             onClick={() => handleRoute(ROUTES.PASSWORD)}
@@ -187,7 +196,7 @@ export default function ProfilPengguna() {
                                                 <input
                                                     value={name}
                                                     onChange={(e) => setName(e.target.value)}
-                                                    className="shadow-md rounded-lg p-2 text-sm"
+                                                    className="border-[1px] border-gray-200 rounded-lg p-2 text-sm"
                                                 />
                                             </div>
 
@@ -197,7 +206,7 @@ export default function ProfilPengguna() {
                                                     type="email"
                                                     value={email}
                                                     onChange={(e) => setEmail(e.target.value)}
-                                                    className="shadow-md rounded-lg p-2 text-sm"
+                                                    className="border-[1px] border-gray-200 rounded-lg p-2 text-sm"
                                                 />
                                             </div>
 
@@ -207,7 +216,7 @@ export default function ProfilPengguna() {
                                                     value={phone}
                                                     type="number"
                                                     onChange={(e) => setPhone(e.target.value)}
-                                                    className="shadow-md rounded-lg p-2 text-sm"
+                                                    className="border-[1px] border-gray-200 rounded-lg p-2 text-sm"
                                                 />
                                             </div>
 
@@ -218,9 +227,16 @@ export default function ProfilPengguna() {
                                                 <button
                                                     type="button"
                                                     onClick={() => setIsOpen(prev => !prev)}
-                                                    className="shadow-md rounded-lg p-2 text-left"
+                                                    className="border-[1px] border-gray-200 rounded-lg p-2 text-left flex justify-between items-center hover:bg-gray-100"
                                                 >
                                                     {prodi}
+                                                    <span className="float-right">
+                                                        {isOpen ? <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-compact-up" viewBox="0 0 16 16">
+                                                            <path fillRule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z" />
+                                                        </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-compact-down" viewBox="0 0 16 16">
+                                                            <path fillRule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67" />
+                                                        </svg>}
+                                                    </span>
                                                 </button>
 
                                                 {isOpen && (
@@ -256,6 +272,8 @@ export default function ProfilPengguna() {
                                             Gunakan password yang kuat
                                         </p>
 
+                                        <span className={`text-sm text-red-500 ${!error ? 'hidden' : ''}`}>{error}</span>
+
                                         <form onSubmit={handlePasswordSubmit} className="mt-5">
 
                                             <div className="flex flex-col mt-2">
@@ -264,7 +282,7 @@ export default function ProfilPengguna() {
                                                     type="password"
                                                     value={oldPassword}
                                                     onChange={(e) => setOldPassword(e.target.value)}
-                                                    className="shadow-md rounded-lg p-2"
+                                                    className="border-[1px] border-gray-200 rounded-lg p-2"
                                                 />
                                             </div>
 
@@ -274,7 +292,7 @@ export default function ProfilPengguna() {
                                                     type="password"
                                                     value={newPassword}
                                                     onChange={(e) => setNewPassword(e.target.value)}
-                                                    className="shadow-md rounded-lg p-2"
+                                                    className="border-[1px] border-gray-200 rounded-lg p-2"
                                                 />
                                             </div>
 
@@ -284,7 +302,7 @@ export default function ProfilPengguna() {
                                                     type="password"
                                                     value={confirmPassword}
                                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                                    className="shadow-md rounded-lg p-2"
+                                                    className="border-[1px] border-gray-200 rounded-lg p-2"
                                                 />
                                             </div>
 

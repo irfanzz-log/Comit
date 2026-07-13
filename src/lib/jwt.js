@@ -6,14 +6,14 @@ if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined");
 }
 
-export function signToken(payload, expiresIn = "1d") {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn });
+export function signToken(payload, options = {}) {
+  return jwt.sign(payload, JWT_SECRET, options);
 }
 
 export function verifyToken(token) {
   try {
     return jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    return null;
+    return null; 
   }
 }

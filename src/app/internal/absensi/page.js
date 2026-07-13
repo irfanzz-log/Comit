@@ -40,7 +40,6 @@ export default function Absensi() {
                 const res = await fetch('/api/userInfo');
                 const data = await res.json();
                 setLinkImg(data.allUsers);
-                console.log(data);
             } catch (error) {
                 console.error('Error fetching user profile:', error);
             }

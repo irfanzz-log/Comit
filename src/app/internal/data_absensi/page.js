@@ -49,13 +49,13 @@ export function DataAbsensi() {
 
     return (
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
-            <Aside />
+            <Aside /> 
             <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
                 <section className="main-section bg-white h-screen relative w-full rounded-lg shadow-md">
                     <HeaderSectionBody
                         title="Data Absensi"
                     />
-                    <div className="main-section_body p-5 bg-white">
+                    <div className="main-section_body p-5">
                         <div className="main-section_content">
                             <div className="content-head">
                                 <h1 className="text-xl font-bold">Data Absensi</h1>
@@ -63,7 +63,7 @@ export function DataAbsensi() {
                             <div className="content-body">
 
                                 {(user?.user_role === 'developer' || user?.user_role === 'sekretaris') && (
-                                    <div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
+                                    <div className="flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 m-2 mb-4">
                                         <h2 className="font-bold m-2">Input Absensi</h2>
                                         <div className="flex flex-col relative">
                                             <label className="m-2" htmlFor="">Nama</label>

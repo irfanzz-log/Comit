@@ -85,13 +85,13 @@ export default function Certificate() {
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
             <Aside />
             <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
-                <section className="main-section bg-white h-screen relative w-full rounded-lg shadow-md">
+                <section className="main-section h-screen bg-white relative w-full rounded-lg">
                     <HeaderSectionBody
                         title="Data Absensi"
                     />
-                    <div className="main-section_body p-5">
+                    <div className="main-section_body bg-white mt-1 p-5">
 
-                        <div className="main-section_content mb-6">
+                        <div className="main-section_content bg-white mb-6">
                             <h1 className="text-xl font-bold">
                                 Data Sertifikat
                             </h1>
@@ -101,11 +101,7 @@ export default function Certificate() {
                             </p>
                         </div>
 
-                        <div>
-
-                        </div>
-
-                        <div>
+                        <div className="rounded-lg">
                             <h2 className="text-lg font-bold">Buat Sertifikat</h2>
                             <form
                             onSubmit={handleSubmit}

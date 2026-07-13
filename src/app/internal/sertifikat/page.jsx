@@ -87,7 +87,7 @@ export default function Certificate() {
             <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
                 <section className="main-section h-screen bg-white relative w-full rounded-lg">
                     <HeaderSectionBody
-                        title="Data Absensi"
+                        title="Data Sertifikat"
                     />
                     <div className="main-section_body bg-white mt-1 p-5">
 

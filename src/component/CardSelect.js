@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { pengurus } from "@/lib/dataMentor";
@@ -8,7 +8,10 @@ import Image from "next/image";
 export default function StaffFilter() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("Pilih Posisi");
-  const [currentRole, setCurrentRole] = useState('Ketua & Wakil Ketua Umum');
+  const [currentRole, setCurrentRole] = useState(
+    "Ketua & Wakil Ketua Umum"
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const positions = [
     "Ketua & Wakil Ketua Umum",
@@ -23,14 +26,47 @@ export default function StaffFilter() {
     "Staff Programming",
     "Staff Design Grafis",
     "Staff Comp & Network",
-    "Staff Microsoft Office"
+    "Staff Microsoft Office",
   ];
 
-  const filteredStaff = pengurus.filter(member => member.posisi === currentRole);
+  const filteredStaff = pengurus.filter(
+    (member) => member.posisi === currentRole
+  );
+
+  const handlePositionChange = (position) => {
+    if (position === currentRole) {
+      setIsDropdownOpen(false);
+      return;
+    }
+
+    setIsDropdownOpen(false);
+    setIsLoading(true);
+
+    const newStaff = pengurus.filter(
+      (member) => member.posisi === position
+    );
+
+    const imagePromises = newStaff.map((member) => {
+      return new Promise((resolve) => {
+        const img = new window.Image();
+
+        img.onload = resolve;
+        img.onerror = resolve;
+
+        img.src = member.imgUrl;
+      });
+    });
+
+    Promise.all(imagePromises).then(() => {
+      setCurrentRole(position);
+      setSelectedPosition(position);
+      setIsLoading(false);
+    });
+  };
 
   return (
     <>
-      <div className="relative mt-10 staff-filter relative md:w-1/3 w-3/4 z-10">
+      <div className="relative mt-10 staff-filter md:w-1/3 w-3/4 z-10">
         <button
           className="staff-filter__button flex justify-between items-center p-3 w-full bg-blue-500 text-white rounded-xl shadow-lg transition-colors hover:bg-blue-600"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -38,30 +74,33 @@ export default function StaffFilter() {
           aria-haspopup="listbox"
         >
           <span>{selectedPosition}</span>
+
           <Image
-            src={`/logo/caret-${isDropdownOpen ? 'down' : 'up'}-fill.svg`}
-            alt={isDropdownOpen ? "Close dropdown" : "Open dropdown"}
+            src={`/logo/caret-${
+              isDropdownOpen ? "down" : "up"
+            }-fill.svg`}
+            alt={
+              isDropdownOpen
+                ? "Close dropdown"
+                : "Open dropdown"
+            }
             className="max-w-4 max-h-4"
             width={200}
             height={200}
-            preload='true'
+            priority
           />
         </button>
 
         {isDropdownOpen && (
-          <ul 
+          <ul
             className="absolute staff-filter__options overflow-y-scroll scrollbar-hide max-h-80 -mt-3 rounded-b-xl -z-1 w-full"
             role="listbox"
           >
-            {positions.map((position, index) => (
+            {positions.map((position) => (
               <li
-                key={index}
+                key={position}
                 className="staff-filter__option bg-blue-500 p-3 text-white hover:bg-blue-700 cursor-pointer transition-colors"
-                onClick={() => {
-                  setSelectedPosition(position);
-                  setIsDropdownOpen(false);
-                  setCurrentRole(position);
-                }}
+                onClick={() => handlePositionChange(position)}
                 role="option"
                 aria-selected={position === selectedPosition}
               >
@@ -72,8 +111,20 @@ export default function StaffFilter() {
         )}
       </div>
 
-      {/* Staff Cards Grid */}
-      <div className="staff-grid mt-10 w-full flex flex-wrap justify-center">
+      {/* Staff Cards */}
+      <div className="relative staff-grid mt-10 w-full min-h-[300px] flex flex-wrap justify-center">
+
+        {/* Loading */}
+        {isLoading && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm rounded-xl">
+            <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+
+            <p className="mt-4 text-gray-600 font-medium">
+              Memuat anggota...
+            </p>
+          </div>
+        )}
+
         {filteredStaff.map((staff, index) => (
           <Card
             key={index}

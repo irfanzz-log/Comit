@@ -49,9 +49,6 @@ export default function Galeri() {
                     )
                 })}
             </div>
-            <Link href="#" className="gallery__link md:p-5 p-3 text-white md:text-xl text-lg bg-blue-500 rounded-lg my-7 hover:scale-110 transition duration-300 shadow-lg">
-                Lihat Lainnya
-            </Link>
         </div>
     )
 }

@@ -51,7 +51,7 @@ export function DataAbsensi() {
         <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
             <Aside /> 
             <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
-                <section className="main-section bg-white h-screen relative w-full rounded-lg shadow-md">
+                <section className="main-section bg-white min-h-screen relative w-full rounded-lg shadow-md">
                     <HeaderSectionBody
                         title="Data Absensi"
                     />

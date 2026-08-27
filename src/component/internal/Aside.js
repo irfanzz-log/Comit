@@ -49,14 +49,34 @@ export default function Aside() {
                             <Link onClick={() => setIsOpen(false)} href="/internal/home" className={`p-2 rounded-md hover:bg-gray-200 text-sm mt-1 flex flex-row items-center gap-2 ${lastPath === "home" && "bg-gray-200"}`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
                                 <span>Home</span></Link>
-                            <Link onClick={() => setIsOpen(false)} href="/internal/absensi" className={`p-2 rounded-md hover:bg-gray-200 text-sm mt-1 flex flex-row items-center gap-2 ${lastPath === "absensi" && "bg-gray-200"}`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
-                                <span>Absensi</span></Link>
-                            {user?.user_role === 'developer' || user?.user_role === 'sekretaris' || user?.user_role === 'superadmin' ? (
-                                <Link onClick={() => setIsOpen(false)} href="/internal/sertifikat" className={`p-2 rounded-md hover:bg-gray-200 text-sm mt-1 flex flex-row items-center gap-2 ${lastPath === "sertifikat" && "bg-gray-200"}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-award"><circle cx="12" cy="8" r="7"></circle><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.11"></path></svg>
-                                    <span>Sertifikat</span></Link>
-                            ) : null}
+                            <Link onClick={() => setIsOpen(false)} href="/internal/pendaftaran" className={`p-2 rounded-md hover:bg-gray-200 text-sm mt-1 flex flex-row items-center gap-2 ${lastPath === "pendaftaran" && "bg-gray-200"}`}>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <rect width="16" height="18" x="4" y="3" rx="2"></rect>
+                                    <path d="M9 3v2h6V3"></path>
+                                    <path d="M8 10h8"></path>
+                                    <path d="M8 14h5"></path>
+                                    <path d="M8 18h3"></path>
+                                </svg>
+                                <span>Pendaftaran</span>
+                                </Link>
+                                <Link onClick={() => setIsOpen(false)} href="/internal/absensi" className={`p-2 rounded-md hover:bg-gray-200 text-sm mt-1 flex flex-row items-center gap-2 ${lastPath === "absensi" && "bg-gray-200"}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                                    <span>Absensi</span></Link>
+                                {user?.user_role === 'developer' || user?.user_role === 'sekretaris' || user?.user_role === 'superadmin' ? (
+                                    <Link onClick={() => setIsOpen(false)} href="/internal/sertifikat" className={`p-2 rounded-md hover:bg-gray-200 text-sm mt-1 flex flex-row items-center gap-2 ${lastPath === "sertifikat" && "bg-gray-200"}`}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-award"><circle cx="12" cy="8" r="7"></circle><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.11"></path></svg>
+                                        <span>Sertifikat</span></Link>
+                                ) : null}
                         </div>
                     </div>
 

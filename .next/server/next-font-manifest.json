@@ -1,17 +1,5 @@
 {
   "app": {
-    "[project]/src/app/_not-found/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/src/app/about/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/src/app/announcement/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
     "[project]/src/app/internal/absensi/page": [
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
       "static/media/797e433ab948586e-s.p.29207c2f.woff2"
@@ -24,6 +12,22 @@
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
       "static/media/797e433ab948586e-s.p.29207c2f.woff2"
     ],
+    "[project]/src/app/internal/data_kegiatan/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
+    "[project]/src/app/internal/data_pemasukkan/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
+    "[project]/src/app/internal/data_pengeluaran/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
+    "[project]/src/app/internal/data_uang_kas/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
     "[project]/src/app/internal/home/page": [
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
       "static/media/797e433ab948586e-s.p.29207c2f.woff2"
@@ -32,7 +36,23 @@
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
       "static/media/797e433ab948586e-s.p.29207c2f.woff2"
     ],
+    "[project]/src/app/internal/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
+    "[project]/src/app/internal/pendaftaran/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
+    "[project]/src/app/internal/profil_pengguna/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
     "[project]/src/app/internal/sertifikat/page": [
+      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    ],
+    "[project]/src/app/internal/sign/page": [
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
       "static/media/797e433ab948586e-s.p.29207c2f.woff2"
     ],

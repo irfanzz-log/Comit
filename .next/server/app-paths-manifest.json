@@ -1,14 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
-  "/announcement/page": "app/announcement/page.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
   "/api/events/route": "app/api/events/route.js",
-  "/api/transactions/route": "app/api/transactions/route.js",
-  "/api/userInfo/route": "app/api/userInfo/route.js",
-  "/internal/home/page": "app/internal/home/page.js",
   "/internal/login/page": "app/internal/login/page.js",
-  "/internal/page": "app/internal/page.js",
-  "/internal/sign/page": "app/internal/sign/page.js",
   "/page": "app/page.js"
 }

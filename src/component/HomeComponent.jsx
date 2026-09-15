@@ -9,11 +9,8 @@ import TentangKamiSlide from '@/component/TentangKami/TentangKamiSlide';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import { data } from '@/lib/dataMentor';
-import useGetEvent from '@/hooks/useGetEvent';
 
 export default function HomeComponent() {
-  const event = useGetEvent(20);
-
   return (
     <>
       {/* =====================================
@@ -26,6 +23,7 @@ export default function HomeComponent() {
           w-screen
           h-screen
           bg-gray-200
+          bg-gray-950
           flex
           justify-center
           md:p-10
@@ -278,6 +276,7 @@ export default function HomeComponent() {
               items-center
               p-5
               bg-white
+              bg-gray-950
               flex-col
               overflow-visible
             "
@@ -376,6 +375,7 @@ export default function HomeComponent() {
               md:min-h-screen
               items-center
               bg-white
+              bg-gray-950
               flex-col
             "
           >

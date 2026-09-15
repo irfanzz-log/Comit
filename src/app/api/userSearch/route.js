@@ -1,8 +1,11 @@
 // src/app/api/userSearch/route.js
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 
 export async function GET(req) {
+    const unauthorized = requireAuth(req);
+    if (unauthorized) return unauthorized;
     const { searchParams } = new URL(req.url);
     const q = searchParams.get('query') || '';
 

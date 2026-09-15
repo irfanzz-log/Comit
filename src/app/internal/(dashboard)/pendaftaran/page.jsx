@@ -1,8 +1,8 @@
 "use client";
 
-import Aside from "@/component/internal/Aside";
 import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 export default function Pendaftaran() {
     const [data, setData] = useState([]);
@@ -22,21 +22,8 @@ export default function Pendaftaran() {
         try {
             setLoading(true);
 
-            const res = await fetch("/api/enrollments", {
-                cache: "no-store",
-            });
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                throw new Error(
-                    result.message ||
-                    "Gagal mengambil data pendaftaran"
-                );
-            }
-
+            const result = await apiFetch("/api/enrollments");
             setData(result.data || []);
-
         } catch (error) {
             console.error(
                 "Error fetching pendaftaran:",
@@ -278,13 +265,7 @@ export default function Pendaftaran() {
     }
 
     return (
-        <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
-
-            <Aside />
-
-            <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
-
-                <section className="main-section bg-white h-auto relative w-full rounded-lg shadow-md">
+        <section className="main-section bg-white bg-gray-900 border border-gray-200 border-gray-800 h-auto relative w-full rounded-2xl shadow-sm overflow-hidden transition-colors">
 
                     <HeaderSectionBody
                         title="Pendaftaran"
@@ -300,17 +281,14 @@ export default function Pendaftaran() {
                             ========================================== */}
 
                             <div className="content-head">
-
-                                <h1 className="text-xl font-bold">
+                                <h1 className="text-xl font-bold text-gray-900 text-white">
                                     Dashboard Pendaftaran
                                 </h1>
 
-                                <p className="text-sm text-gray-500 mt-1">
+                                <p className="text-sm text-gray-500 text-gray-400 mt-1">
                                     Kelola pengajuan pendaftaran anggota COMIT
                                 </p>
-
                             </div>
-
 
                             {/* ==========================================
                                 STATISTIK
@@ -319,64 +297,48 @@ export default function Pendaftaran() {
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
 
                                 {/* TOTAL */}
-
-                                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-
-                                    <p className="text-sm text-gray-500">
+                                <div className="bg-blue-50/70 bg-blue-950/20 border border-blue-100 border-blue-900/40 rounded-xl p-4">
+                                    <p className="text-sm text-gray-500 text-gray-400">
                                         Total Pendaftar
                                     </p>
 
-                                    <h2 className="text-2xl font-bold text-blue-600 mt-1">
+                                    <h2 className="text-2xl font-bold text-blue-600 text-blue-400 mt-1">
                                         {totalPendaftar}
                                     </h2>
-
                                 </div>
 
-
                                 {/* PENDING */}
-
-                                <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-4">
-
-                                    <p className="text-sm text-gray-500">
+                                <div className="bg-yellow-50/70 bg-yellow-950/20 border border-yellow-100 border-yellow-900/40 rounded-xl p-4">
+                                    <p className="text-sm text-gray-500 text-gray-400">
                                         Menunggu
                                     </p>
 
-                                    <h2 className="text-2xl font-bold text-yellow-600 mt-1">
+                                    <h2 className="text-2xl font-bold text-yellow-600 text-yellow-400 mt-1">
                                         {totalPending}
                                     </h2>
-
                                 </div>
 
-
                                 {/* APPROVED */}
-
-                                <div className="bg-green-50 border border-green-100 rounded-xl p-4">
-
-                                    <p className="text-sm text-gray-500">
+                                <div className="bg-green-50/70 bg-green-950/20 border border-green-100 border-green-900/40 rounded-xl p-4">
+                                    <p className="text-sm text-gray-500 text-gray-400">
                                         Diterima
                                     </p>
 
-                                    <h2 className="text-2xl font-bold text-green-600 mt-1">
+                                    <h2 className="text-2xl font-bold text-green-600 text-green-400 mt-1">
                                         {totalApproved}
                                     </h2>
-
                                 </div>
 
-
                                 {/* REJECTED */}
-
-                                <div className="bg-red-50 border border-red-100 rounded-xl p-4">
-
-                                    <p className="text-sm text-gray-500">
+                                <div className="bg-red-50/70 bg-red-950/20 border border-red-100 border-red-900/40 rounded-xl p-4">
+                                    <p className="text-sm text-gray-500 text-gray-400">
                                         Ditolak
                                     </p>
 
-                                    <h2 className="text-2xl font-bold text-red-600 mt-1">
+                                    <h2 className="text-2xl font-bold text-red-600 text-red-400 mt-1">
                                         {totalRejected}
                                     </h2>
-
                                 </div>
-
                             </div>
 
 
@@ -866,9 +828,5 @@ export default function Pendaftaran() {
                     </div>
 
                 </section>
-
-            </main>
-
-        </div>
     );
 }

@@ -71,24 +71,29 @@ export async function PUT(req) {
         // Data baru
         // ==========================================
 
+        const MAX_FIELD_LENGTH = 100;
+
+        const capLength = (value) =>
+            value.length > MAX_FIELD_LENGTH ? value.slice(0, MAX_FIELD_LENGTH) : value;
+
         const newName =
             name !== undefined
-                ? String(name).trim()
+                ? capLength(String(name).trim())
                 : currentUser.nama;
 
         const newPhone =
             phone !== undefined
-                ? String(phone).trim()
+                ? capLength(String(phone).trim())
                 : currentUser.no_telpon;
 
         const newProdi =
             prodi !== undefined
-                ? String(prodi).trim()
+                ? capLength(String(prodi).trim())
                 : currentUser.jurusan;
 
         const newMinat =
             minat !== undefined
-                ? String(minat).trim()
+                ? capLength(String(minat).trim())
                 : currentUser.minat;
 
 

@@ -1,6 +1,5 @@
 'use client';
 
-import Aside from "@/component/internal/Aside";
 import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import Pagination from "@/hooks/ui/pagination";
 import { useEffect } from "react";
@@ -26,10 +25,7 @@ export function DataAnggota() {
 
 
     return (
-        <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
-            <Aside />
-            <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
-                <section className="main-section bg-white h-auto relative w-full rounded-lg shadow-md">
+        <section className="main-section bg-white bg-gray-900 h-auto relative w-full rounded-lg shadow-md">
                     <HeaderSectionBody
                         title="Anggota" />
                     <div className="main-section_body p-5">
@@ -41,7 +37,7 @@ export function DataAnggota() {
 
                                 <div className="dataFilter p-2">
                                     <form onSubmit={handleSearch} className="flex flex-row md:p-2 w-full">
-                                        <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 outline-none focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
+                                        <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 text-gray-400 outline-none bg-gray-800 placeholder-gray-500 focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
                                     </form>
 
                                     <div ref={dropdownRef} className="flex md:flex-row md:ml-0 ml-1 flex-col w-full text-sm items-center md:items-start mt-2 mb-2">
@@ -58,7 +54,7 @@ export function DataAnggota() {
                                             setTogglePosisi('Filter by posisi');
                                             setToggleStatus('Filter by status');
                                             setName('');
-                                        }} className="md:ml-0 -ml-1 relative bg-white border-[0.5px] border-gray-600/10 rounded-md p-2 shadow-sm w-full text-left">
+                                        }} className="md:ml-0 -ml-1 relative bg-white bg-gray-800 text-gray-200 border-gray-700 hover:bg-gray-700 border-[0.5px] border-gray-600/10 rounded-md p-2 shadow-sm w-full text-left">
                                             Reset Filter
                                         </button>
                                         </div>
@@ -70,29 +66,29 @@ export function DataAnggota() {
                                 <div className="content-body_data p-5">
                                     <div className="head flex ">
                                         <div className="dataView w-screen">
-                                            <div className="hidden lg:block overflow-x-auto border border-1 border-black/10 rounded-md">
-                                                <table id="table-data" className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
-                                                    <thead className="bg-gray-50">
+                                            <div className="hidden lg:block overflow-x-auto border border-1 border-black/10 border-gray-800 rounded-md">
+                                                <table id="table-data" className="min-w-full divide-y divide-gray-200 divide-gray-800 table-fixed shadow-lg">
+                                                    <thead className="bg-gray-50 bg-gray-800">
                                                         <tr>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">No</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Nama Lengkap</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">NPM</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Jurusan</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Minat Keahlian</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Status</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Posisi</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">No</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Nama Lengkap</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">NPM</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Jurusan</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Minat Keahlian</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Status</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Posisi</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody className="bg-white divide-y divide-gray-200">
+                                                    <tbody className="bg-white bg-gray-900 divide-y divide-gray-200 divide-gray-800">
                                                         {dataAnggota.map((data, idx) => (
-                                                            <tr key={idx} className="even:bg-gray-50">
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{(page - 1) * 10 + idx + 1}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.nama}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.user_npm}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.jurusan}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.minat}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.status}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.posisi}</td>
+                                                            <tr key={idx} className="even:bg-gray-50 even:bg-gray-800/50">
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{(page - 1) * 10 + idx + 1}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.nama}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.user_npm}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.jurusan}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.minat}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.status}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.posisi}</td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -101,29 +97,29 @@ export function DataAnggota() {
                                             <div className="dataView_card lg:hidden">
                                                 {dataAnggota.map((data, index) => {
                                                     return (
-                                                        <div key={index} className="p-4 border border-1 border-black/10 rounded-md">
+                                                        <div key={index} className="p-4 border border-1 border-black/10 border-gray-800 rounded-md">
                                                             <div className="card_main mb-4">
                                                                 <h3 className="text-xl font-bold">{data.nama}</h3>
-                                                                <p className="text-gray-600/80">{data.user_npm}</p>
+                                                                <p className="text-gray-600/80 text-gray-400">{data.user_npm}</p>
                                                             </div>
                                                             <div className="card_details grid grid-cols-2">
                                                                 <div className="left">
                                                                     <div className="jurusan">
-                                                                        <p className="text-gray-600/80">Jurusan : </p>
+                                                                        <p className="text-gray-600/80 text-gray-400">Jurusan : </p>
                                                                         <p className="font-bold">{data.jurusan}</p>
                                                                     </div>
                                                                     <div className="popsisi">
-                                                                        <p className="text-gray-600/80">Posisi : </p>
+                                                                        <p className="text-gray-600/80 text-gray-400">Posisi : </p>
                                                                         <p className="font-bold">{data.posisi}</p>
                                                                     </div>
                                                                 </div>
                                                                 <div className="right">
                                                                     <div className="minat">
-                                                                        <p className="text-gray-600/80">Minat : </p>
+                                                                        <p className="text-gray-600/80 text-gray-400">Minat : </p>
                                                                         <p className="font-bold">{data.minat}</p>
                                                                     </div>
                                                                     <div className="status">
-                                                                        <p className="text-gray-600/80">Status : </p>
+                                                                        <p className="text-gray-600/80 text-gray-400">Status : </p>
                                                                         <p className="font-bold">{data.status}</p>
                                                                     </div>
                                                                 </div>
@@ -140,9 +136,6 @@ export function DataAnggota() {
                         </div>
                     </div >
                 </section >
-            </main >
-
-        </div >
     );
 }
 

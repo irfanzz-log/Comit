@@ -131,7 +131,8 @@ export default function Navigation({
         {/* =====================================================
             DESKTOP AUTH
         ====================================================== */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center gap-3">
+          
           {user ? (
             <div className="flex items-center gap-4 text-white">
               {/* Nama user tanpa background */}
@@ -417,7 +418,7 @@ export default function Navigation({
 
 
       {/* Authentication */}
-      <div className="px-2 mb-3">
+      <div className="px-2 mb-3 flex items-center justify-between">
         <span
           className="
             text-[10px]
@@ -429,6 +430,7 @@ export default function Navigation({
         >
           Account
         </span>
+        
       </div>
 
 

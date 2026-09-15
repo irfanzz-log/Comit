@@ -1,12 +1,16 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAuth } from "@/lib/auth";
 
 
 // ======================================================
 // GET /api/enrollments
 // ======================================================
 
-export async function GET() {
+export async function GET(req) {
+    const unauthorized = requireAuth(req);
+    if (unauthorized) return unauthorized;
+
     try {
         const result = await query(`
             SELECT
@@ -54,8 +58,6 @@ export async function POST(request) {
 
         const body = await request.json();
 
-        console.log("POST ENROLLMENT BODY:", body);
-
         // Ambil sesuai dengan field dari sign/page.js
         const nama = body.nama;
         const npm = body.npm;
@@ -93,13 +95,8 @@ export async function POST(request) {
         const jurusanValue = String(jurusan).trim();
         const alasanValue = String(alasan).trim();
 
-        console.log("DATA SETELAH NORMALISASI:", {
-            namaValue,
-            npmValue,
-            noTelponValue,
-            jurusanValue,
-            alasanValue,
-        });
+
+
 
         // ==================================================
         // VALIDASI KOSONG
@@ -259,7 +256,6 @@ export async function POST(request) {
             {
                 success: false,
                 message: "Gagal menyimpan pendaftaran",
-                error: error.message,
             },
             { status: 500 }
         );

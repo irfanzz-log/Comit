@@ -2,15 +2,15 @@
 
 import { useRouter } from "next/navigation";
 
-export default function Pagination({ currentPage, totalPages, onPageChange, userLength, totalUsers }) {
+export default function Pagination({ currentPage, totalPages, onPageChange, userLength, totalUsers = 0 }) {
     const router = useRouter();
-    const maxButton = 5; // Maksimal tombol halaman yang ditampilkan
+    const maxButton = 5;
     const halfMax = Math.floor(maxButton / 2);
     let startPage = Math.max(1, currentPage - halfMax);
-    let endPage = Math.min(totalPages, currentPage + halfMax);
+    let endPage = Math.min(totalPages || 1, currentPage + halfMax);
 
-    if (endPage > totalPages) {
-        endPage = totalPages;
+    if (endPage > (totalPages || 1)) {
+        endPage = totalPages || 1;
         startPage = Math.max(1, endPage - maxButton + 1);
     }
 
@@ -21,40 +21,51 @@ export default function Pagination({ currentPage, totalPages, onPageChange, user
         }
     }
 
+    const fromCount = totalUsers > 0 ? ((currentPage - 1) * 10) + 1 : 0;
+    const toCount = Math.min(currentPage * 10, totalUsers);
 
     return (
-        <div className="pagination justify-between items-center mt-4 flex md:flex-row flex-col gap-4">
+        <div className="pagination justify-between items-center mt-4 flex md:flex-row flex-col gap-4 text-gray-700 text-gray-300">
             <p className="text-sm">
-                Menampilkan data {((currentPage - 1) * 10) + 1} sampai{" "}
-                {Math.min(currentPage * 10, totalUsers)} dari {totalUsers}
+                Menampilkan data <span className="font-semibold text-gray-900 text-white">{fromCount}</span> sampai{" "}
+                <span className="font-semibold text-gray-900 text-white">{toCount}</span> dari{" "}
+                <span className="font-semibold text-gray-900 text-white">{totalUsers}</span> data
             </p>
-            <div className="flex items-center text-sm">
+            <div className="flex items-center text-sm gap-1">
                 <button
-                    className="px-3 py-1 border border-1 border-black/10 rounded-md mr-2"
+                    type="button"
+                    className="px-3 py-1.5 border border-gray-300 border-gray-700 rounded-md bg-white bg-gray-800 hover:bg-gray-100 hover:bg-gray-700 text-gray-700 text-gray-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:bg-gray-800"
                     onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
+                    disabled={currentPage <= 1}
                 >
                     Previous
                 </button>
-                <div className="btn-list">
-                    {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
+                <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.max(0, endPage - startPage + 1) }, (_, i) => startPage + i).map((page) => (
                         <button
                             key={page}
-                            className={`px-3 py-1 border border-1 border-black/10 rounded-md mr-2 ${page === currentPage ? 'bg-blue-200/50' : ''}`}
-                            onClick={() => onPageChange(page)}
+                            type="button"
+                            className={`px-3 py-1.5 border rounded-md transition-colors ${
+                                page === currentPage
+                                    ? "bg-blue-600 text-white border-blue-600 bg-blue-600 border-blue-600 font-semibold"
+                                    : "border-gray-300 border-gray-700 bg-white bg-gray-800 hover:bg-gray-100 hover:bg-gray-700 text-gray-700 text-gray-200"
+                            }`}
+                            onClick={() => handlePageChange(page)}
+                            aria-current={page === currentPage ? "page" : undefined}
                         >
                             {page}
                         </button>
                     ))}
                 </div>
                 <button
-                    className="px-3 py-1 border border-1 border-black/10 rounded-md"
+                    type="button"
+                    className="px-3 py-1.5 border border-gray-300 border-gray-700 rounded-md bg-white bg-gray-800 hover:bg-gray-100 hover:bg-gray-700 text-gray-700 text-gray-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:bg-gray-800"
                     onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage >= totalPages || totalPages === 0}
                 >
                     Next
                 </button>
             </div>
         </div>
-    )
+    );
 }

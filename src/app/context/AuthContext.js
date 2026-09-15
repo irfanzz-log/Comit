@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { apiFetch, ApiError } from "@/lib/api";
 
 const AuthContext = createContext();
 
@@ -12,69 +13,41 @@ export function AuthProvider({ children }) {
 
     const pathname = usePathname();
 
-    async function fetchUser() {
-        try {
-            const res = await fetch('/api/auth/me', {
-                credentials: 'include'
-            });
-
-            if (res.status === 401) {
-                setUser(null);
-                if (pathname.startsWith("/internal")) {
-                    router.replace("/internal/login");
-                }
-
-                return;
-            }
-
-            if (!res.ok) {
-                throw new Error('Failed to fetch user');
-            }
-
-            const userData = await res.json();
-            setUser(userData.user);
-        } catch (error) {
-            setUser(null);
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
     useEffect(() => {
+        let cancelled = false;
+
+        async function fetchUser() {
+            try {
+                const data = await apiFetch('/api/auth/me');
+                if (!cancelled) setUser(data.user);
+            } catch (error) {
+                if (cancelled) return;
+                setUser(null);
+                if (error instanceof ApiError && error.status === 401 && pathname.startsWith("/internal")) {
+                    router.replace("/internal/login");
+                } else if (!(error instanceof ApiError)) {
+                    console.error(error);
+                }
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        }
+
         fetchUser();
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     async function login(npm, password, remembered) {
         try {
-            const res = await fetch('/api/auth/login', {
+            await apiFetch('/api/auth/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 body: JSON.stringify({ npm, password, remembered }),
-                credentials: 'include',
             });
 
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.error || 'Login failed');
-            }
-
-            const me = await fetch('/api/auth/me', {
-                credentials: 'include',
-            });
-
-            if (me.status === 401) {
-                throw new Error('Session tidak valid');
-            }
-
-            if (!me.ok) {
-                throw new Error('Gagal mengambil data user');
-            }
-
-            const userData = await me.json();
-            setUser(userData.user);
+            const me = await apiFetch('/api/auth/me');
+            setUser(me.user);
 
             return { success: true };
 
@@ -83,21 +56,19 @@ export function AuthProvider({ children }) {
 
             return {
                 success: false,
-                error: error.message,
+                error: error.message || 'Login gagal',
             };
         }
     }
 
     async function logout() {
         try {
-            await fetch('/api/auth/logout', {
-                method: 'POST',
-                credentials: 'include',
-            });
-            setUser(null);
-            router.push('/internal/login');
+            await apiFetch('/api/auth/logout', { method: 'POST' });
         } catch (error) {
             console.error('Logout error:', error);
+        } finally {
+            setUser(null);
+            router.push('/internal/login');
         }
     }
 

@@ -34,14 +34,13 @@ const faqData = [
 
 export default function FloatingFAQ() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+  const [openQuestion, setOpenQuestion] = useState(null);
 
   // Jangan tampilkan di halaman /internal
   if (pathname.startsWith("/internal")) {
     return null;
   }
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [openQuestion, setOpenQuestion] = useState(null);
 
   const toggleQuestion = (index) => {
     setOpenQuestion(
@@ -165,7 +164,7 @@ export default function FloatingFAQ() {
                   items-center
                   justify-center
                   rounded-full
-                  hover:bg-blue-500
+                  hover:bg-blue-600
                   transition-colors
                 "
               >

@@ -11,13 +11,12 @@ import userInsertTransactions from "@/hooks/useInsertTransactions";
 import { useAuth } from "@/app/context/AuthContext";
 import { Suspense } from "react";
 
-export function DataPemasukkan() {
-    const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, handleSearch } = useTransactions({ tipe: 'Pemasukkan', kategori: '' });
+export function DataAnggota() {
+    const { name, setName, dataAnggota, page, setPage, totalPages, totalUsers, handleSearch } = useTransactions({ tipe: 'Pengeluaran', kategori: '' });
     const dropdownRef = useRef(null);
+    const { form, handleChange, submitTransaksi, loading } = userInsertTransactions({ tipe: 'Pengeluaran', kategori: 'Lainnya' });
 
     const { user } = useAuth();
-
-    const { form, handleChange, submitTransaksi, loading } = userInsertTransactions({ tipe: 'Pemasukkan', kategori: 'Lainnya' });
 
     function submmitBtn(e) {
         e.preventDefault();
@@ -41,47 +40,49 @@ export function DataPemasukkan() {
             <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
                 <section className="main-section bg-white h-auto relative w-full rounded-lg shadow-md">
                     <HeaderSectionBody
-                        title="Data Pemasukkan" />
+                        title="Data Pengeluaran" />
                     <div className="main-section_body p-5">
                         <div className="main-section_content">
                             <div className="content-head">
-                                <h1 className="text-xl font-bold">Data Pemasukkan</h1>
+                                <h1 className="text-xl font-bold">Data Pengeluaran</h1>
                             </div>
                             <div className="content-body">
 
-                                {(user?.user_role === 'developer' || user?.user_role === 'bendahara' )&& (<div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
-                                    <h2 className="font-bold m-2">Tambah Pemasukkan</h2>
-                                    {/* <div className="flex flex-col">
+                                {(user?.user_role === 'developer' || user?.user_role === 'bendahara') && (
+                                    <div className="m-2 flex flex-col justify-center border border-[0.5px] border-gray-300/50 rounded-md p-4 mb-4">
+                                        <h2 className="font-bold m-2">Tambah Pengeluaran</h2>
+                                        {/* <div className="flex flex-col">
                                         <label className="m-2" htmlFor="">Nama</label>
                                         <input value={form.target_user_id} onChange={handleChange} className="m-2 bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
                                     </div> */}
 
-                                    <div className="flex flex-row items-center">
-                                        <div className="w-full m-2">
-                                            <label htmlFor="m-2">Deskripsi</label>
-                                            <input name="deskripsi" value={form.deskripsi} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <div className="flex md:flex-row flex-col md:m-0 m-2 items-center">
-                                        <div className="w-full m-2">
-                                            <label className="m-2" htmlFor="">Jumlah</label>
-                                            <input name="jumlah" value={form.jumlah} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="number" />
+                                        <div className="flex flex-row items-center">
+                                            <div className="w-full m-2">
+                                                <label htmlFor="m-2">Deskripsi</label>
+                                                <input name="deskripsi" value={form?.deskripsi} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="text" />
+                                            </div>
                                         </div>
 
-                                        <div className="md:w-1/4 w-full md:2 mx-2">
-                                            <label className="invisible" htmlFor="">#</label>
-                                            <button onClick={submmitBtn} disabled={loading} className="w-full bg-blue-600/80 rounded-md p-2 flex items-center justify-center text-white cursor-pointer hover:bg-blue-700/80">
-                                                {loading ? 'Loading...' : 'Input Pemasukkan'}
-                                            </button>
+                                        <div className="flex md:flex-row flex-col md:m-0 m-2 items-center">
+                                            <div className="w-full m-2">
+                                                <label className="m-2" htmlFor="">Jumlah</label>
+                                                <input name="jumlah" value={form?.jumlah} onChange={handleChange} className="w-full bg-white border border-gray-600/20 border-[0.5px] p-2 rounded-md" type="number" />
+                                            </div>
+
+                                            <div className="md:w-1/4 w-full md:2 mx-2">
+                                                <label className="invisible" htmlFor="">#</label>
+                                                <button onClick={submmitBtn} disabled={loading} className="w-full bg-blue-600/80 rounded-md p-2 flex items-center justify-center text-white cursor-pointer hover:bg-blue-700/80">
+                                                    {loading ? 'Loading...' : 'Input Pengeluaran'}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>)}
+                                )}
+
 
                                 <div className="dataFilter p-2">
-                                    <h2 className="font-bold">Filter Data</h2>
                                     <form onSubmit={handleSearch} className="flex flex-row md:p-2 w-full mb-4">
-                                        <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 outline-none focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
+                                        <input type="text" name="searchName" className=" p-2 py-3 focus:outline-none focus:ring-blue-600/50 focus:border-blue-600/50 border-[0.5px] border-gray-600/10 w-full rounded-lg text-sm text-gray-600 text-gray-400 outline-none bg-gray-800 placeholder-gray-500 focus:border-1 focus:ring-2 focus:ring-gray-600/20 shadow-sm" placeholder="Cari nama..." value={name} onChange={(e) => setName(e.target.value)} />
                                     </form>
                                     <div className="w-full flex justify-end"><ExportTableButton /></div>
                                 </div>
@@ -89,25 +90,25 @@ export function DataPemasukkan() {
                                 <div className="content-body_data p-5">
                                     <div className="head flex ">
                                         <div className="dataView w-screen">
-                                            <div className="lg:block hidden overflow-x-auto border border-1 border-black/10 rounded-md">
-                                                <table id="table-data" className="min-w-full divide-y divide-gray-200 table-fixed shadow-lg">
-                                                    <thead className="bg-gray-50">
+                                            <div className="lg:block hidden overflow-x-auto border border-1 border-black/10 border-gray-800 rounded-md">
+                                                <table id="table-data" className="min-w-full divide-y divide-gray-200 divide-gray-800 table-fixed shadow-lg">
+                                                    <thead className="bg-gray-50 bg-gray-800">
                                                         <tr>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">No</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Penanggung Jawab</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Deskripsi</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Jumlah</th>
-                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700">Tanggal Input</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">No</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Penanggung Jawab</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Deskripsi</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Jumlah</th>
+                                                            <th scope="col" className="px-4 py-2 text-left text-sm font-medium text-gray-700 text-gray-300">Tanggal Input</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody className="bg-white divide-y divide-gray-200">
+                                                    <tbody className="bg-white bg-gray-900 divide-y divide-gray-200 divide-gray-800">
                                                         {dataAnggota.map((data, idx) => (
-                                                            <tr key={idx} className="even:bg-gray-50">
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{(page - 1) * 10 + idx + 1}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{data.nama_penginput}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{(data.deskripsi)}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">Rp{Number(data.jumlah).toLocaleString('id-ID')}</td>
-                                                                <td className="px-4 py-2 text-sm text-gray-700">{new Date(data.created_at).toLocaleString('id-ID', {
+                                                            <tr key={idx} className="even:bg-gray-50 even:bg-gray-800/50">
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{(page - 1) * 10 + idx + 1}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.nama_penginput}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{data.deskripsi}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">Rp{Number(data.jumlah).toLocaleString('id-ID')}</td>
+                                                                <td className="px-4 py-2 text-sm text-gray-700 text-gray-300">{new Date(data.created_at).toLocaleString('id-ID', {
                                                                     dateStyle: 'medium',
                                                                     timeStyle: 'short'
                                                                 })}</td>
@@ -119,21 +120,21 @@ export function DataPemasukkan() {
                                             <div className="dataView_card lg:hidden">
                                                 {dataAnggota.map((data, index) => {
                                                     return (
-                                                        <div key={index} className="p-4 border border-1 border-black/10 rounded-md">
+                                                        <div key={index} className="p-4 border border-1 border-black/10 border-gray-800 rounded-md">
                                                             <div className="card_main mb-4">
                                                                 <h3 className="text-xl font-bold">{data.nama_penginput}</h3>
-                                                                <p className="text-xs text-gray-600/80">Penanggung Jawab</p>
+                                                                <p className="text-xs text-gray-600/80 text-gray-400">Penanggung Jawab</p>
                                                             </div>
                                                             <div className="card_details grid grid-cols-2">
                                                                 <div className="left">
                                                                     <div className="jurusan">
-                                                                        <p className="text-xs text-gray-600/80">Deskripsi : </p>
+                                                                        <p className="text-xs text-gray-600/80 text-gray-400">Deskripsi : </p>
                                                                         <p className="font-bold">{data.deskripsi}</p>
                                                                     </div>
                                                                 </div>
                                                                 <div className="right">
                                                                     <div className="minat">
-                                                                        <p className="text-xs text-gray-600/80">Jumlah : </p>
+                                                                        <p className="text-xs text-gray-600/80 text-gray-400">Jumlah : </p>
                                                                         <p className="font-bold">{data.jumlah}</p>
                                                                     </div>
                                                                 </div>
@@ -159,7 +160,7 @@ export function DataPemasukkan() {
 export default function Page() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <DataPemasukkan />
+            <DataAnggota />
         </Suspense>
-    )
+    );
 }

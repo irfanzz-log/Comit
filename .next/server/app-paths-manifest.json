@@ -1,7 +1,7 @@
 {
   "/about/page": "app/about/page.js",
+  "/announcement/page": "app/announcement/page.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
   "/api/events/route": "app/api/events/route.js",
-  "/internal/login/page": "app/internal/login/page.js",
   "/page": "app/page.js"
 }

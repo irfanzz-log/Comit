@@ -11,68 +11,45 @@ const prisma = new PrismaClient();
 
 const DEV_PASSWORD_ROUNDS = 10;
 
-const STAFF = [
-  {
-    user_npm: "20220001",
-    nama: "Syah Irfan",
-    posisi: "Developer",
-    user_role: "developer",
-    jurusan: "Teknologi Informasi",
-    minat: "Programming",
-    no_telpon: "081234567801",
-    linkimg: "kominfo-1",
-  },
-  {
-    user_npm: "20220002",
-    nama: "Aulia Putri",
-    posisi: "Sekretaris",
-    user_role: "sekretaris",
-    jurusan: "Sistem Informasi",
-    minat: "Office",
-    no_telpon: "081234567802",
-    linkimg: "sekretaris-1",
-  },
-  {
-    user_npm: "20220003",
-    nama: "Budi Santoso",
-    posisi: "Bendahara",
-    user_role: "bendahara",
-    jurusan: "Akuntansi",
-    minat: "Office",
-    no_telpon: "081234567803",
-    linkimg: "bendahara-1",
-  },
-  {
-    user_npm: "20220004",
-    nama: "Citra Lestari",
-    posisi: "Ketua Umum",
-    user_role: "superadmin",
-    jurusan: "Teknologi Informasi",
-    minat: "Programming",
-    no_telpon: "081234567804",
-    linkimg: "ketua-umum",
-  },
-  {
-    user_npm: "20220005",
-    nama: "Dewi Anggraini",
-    posisi: "Koordinator Humas",
-    user_role: "staff",
-    jurusan: "Manajemen",
-    minat: "Design",
-    no_telpon: "081234567805",
-    linkimg: "humas-eksternal-1",
-  },
-];
-
-const ANGGOTA = [
-  { user_npm: "20230001", nama: "Eka Pratama", jurusan: "Teknologi Informasi", minat: "Programming", no_telpon: "081234000001", linkimg: "program-1" },
-  { user_npm: "20230002", nama: "Fitra Ramadhan", jurusan: "Teknologi Informasi", minat: "Design", no_telpon: "081234000002", linkimg: "design-1" },
-  { user_npm: "20230003", nama: "Gita Nurhaliza", jurusan: "Sistem Informasi", minat: "Comnet", no_telpon: "081234000003", linkimg: "comp-and-network-1" },
-  { user_npm: "20230004", nama: "Hadi Wijaya", jurusan: "Manajemen", minat: "Office", no_telpon: "081234000004", linkimg: "ms-office-1" },
-  { user_npm: "20230005", nama: "Indah Permata", jurusan: "Akuntansi", minat: "Office", no_telpon: "081234000005", linkimg: "ms-office-2" },
-  { user_npm: "20230006", nama: "Joko Susilo", jurusan: "Teknologi Informasi", minat: "Programming", no_telpon: "081234000006", linkimg: "program-2" },
-  { user_npm: "20230007", nama: "Kirana Dewi", jurusan: "Hukum", minat: "Design", no_telpon: "081234000007", linkimg: "design-2" },
-  { user_npm: "20230008", nama: "Lukman Hakim", jurusan: "Sistem Informasi", minat: "Comnet", no_telpon: "081234000008", linkimg: "comp-and-network-2" },
+// Daftar anggota COMIT periode 2025-2026.
+// `role` menentukan hak akses panel internal; `posisi` adalah jabatan
+// organisasi (ditampilkan di UI). `linkimg` memetakan ke file foto
+// pengurus di /public/pengurus.
+const ANGGOTA_2025 = [
+  { user_npm: "2023804102", nama: "Danang Prasetio", posisi: "Ketua Umum", role: "superadmin", linkimg: "ketua-umum" },
+  { user_npm: "2023804059", nama: "Erik Susanto", posisi: "Wakil Ketua", role: "superadmin", linkimg: "wakil-ketua-umum" },
+  { user_npm: "2024102234", nama: "Abella Pinkan Ham", posisi: "Sekretaris I", role: "sekretaris", linkimg: "sekretaris-1" },
+  { user_npm: "2024102181", nama: "Putriyana", posisi: "Sekretaris II", role: "sekretaris", linkimg: "sekretaris-2" },
+  { user_npm: "2024804058", nama: "Sofi Utami", posisi: "Bendahara I", role: "bendahara", linkimg: "bendahara-1" },
+  { user_npm: "2024102189", nama: "Eva Fauziah", posisi: "Bendahara II", role: "bendahara", linkimg: "bendahara-2" },
+  { user_npm: "2023804011", nama: "Ahmad Rohman", posisi: "SDM", role: "staff", linkimg: "sdm-1" },
+  { user_npm: "2023804004", nama: "Crisvin", posisi: "SDM", role: "staff", linkimg: "sdm-2" },
+  { user_npm: "2024102191", nama: "Dewi Fatimah Nurhasiya", posisi: "SDM", role: "staff", linkimg: "sdm-3" },
+  { user_npm: "2023804070", nama: "Muhammad Teuku Rizal", posisi: "Koor Humas", role: "staff", linkimg: "koor-humas" },
+  { user_npm: "2025804005", nama: "Ihya Ulumudin", posisi: "Humas Internal", role: "staff", linkimg: "humas-internal-1" },
+  { user_npm: "2024102037", nama: "Dita Resty Pauji", posisi: "Humas Internal", role: "staff", linkimg: "humas-internal-2" },
+  { user_npm: "2024102034", nama: "Komalasari", posisi: "Humas Eksternal", role: "staff", linkimg: "humas-eksternal-1" },
+  { user_npm: "2024102179", nama: "Chesa Aulia", posisi: "Humas Eksternal", role: "staff", linkimg: "humas-eksternal-2" },
+  { user_npm: "2025102236", nama: "Ryan Adi Prasetyo", posisi: "Humas Eksternal", role: "staff", linkimg: "humas-eksternal-3" },
+  { user_npm: "2023806076", nama: "M Irfansyah", posisi: "Koor Akademik", role: "developer", linkimg: "koor-akademik" },
+  { user_npm: "2024804175", nama: "Fikriyah", posisi: "Staff Design", role: "staff", linkimg: "design-1" },
+  { user_npm: "2025102011", nama: "Meysha Shifa Ayudia", posisi: "Staff Design", role: "staff", linkimg: "design-2" },
+  { user_npm: "2025104052", nama: "Nabila Salsabila", posisi: "Staff Design", role: "staff", linkimg: "design-3" },
+  { user_npm: "2025804010", nama: "Rifki Dwi Al Zari", posisi: "Staff Program", role: "staff", linkimg: "program-1" },
+  { user_npm: "2025806037", nama: "Galih Eza Kurniawansyah", posisi: "Staff Program", role: "staff", linkimg: "program-2" },
+  { user_npm: "2025804018", nama: "Reva Andini", posisi: "Staff Program", role: "staff", linkimg: "program-3" },
+  { user_npm: "2024804153", nama: "Ripki Dimas Andrea", posisi: "Staff Com. Network", role: "staff", linkimg: "comp-and-network-1" },
+  { user_npm: "2024806015", nama: "Rusminah", posisi: "Staff Com. Network", role: "staff", linkimg: "comp-and-network-2" },
+  { user_npm: "2024804101", nama: "Haikal Rifalda", posisi: "Staff Com. Network", role: "staff", linkimg: "comp-and-network-3" },
+  { user_npm: "2025104062", nama: "Andini Rahmayati", posisi: "Staff Ms. Office", role: "staff", linkimg: "ms-office-1" },
+  { user_npm: "2025104063", nama: "Yuliyanti", posisi: "Staff Ms. Office", role: "staff", linkimg: "ms-office-2" },
+  { user_npm: "2024104086", nama: "Giany Syahnariza Haura", posisi: "Staff Ms. Office", role: "staff", linkimg: "ms-office-3" },
+  { user_npm: "2024104052", nama: "Dona Raflina", posisi: "Staff Ms. Office", role: "staff", linkimg: "ms-office-4" },
+  { user_npm: "2023804086", nama: "Nufail Jazali", posisi: "Kominfo", role: "staff", linkimg: "kominfo-1" },
+  { user_npm: "2025804007", nama: "Zunda Melandari", posisi: "Kominfo", role: "staff", linkimg: "kominfo-2" },
+  { user_npm: "2025804015", nama: "Agustian Sadovin", posisi: "Prasarana", role: "staff", linkimg: "prasarana-1" },
+  { user_npm: "2023804165", nama: "Bayu Indra Setiawan", posisi: "Prasarana", role: "staff", linkimg: "prasarana-2" },
+  { user_npm: "2025804028", nama: "Muhammad Chandra Wijaya", posisi: "Prasarana", role: "staff", linkimg: "prasarana-3" },
 ];
 
 // Tanggal dit-tetapkan agar seed deterministik (chart dashboard selalu sama)
@@ -83,11 +60,7 @@ function isoDay(offsetDays) {
   return new Date(SEED_BASE + offsetDays * DAY);
 }
 
-function fmtDate(d) {
-  return d.toISOString().slice(0, 10);
-}
-
-async function upsertUser({ user_npm, nama, posisi, user_role, jurusan, minat, no_telpon, linkimg, status = "aktif" }) {
+async function upsertUser({ user_npm, nama, posisi, role, linkimg, status = "aktif" }) {
   const password = await bcrypt.hash(user_npm, DEV_PASSWORD_ROUNDS);
 
   const user = await prisma.user.upsert({
@@ -95,18 +68,18 @@ async function upsertUser({ user_npm, nama, posisi, user_role, jurusan, minat, n
     create: {
       user_npm,
       password,
-      user_role,
+      user_role: role,
       info: {
-        create: { nama, posisi, jurusan, minat, status, no_telpon, linkimg },
+        create: { nama, posisi, status, linkimg },
       },
     },
-    update: { user_role },
+    update: { user_role: role },
   });
 
   await prisma.userInfo.upsert({
     where: { user_id: user.id },
-    create: { user_id: user.id, nama, posisi, jurusan, minat, status, no_telpon, linkimg },
-    update: { nama, posisi, jurusan, minat, status, no_telpon, linkimg },
+    create: { user_id: user.id, nama, posisi, status, linkimg },
+    update: { nama, posisi, status, linkimg },
   });
 
   return user;
@@ -116,16 +89,12 @@ async function main() {
   console.log("→ COMIT seed dimulai (development data)\n");
 
   // -------------------------------------------------------- Users
-  const staff = [];
-  for (const s of STAFF) {
-    staff.push(await upsertUser(s));
+  const allUsers = [];
+  for (const a of ANGGOTA_2025) {
+    allUsers.push(await upsertUser(a));
   }
-  const anggota = [];
-  for (const a of ANGGOTA) {
-    anggota.push(await upsertUser({ ...a, posisi: "Anggota", user_role: "anggota" }));
-  }
-  const allUsers = [...staff, ...anggota];
-  console.log(`✓ ${allUsers.length} users (${staff.length} staff + ${anggota.length} anggota)`);
+  const staff = allUsers.filter((u) => u.user_role !== "anggota");
+  console.log(`✓ ${allUsers.length} users (${staff.length} staff + ${allUsers.length - staff.length} anggota)`);
 
   // -------------------------------------------------------- Certificate templates
   const templates = [];
@@ -145,10 +114,10 @@ async function main() {
   // -------------------------------------------------------- Events
   const events = [];
   const eventSeed = [
-    { nama_acara: "Rapat Bulanan COMIT", tipe_acara: "internal", day: 2, komentar: "Rapat evaluasi program kerja", creatorIdx: 3 },
-    { nama_acara: "Workshop Web Development", tipe_acara: "public", day: 9, komentar: "Pengenalan Next.js", creatorIdx: 0 },
-    { nama_acara: "Sharing Session Design", tipe_acara: "public", day: 16, komentar: "UI/UX fundamentals", creatorIdx: 4 },
-    { nama_acara: "Praktik Jaringan Komputer", tipe_acara: "internal", day: 23, komentar: "Lab Comnet", creatorIdx: 2 },
+    { nama_acara: "Rapat Bulanan COMIT", tipe_acara: "internal", day: 2, komentar: "Rapat evaluasi program kerja", creatorIdx: 0 },
+    { nama_acara: "Workshop Web Development", tipe_acara: "public", day: 9, komentar: "Pengenalan Next.js", creatorIdx: 15 },
+    { nama_acara: "Sharing Session Design", tipe_acara: "public", day: 16, komentar: "UI/UX fundamentals", creatorIdx: 17 },
+    { nama_acara: "Praktik Jaringan Komputer", tipe_acara: "internal", day: 23, komentar: "Lab Comnet", creatorIdx: 22 },
   ];
   for (const e of eventSeed) {
     const found = await prisma.event.findFirst({ where: { nama_acara: e.nama_acara } });
@@ -194,7 +163,7 @@ async function main() {
   console.log(`✓ ${attendanceCount} attendance records`);
 
   // -------------------------------------------------------- Transactions
-  const bendahara = staff.find((s) => s.user_role === "bendahara") ?? staff[0];
+  const bendahara = allUsers.find((u) => u.user_role === "bendahara") ?? allUsers[0];
   const txSeed = [
     { tipe: "pemasukkan", kategori: "kas", jumlah: 50000, deskripsi: "Uang kas bulanan", day: 1, targetIdx: null },
     { tipe: "pemasukkan", kategori: "kas", jumlah: 50000, deskripsi: "Uang kas bulanan", day: 3, targetIdx: 5 },
@@ -236,7 +205,6 @@ async function main() {
     { nama: "Olivia Syafira", npm: "20240003", jurusan: "Manajemen", status: "approved", day: 6 },
     { nama: "Putra Maheswara", npm: "20240004", jurusan: "Hukum", status: "rejected", day: 8 },
   ];
-  let enrCount = 0;
   for (const e of enrollmentSeed) {
     const existing = await prisma.enrollment.findFirst({ where: { npm: e.npm } });
     const data = {
@@ -252,7 +220,6 @@ async function main() {
       await prisma.enrollment.update({ where: { id: existing.id }, data });
     } else {
       await prisma.enrollment.create({ data });
-      enrCount++;
     }
   }
   console.log(`✓ ${enrollmentSeed.length} enrollments`);
@@ -269,7 +236,7 @@ async function main() {
           activity_name: "Workshop Web Development",
           activity_info: "Peserta aktif workshop Next.js",
           issue_date: isoDay(9),
-          signer_name: "Citra Lestari",
+          signer_name: "Danang Prasetio",
           signer_position: "Ketua Umum",
         },
       ],
@@ -281,8 +248,8 @@ async function main() {
 
   console.log("\n→ Seed selesai.\n");
   console.log("  Login demo (password = NPM):");
-  for (const s of staff) {
-    console.log(`    ${s.user_role.padEnd(11)} npm=${s.user_npm}  pass=${s.user_npm}`);
+  for (const s of ANGGOTA_2025.filter((a) => a.role !== "anggota")) {
+    console.log(`    ${s.role.padEnd(11)} npm=${s.user_npm}  pass=${s.user_npm}`);
   }
 }
 

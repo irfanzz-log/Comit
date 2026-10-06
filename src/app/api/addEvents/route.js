@@ -3,7 +3,16 @@ import { NextResponse } from "next/server";
 import { requireRole, getAuthPayload } from "@/lib/auth";
 
 export async function POST(req) {
-    const unauthorized = requireRole(req);
+    // canManageEvent() = developer/superadmin/sekretaris/staff.
+    // Sebelumnya memakai `requireRole(req)` tanpa argumen, yang memakai
+    // default STAFF_ROLES — bendahara ikut lolos meskipun tidak berhak
+    // mengelola kegiatan.
+    const unauthorized = requireRole(req, [
+        "developer",
+        "superadmin",
+        "sekretaris",
+        "staff",
+    ]);
     if (unauthorized) return unauthorized;
 
     try {

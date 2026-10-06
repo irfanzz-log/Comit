@@ -88,14 +88,20 @@ export function formatNumber(value) {
 
 export function formatDate(value, options) {
     if (!value) return "-";
+    const date = new Date(value);
+    // String seperti "not-a-date" menghasilkan Invalid Date; tanpa pengecekan
+    // ini Intl.DateTimeFormat melempar RangeError dan merontokkan komponen.
+    if (Number.isNaN(date.getTime())) return "-";
     return new Intl.DateTimeFormat("id-ID", options || { dateStyle: "medium" }).format(
-        new Date(value)
+        date
     );
 }
 
 export function formatDateTime(value) {
     if (!value) return "-";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "-";
     return new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(
-        new Date(value)
+        date
     );
 }

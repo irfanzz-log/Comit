@@ -2,6 +2,7 @@ import { signToken } from "@/lib/jwt";
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
 import { comparePassword } from "@/lib/hash";
+import { consumeRateLimit, resetRateLimit } from "@/lib/rateLimit";
 
 export async function POST(req) {
     try {
@@ -10,6 +11,19 @@ export async function POST(req) {
         // Validasi input sebelum menyentuh database
         if (typeof npm !== "string" || npm.trim() === "" || typeof password !== "string" || password === "") {
             return NextResponse.json({ error: "NPM atau password salah" }, { status: 401 });
+        }
+
+        // Rate limit per IP untuk membatasi brute-force password. Key hanya
+        // IP (bukan NPM) — memakai NPM sebagai key membuat attacker bisa
+        // mengunci akun user lain hanya dengan menebak passwordnya (DoS).
+        const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "local";
+        const rateKey = `login:${ip}`;
+        const rate = consumeRateLimit(rateKey);
+        if (!rate.allowed) {
+            return NextResponse.json(
+                { error: "Terlalu banyak percobaan login. Coba lagi nanti." },
+                { status: 429 }
+            );
         }
 
         //user
@@ -26,6 +40,10 @@ export async function POST(req) {
         if (!isPasswordValid) {
             return NextResponse.json({ error: "NPM atau password salah" }, { status: 401 });
         }
+
+        // Login berhasil: reset counter rate-limit IP ini agar user valid
+        // tidak terpengaruh oleh tebakan gagal dari IP yang sama.
+        resetRateLimit(rateKey);
 
         //generate token
         const token = signToken({

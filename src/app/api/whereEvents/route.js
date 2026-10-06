@@ -9,6 +9,16 @@ export async function GET(req) {
         return NextResponse.json({ error: "UUID tidak valid" }, { status: 400 });
     }
 
+    // `uuid` di-SELECT punya tipe data `uuid` PostgreSQL, jadi nilai non-UUID
+    // (mis. "not-a-uuid") melempar 22P02 sebelum clause WHERE dievaluasi.
+    // Validasi format di sini agar input invalid -> 404, bukan server error.
+    const UUID_REGEX =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+    if (!UUID_REGEX.test(uuid.trim())) {
+        return NextResponse.json([], { status: 200 });
+    }
+
     try {
         const result = await query(
             `SELECT * FROM events WHERE uuid = $1`,

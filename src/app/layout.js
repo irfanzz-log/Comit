@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://comit.id"),
+  metadataBase: new URL("https://comitunipi.id"),
 
   title: {
     default: "COMIT — Community of Information Technology",
@@ -41,7 +41,7 @@ export const metadata = {
   authors: [
     {
       name: "COMIT",
-      url: "https://comit.id",
+      url: "https://comitunipi.id",
     },
   ],
 
@@ -68,13 +68,13 @@ export const metadata = {
   },
 
   alternates: {
-    canonical: "https://comit.id",
+    canonical: "https://comitunipi.id",
   },
 
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://comit.id",
+    url: "https://comitunipi.id",
     siteName: "COMIT",
     title: "COMIT — Community of Information Technology",
     description:

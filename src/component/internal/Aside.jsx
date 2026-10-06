@@ -142,6 +142,20 @@ export default function Aside() {
                                     sertifikat.
                                 </p>
                             )}
+                            {showCertificate ? (
+                                <Link
+                                    onClick={() => setIsOpen(false)}
+                                    href="/internal/sertifikat/batch"
+                                    className={navItemClass("batch")}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        size={18}
+                                        className={iconClass("batch")}
+                                    />
+                                    <span className="truncate">Batch Sertifikat</span>
+                                </Link>
+                            ) : null}
                         </div>
                     </div>
 

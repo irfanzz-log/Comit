@@ -1,0 +1,102 @@
+<svg width="1123" height="794" viewBox="0 0 1123 794" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1123" y2="794" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFBF5"/>
+      <stop offset="1" stop-color="#FFF3E4"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1123" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D98E2B"/>
+      <stop offset="0.5" stop-color="#F0C277"/>
+      <stop offset="1" stop-color="#D98E2B"/>
+    </linearGradient>
+    <linearGradient id="goldSoft" x1="0" y1="0" x2="0" y2="794" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0C277" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#D98E2B" stop-opacity="0.08"/>
+    </linearGradient>
+    <radialGradient id="corner" cx="0" cy="0" r="1">
+      <stop stop-color="#F0C277" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#F0C277" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1123" height="794" fill="url(#bg)"/>
+
+  <!-- Corner ornaments -->
+  <circle cx="0" cy="0" r="360" fill="url(#corner)"/>
+  <circle cx="1123" cy="794" r="360" fill="url(#corner)"/>
+
+  <!-- Outer frame -->
+  <rect x="30" y="30" width="1063" height="734" rx="18" fill="none" stroke="url(#gold)" stroke-width="3"/>
+  <!-- Inner thin frame -->
+  <rect x="46" y="46" width="1031" height="702" rx="12" fill="none" stroke="#D98E2B" stroke-opacity="0.45" stroke-width="1.2"/>
+
+  <!-- Top accent band -->
+  <rect x="60" y="62" width="1003" height="5" rx="2.5" fill="url(#gold)" opacity="0.85"/>
+  <rect x="60" y="727" width="1003" height="5" rx="2.5" fill="url(#gold)" opacity="0.85"/>
+
+  <!-- Corner flourish marks -->
+  <g stroke="#D98E2B" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M62 96 L62 62 L96 62"/>
+    <path d="M1027 62 L1061 62 L1061 96"/>
+    <path d="M1061 698 L1061 732 L1027 732"/>
+    <path d="M96 732 L62 732 L62 698"/>
+  </g>
+  <g fill="#D98E2B">
+    <circle cx="62" cy="62" r="4"/>
+    <circle cx="1061" cy="62" r="4"/>
+    <circle cx="1061" cy="732" r="4"/>
+    <circle cx="62" cy="732" r="4"/>
+  </g>
+
+  <!-- Emblem -->
+  <g>
+    <circle cx="561.5" cy="150" r="46" fill="url(#goldSoft)" stroke="url(#gold)" stroke-width="2.5"/>
+    <path d="M561.5 126 L588 165 L535 165 Z" fill="#D98E2B"/>
+    <circle cx="561.5" cy="180" r="5" fill="#D98E2B"/>
+  </g>
+
+  <!-- Organization -->
+  <text x="561.5" y="232" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" letter-spacing="6" fill="#8A5A16" font-weight="bold">COMIT</text>
+
+  <!-- Title -->
+  <text x="561.5" y="292" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="58" fill="#2A2C67" font-style="italic" font-weight="bold">Certificate</text>
+  <text x="561.5" y="330" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="26" fill="#3C3E7A" font-style="italic">of Participation</text>
+
+  <!-- Divider -->
+  <line x1="436.5" y1="356" x2="686.5" y2="356" stroke="url(#gold)" stroke-width="2"/>
+  <circle cx="561.5" cy="356" r="4.5" fill="#D98E2B"/>
+  <circle cx="436.5" cy="356" r="3" fill="#D98E2B"/>
+  <circle cx="686.5" cy="356" r="3" fill="#D98E2B"/>
+
+  <!-- Awarded to -->
+  <text x="561.5" y="412" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="17" letter-spacing="4" fill="#6B7280">AWARDED TO</text>
+
+  <!-- Participant name (drawn at runtime into the layered target) -->
+  <text x="561.5" y="476" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="44" fill="#2A2C67" font-weight="bold"> </text>
+
+  <!-- Underline for name -->
+  <line x1="336.5" y1="500" x2="786.5" y2="500" stroke="#D98E2B" stroke-opacity="0.5" stroke-width="1.4"/>
+
+  <!-- Activity -->
+  <text x="561.5" y="552" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="17" letter-spacing="4" fill="#6B7280">FOR PARTICIPATION IN</text>
+  <text x="561.5" y="588" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="26" fill="#3C3E7A"> </text>
+
+  <!-- Signature lines -->
+  <line x1="186" y1="660" x2="386" y2="660" stroke="#9CA3AF" stroke-width="1.4"/>
+  <line x1="736" y1="660" x2="936" y2="660" stroke="#9CA3AF" stroke-width="1.4"/>
+  <text x="286" y="686" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#6B7280"> </text>
+  <text x="286" y="708" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" letter-spacing="2" fill="#9CA3AF">SIGNATURE</text>
+  <text x="836" y="686" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#6B7280"> </text>
+  <text x="836" y="708" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" letter-spacing="2" fill="#9CA3AF">SIGNATURE</text>
+
+  <!-- Issue date -->
+  <text x="561.5" y="708" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#6B7280"> </text>
+
+  <!-- Decorative dots -->
+  <g fill="#D98E2B" opacity="0.6">
+    <circle cx="96" cy="150" r="3"/>
+    <circle cx="1027" cy="150" r="3"/>
+    <circle cx="96" cy="644" r="3"/>
+    <circle cx="1027" cy="644" r="3"/>
+  </g>
+</svg>

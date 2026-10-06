@@ -14,7 +14,7 @@ import useAttendanceFilter from "@/hooks/useAttendanceFilter";
 import useAttendanceInput from "@/hooks/useAttendanceInput";
 import { useAuth } from "@/app/context/AuthContext";
 import { POSISI_OPTIONS, STATUS_ABSEN_OPTIONS, canManageAttendance } from "@/lib/constants";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const DEFAULTS = {
     posisi: "Filter by posisi",
@@ -46,21 +46,7 @@ export function DataAbsensi() {
     const { user } = useAuth();
     const canInput = canManageAttendance(user?.user_role);
 
-    const [acara, setAcara] = useState("");
-    const [acaraList, setAcaraList] = useState([]);
     const [feedback, setFeedback] = useState(null);
-
-    useEffect(() => {
-        let cancelled = false;
-        apiFetch("/api/events?limit=50")
-            .then((data) => {
-                if (!cancelled) setAcaraList((data || []).map((e) => e.nama_acara));
-            })
-            .catch((err) => console.error("Error fetching events:", err));
-        return () => {
-            cancelled = true;
-        };
-    }, []);
 
     const hasFilter =
         name !== "" ||
@@ -148,12 +134,9 @@ export function DataAbsensi() {
                             <SelectField
                                 label="Acara"
                                 name="acara"
-                                options={acaraList}
-                                value={form.acara || acara}
-                                onChange={(e) => {
-                                    handleChange(e);
-                                    setAcara(e.target.value);
-                                }}
+                                options={acaraOptions}
+                                value={form.acara}
+                                onChange={handleChange}
                                 placeholder="Pilih acara"
                             />
                         </div>

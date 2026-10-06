@@ -65,6 +65,13 @@ export default function Scanner() {
                             height: qrboxSize
                         };
                     },
+                    videoStyle: {
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "0.75rem",
+                        display: "block",
+                    },
                 },
                 async (decodedText) => {
                     if (isProcessingRef.current || lastScanRef.current === decodedText) return;
@@ -205,32 +212,37 @@ export default function Scanner() {
     }
 
     return (
-        <div className="flex flex-col items-center md:w-1/2 w-full md:my-0">
-            <div className="flex md:flex-row flex-col items-center justify-between md:w-3/4 w-full">
-                <h2 className="text-xl font-bold">
-                    Scan Kehadiran
-                </h2>
+        <div className="flex flex-col w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full mb-4">
+                <h2 className="text-lg font-bold text-gray-900">Scan Kehadiran</h2>
                 <div className="flex gap-2">
                     {isRunning ? (
                         <button
                             onClick={safeStop}
-                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            className="px-4 py-2 rounded-lg bg-red-500 text-white font-medium text-sm hover:bg-red-600 transition-colors"
                         >
                             Tutup Kamera
                         </button>
                     ) : (
                         <button
                             onClick={startScanner}
-                            className="px-4 py-2 bg-blue-600/80 text-white rounded"
+                            className="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 transition-colors"
                         >
                             Buka Kamera
                         </button>
                     )}
                 </div>
             </div>
+
+            {/*
+              Viewfinder. html5-qrcode mengisi container #reader dengan
+              <video> berukuran tetap (default 320x240); container ini
+              memberi rasio 4:3 dan memaksa videonya mengisi penuh lebar
+              melalui videoStyle object-fit: cover di atas.
+            */}
             <div
                 id="reader"
-                className="w-full md:w-full my-5 rounded overflow-hidden"
+                className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-900 border border-gray-200"
             />
         </div>
     );

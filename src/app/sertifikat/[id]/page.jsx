@@ -5,16 +5,24 @@ import { notFound } from "next/navigation";
 export default async function Page({ params }) {
   const { id } = await params;
 
-  const result = await query(
-    `
-      SELECT c.*, t.background
-      FROM certificates c
-      JOIN certificate_templates t
-        ON t.id = c.template_id
-      WHERE c.id = $1
-    `,
-    [id]
-  );
+  let result;
+  try {
+    result = await query(
+      `
+        SELECT c.*, t.background
+        FROM certificates c
+        JOIN certificate_templates t
+          ON t.id = c.template_id
+        WHERE c.id = $1
+      `,
+      [id]
+    );
+  } catch {
+    // Query di atas melempar error PostgreSQL (mis. "invalid input syntax
+    // for type uuid") ketika id bukan UUID yang valid — itu sama dengan
+    // "sertifikat tidak ditemukan", jadi 404, bukan 500.
+    notFound();
+  }
 
   if (result.rowCount === 0) {
     notFound();

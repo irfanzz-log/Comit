@@ -1,0 +1,176 @@
+// ==========================================================================
+// COMIT — Prisma schema (source of truth untuk struktur database)
+//
+// Skema ini direkonstruksi dari seluruh query SQL yang tersebar di
+// src/app/api/** dan src/app/** (lihat docs/DATABASE_DEPLOYMENT.md).
+// Nama tabel/kolom sengaja dipertahankan agar query SQL existing
+// (raw SQL via src/lib/db.js) tetap kompatibel selama migrasi bertahap.
+// ==========================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // Database sementara untuk Prisma Migrate. Role `comit` tidak diberi
+  // hak CREATEDB (prinsip privilege minimum), jadi shadow DB dibuat manual.
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode = "foreignKeys"
+}
+
+// --------------------------------------------------------------------------
+// Users
+// --------------------------------------------------------------------------
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  user_npm  String   @unique @db.VarChar(20)
+  password  String
+  user_role String   @default("anggota") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  info       UserInfo?
+  events     Event[]
+  attendance Attendance[]
+  transactionsCreated Transaction[] @relation("created_by")
+  transactionsTarget  Transaction[] @relation("target_user_id")
+
+  @@map("users")
+}
+
+// 1:1 — selalu dibuat bersamaan (lihat enrollments/[id]/route.js)
+model UserInfo {
+  id        BigInt @id @default(autoincrement())
+  user_id   BigInt @unique
+  nama      String @db.VarChar(200)
+  posisi    String @default("Anggota") @db.VarChar(100)
+  jurusan   String? @db.VarChar(100)
+  minat     String? @db.VarChar(100)
+  status    String @default("aktif") @db.VarChar(50)
+  no_telpon String? @db.VarChar(100)
+  linkimg   String? @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("users_info")
+}
+
+// --------------------------------------------------------------------------
+// Enrollments — pendaftaran anggota publik (tidak butuh login)
+// --------------------------------------------------------------------------
+
+model Enrollment {
+  id        BigInt   @id @default(autoincrement())
+  nama      String   @db.VarChar(200)
+  npm       String   @db.VarChar(20)
+  no_telpon String   @db.VarChar(50)
+  jurusan   String   @db.VarChar(100)
+  alasan    String   @db.VarChar(1000)
+  status    String   @default("pending") @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([npm])
+  @@map("enrollments")
+}
+
+// --------------------------------------------------------------------------
+// Events — kegiatan, absensi QR mengirim `uuid`
+// --------------------------------------------------------------------------
+
+model Event {
+  id           BigInt   @id @default(autoincrement())
+  uuid         String   @unique @default(uuid()) @db.Uuid
+  nama_acara   String   @db.VarChar(200)
+  tanggal_acara DateTime @map("tanggal_acara") @db.Date
+  komentar     String?  @db.VarChar(500)
+  tipe_acara   String   @db.VarChar(50)
+  file_url     String?  @db.VarChar(500)
+  file_key     String?  @db.VarChar(255)
+  user_id      BigInt?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([tanggal_acara])
+  @@map("events")
+}
+
+// --------------------------------------------------------------------------
+// Attendance
+// --------------------------------------------------------------------------
+
+model Attendance {
+  id          BigInt   @id @default(autoincrement())
+  user_id     BigInt
+  status_absen String  @db.VarChar(20)
+  keterangan  String?  @db.VarChar(500)
+  acara       String?  @db.VarChar(200)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([acara])
+  @@map("attendance")
+}
+
+// --------------------------------------------------------------------------
+// Transactions
+// --------------------------------------------------------------------------
+
+model Transaction {
+  id            BigInt   @id @default(autoincrement())
+  tipe          String   @db.VarChar(20)
+  jumlah        Int
+  deskripsi     String?  @db.VarChar(500)
+  kategori      String   @db.VarChar(50)
+  created_by    BigInt
+  target_user_id BigInt?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  creator User  @relation("created_by", fields: [created_by], references: [id], onDelete: Cascade)
+  target User?  @relation("target_user_id", fields: [target_user_id], references: [id], onDelete: SetNull)
+
+  @@index([tipe])
+  @@index([kategori])
+  @@index([created_by])
+  @@map("transactions")
+}
+
+// --------------------------------------------------------------------------
+// Certificates
+// --------------------------------------------------------------------------
+
+model CertificateTemplate {
+  id         BigInt @id @default(autoincrement())
+  name       String @unique @db.VarChar(200)
+  background String @db.VarChar(500)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  certificates Certificate[]
+
+  @@map("certificate_templates")
+}
+
+model Certificate {
+  id                 String   @id @default(uuid()) @db.Uuid
+  template_id        BigInt
+  certificate_number String   @unique @db.VarChar(100)
+  participant_name   String   @db.VarChar(200)
+  activity_name      String   @db.VarChar(200)
+  activity_info      String?  @db.VarChar(500)
+  issue_date         DateTime @map("issue_date") @db.Date
+  signer_name        String?  @db.VarChar(200)
+  signer_position    String?  @db.VarChar(200)
+  qr_code            String?  @db.VarChar(500)
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  template CertificateTemplate @relation(fields: [template_id], references: [id], onDelete: Cascade)
+
+  @@index([template_id])
+  @@map("certificates")
+}

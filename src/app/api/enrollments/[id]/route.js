@@ -1,4 +1,4 @@
-import { query } from "@/lib/db";
+import { query, pool } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
 import { hashPassword } from "@/lib/hash";
@@ -57,50 +57,65 @@ export async function PATCH(request, { params }) {
         }
 
         // JIKA APPROVED
-        const existingUser = await query(
-            `SELECT id FROM users WHERE user_npm = $1 LIMIT 1`,
-            [enrollment.npm]
-        );
+        // Dibungkus dalam transaction agar akun + info anggota + status
+        // pendaftaran selalu konsisten (sebelumnya 3 query terpisah —
+        // kegagalan di tengah meninggalkan data setengah jadi).
+        const hashedDefaultPassword = await hashPassword(enrollment.npm);
 
-        let userId;
+        await pool.connect().then(async (client) => {
+            try {
+                await client.query("BEGIN");
 
-        if (existingUser.rows.length === 0) {
-            // Hash the default password instead of storing plaintext NPM
-            const hashedDefaultPassword = await hashPassword(enrollment.npm);
+                const existingUser = await client.query(
+                    `SELECT id FROM users WHERE user_npm = $1 LIMIT 1`,
+                    [enrollment.npm]
+                );
 
-            const newUser = await query(
-                `INSERT INTO users (user_npm, password, user_role)
-                 VALUES ($1, $2, 'anggota') RETURNING id`,
-                [enrollment.npm, hashedDefaultPassword]
-            );
-            userId = newUser.rows[0].id;
-        } else {
-            userId = existingUser.rows[0].id;
-        }
+                let userId;
 
-        const existingInfo = await query(
-            `SELECT id FROM users_info WHERE user_id = $1 LIMIT 1`,
-            [userId]
-        );
+                if (existingUser.rows.length === 0) {
+                    const newUser = await client.query(
+                        `INSERT INTO users (user_npm, password, user_role)
+                         VALUES ($1, $2, 'anggota') RETURNING id`,
+                        [enrollment.npm, hashedDefaultPassword]
+                    );
+                    userId = newUser.rows[0].id;
+                } else {
+                    userId = existingUser.rows[0].id;
+                }
 
-        if (existingInfo.rows.length === 0) {
-            await query(
-                `INSERT INTO users_info (user_id, nama, posisi, jurusan, minat, status, linkimg)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                [userId, enrollment.nama, "Anggota", enrollment.jurusan, null, "aktif", null]
-            );
-        } else {
-            await query(
-                `UPDATE users_info SET nama = $1, posisi = $2, jurusan = $3, status = $4
-                 WHERE user_id = $5`,
-                [enrollment.nama, "Anggota", enrollment.jurusan, "aktif", userId]
-            );
-        }
+                const existingInfo = await client.query(
+                    `SELECT id FROM users_info WHERE user_id = $1 LIMIT 1`,
+                    [userId]
+                );
 
-        await query(
-            `UPDATE enrollments SET status = 'approved', updated_at = NOW() WHERE id = $1`,
-            [id]
-        );
+                if (existingInfo.rows.length === 0) {
+                    await client.query(
+                        `INSERT INTO users_info (user_id, nama, posisi, jurusan, minat, status, linkimg)
+                         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+                        [userId, enrollment.nama, "Anggota", enrollment.jurusan, null, "aktif", null]
+                    );
+                } else {
+                    await client.query(
+                        `UPDATE users_info SET nama = $1, posisi = $2, jurusan = $3, status = $4
+                         WHERE user_id = $5`,
+                        [enrollment.nama, "Anggota", enrollment.jurusan, "aktif", userId]
+                    );
+                }
+
+                await client.query(
+                    `UPDATE enrollments SET status = 'approved', updated_at = NOW() WHERE id = $1`,
+                    [id]
+                );
+
+                await client.query("COMMIT");
+            } catch (txError) {
+                await client.query("ROLLBACK");
+                throw txError;
+            } finally {
+                client.release();
+            }
+        });
 
         return NextResponse.json({ success: true, message: "Pendaftar berhasil diterima sebagai anggota" });
 

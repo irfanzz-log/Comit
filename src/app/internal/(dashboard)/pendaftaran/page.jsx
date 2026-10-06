@@ -1,34 +1,42 @@
 "use client";
 
-import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
 import { useEffect, useState } from "react";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, ApiError } from "@/lib/api";
+import PageContainer from "@/component/internal/PageContainer";
+import StatCard from "@/component/internal/StatCard";
+import DataTable from "@/component/internal/DataTable";
+import Pagination from "@/component/internal/Pagination";
+import Button from "@/component/internal/Button";
+import { StatusBadge } from "@/component/internal/Badge";
+import Icon from "@/component/internal/Icon";
+
+const FILTERS = [
+    { value: "all", label: "Semua" },
+    { value: "pending", label: "Pending" },
+    { value: "approved", label: "Diterima" },
+    { value: "rejected", label: "Ditolak" },
+];
+
+const PAGE_SIZE = 10;
 
 export default function Pendaftaran() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [processingId, setProcessingId] = useState(null);
-
     const [filter, setFilter] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
-
-    const itemsPerPage = 10;
-
-    // ==========================================
-    // FETCH DATA
-    // ==========================================
+    const [confirm, setConfirm] = useState(null);
+    const [toast, setToast] = useState(null);
 
     async function fetchPendaftaran() {
         try {
             setLoading(true);
-
+            setError(null);
             const result = await apiFetch("/api/enrollments");
             setData(result.data || []);
-        } catch (error) {
-            console.error(
-                "Error fetching pendaftaran:",
-                error
-            );
+        } catch (err) {
+            setError(err instanceof ApiError ? err.message : "Gagal memuat data pendaftaran.");
         } finally {
             setLoading(false);
         }
@@ -38,795 +46,239 @@ export default function Pendaftaran() {
         fetchPendaftaran();
     }, []);
 
-    // ==========================================
-    // UPDATE STATUS
-    // ==========================================
+    // Toast otomatis hilang
+    useEffect(() => {
+        if (!toast) return;
+        const timer = setTimeout(() => setToast(null), 4000);
+        return () => clearTimeout(timer);
+    }, [toast]);
 
-    async function updateStatus(id, status) {
-        const confirmMessage =
-            status === "approved"
-                ? "Apakah kamu yakin ingin menerima pendaftar ini?"
-                : "Apakah kamu yakin ingin menolak pendaftar ini?";
-
-        if (!confirm(confirmMessage)) {
-            return;
-        }
+    async function confirmUpdateStatus() {
+        if (!confirm) return;
+        const { id, status } = confirm;
+        setConfirm(null);
 
         try {
             setProcessingId(id);
+            const result = await apiFetch(`/api/enrollments/${id}`, {
+                method: "PATCH",
+                body: JSON.stringify({ status }),
+            });
 
-            const res = await fetch(
-                `/api/enrollments/${id}`,
-                {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-                    },
-                    body: JSON.stringify({
-                        status,
-                    }),
-                }
-            );
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                alert(
-                    result.message ||
-                    "Gagal mengubah status"
-                );
-                return;
-            }
-
-            alert(
-                result.message ||
-                "Status berhasil diperbarui"
-            );
-
+            setToast({ type: "success", message: result.message || "Status berhasil diperbarui." });
             await fetchPendaftaran();
-
-        } catch (error) {
-            console.error(
-                "Error update status:",
-                error
-            );
-
-            alert(
-                "Terjadi kesalahan pada server"
-            );
-
+        } catch (err) {
+            setToast({
+                type: "error",
+                message: err instanceof ApiError ? err.message : "Terjadi kesalahan pada server.",
+            });
         } finally {
             setProcessingId(null);
         }
     }
 
-    // ==========================================
-    // FILTER
-    // ==========================================
+    const filteredData = data.filter((item) => filter === "all" || item.status === filter);
 
-    const filteredData = data.filter((item) => {
-        if (filter === "all") {
-            return true;
-        }
-
-        return item.status === filter;
-    });
-
-    // ==========================================
-    // PAGINATION
-    // ==========================================
-
-    const totalPages = Math.ceil(
-        filteredData.length / itemsPerPage
-    );
-
-    const startIndex =
-        (currentPage - 1) * itemsPerPage;
-
-    const paginatedData =
-        filteredData.slice(
-            startIndex,
-            startIndex + itemsPerPage
-        );
+    const totalPages = Math.max(1, Math.ceil(filteredData.length / PAGE_SIZE));
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const paginatedData = filteredData.slice(startIndex, startIndex + PAGE_SIZE);
 
     function changeFilter(value) {
         setFilter(value);
         setCurrentPage(1);
     }
 
-    function previousPage() {
-        setCurrentPage((prev) =>
-            Math.max(prev - 1, 1)
-        );
-    }
+    const totalPending = data.filter((i) => i.status === "pending").length;
+    const totalApproved = data.filter((i) => i.status === "approved").length;
+    const totalRejected = data.filter((i) => i.status === "rejected").length;
 
-    function nextPage() {
-        setCurrentPage((prev) =>
-            Math.min(
-                prev + 1,
-                totalPages
-            )
-        );
-    }
+    const columns = [
+        { key: "no", header: "No", sortable: false, render: (_row, idx) => startIndex + idx + 1 },
+        { key: "nama", header: "Nama" },
+        { key: "npm", header: "NPM" },
+        { key: "no_telpon", header: "WhatsApp" },
+        { key: "jurusan", header: "Jurusan" },
+        {
+            key: "alasan",
+            header: "Alasan",
+            render: (row) => (
+                <span className="block max-w-xs truncate text-gray-600" title={row.alasan}>
+                    {row.alasan}
+                </span>
+            ),
+        },
+        {
+            key: "status",
+            header: "Status",
+            align: "center",
+            render: (row) => <StatusBadge status={row.status} />,
+        },
+        {
+            key: "aksi",
+            header: "Aksi",
+            align: "center",
+            sortable: false,
+            render: (row) => {
+                if (row.status !== "pending") {
+                    return <span className="text-xs text-gray-400">Sudah diproses</span>;
+                }
 
-    // ==========================================
-    // STATISTIK
-    // ==========================================
-
-    const totalPendaftar =
-        data.length;
-
-    const totalPending =
-        data.filter(
-            (item) =>
-                item.status === "pending"
-        ).length;
-
-    const totalApproved =
-        data.filter(
-            (item) =>
-                item.status === "approved"
-        ).length;
-
-    const totalRejected =
-        data.filter(
-            (item) =>
-                item.status === "rejected"
-        ).length;
-
-    // ==========================================
-    // EXPORT EXCEL
-    // ==========================================
-
-    async function exportExcel() {
-        try {
-            if (filteredData.length === 0) {
-                alert(
-                    "Tidak ada data untuk diexport."
+                return (
+                    <div className="inline-flex items-center gap-1.5">
+                        <Button
+                            size="sm"
+                            variant="success"
+                            loading={processingId === row.id}
+                            onClick={() => setConfirm({ id: row.id, status: "approved" })}
+                        >
+                            Terima
+                        </Button>
+                        <Button
+                            size="sm"
+                            variant="danger"
+                            loading={processingId === row.id}
+                            onClick={() => setConfirm({ id: row.id, status: "rejected" })}
+                        >
+                            Tolak
+                        </Button>
+                    </div>
                 );
-                return;
-            }
-
-            // Import xlsx hanya ketika tombol diklik
-            const XLSX = await import("xlsx");
-
-            const exportData =
-                filteredData.map(
-                    (item, index) => ({
-                        No: index + 1,
-                        Nama: item.nama || "",
-                        NPM: item.npm || "",
-                        "Nomor WhatsApp":
-                            item.no_telpon || "",
-                        Jurusan:
-                            item.jurusan || "",
-                        Alasan:
-                            item.alasan || "",
-                        Status:
-                            item.status ===
-                            "pending"
-                                ? "Pending"
-                                : item.status ===
-                                  "approved"
-                                ? "Diterima"
-                                : item.status ===
-                                  "rejected"
-                                ? "Ditolak"
-                                : item.status || "",
-                    })
-                );
-
-            const worksheet =
-                XLSX.utils.json_to_sheet(
-                    exportData
-                );
-
-            // Lebar kolom
-            worksheet["!cols"] = [
-                { wch: 6 },
-                { wch: 28 },
-                { wch: 16 },
-                { wch: 20 },
-                { wch: 25 },
-                { wch: 50 },
-                { wch: 15 },
-            ];
-
-            const workbook =
-                XLSX.utils.book_new();
-
-            XLSX.utils.book_append_sheet(
-                workbook,
-                worksheet,
-                "Pendaftaran"
-            );
-
-            const date =
-                new Date()
-                    .toISOString()
-                    .slice(0, 10);
-
-            XLSX.writeFile(
-                workbook,
-                `data-pendaftaran-${date}.xlsx`
-            );
-
-        } catch (error) {
-            console.error(
-                "Export Excel error:",
-                error
-            );
-
-            alert(
-                "Gagal membuat file Excel."
-            );
-        }
-    }
+            },
+        },
+    ];
 
     return (
-        <section className="main-section bg-white bg-gray-900 border border-gray-200 border-gray-800 h-auto relative w-full rounded-2xl shadow-sm overflow-hidden transition-colors">
+        <PageContainer
+            title="Pendaftaran Anggota"
+            subtitle="Kelola pengajuan pendaftaran anggota COMIT"
+        >
+            {error ? (
+                <div className="px-4 py-3 rounded-lg bg-red-50 text-red-700 border border-red-200 text-sm flex items-center gap-2">
+                    <Icon name="alert" size={16} />
+                    {error}
+                </div>
+            ) : null}
 
-                    <HeaderSectionBody
-                        title="Pendaftaran"
-                        profile="UP"
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                <StatCard title="Total Pendaftar" value={data.length} icon="users" variant="blue" loading={loading} />
+                <StatCard title="Menunggu" value={totalPending} icon="inbox" variant="yellow" loading={loading} />
+                <StatCard title="Diterima" value={totalApproved} icon="check" variant="green" loading={loading} />
+                <StatCard title="Ditolak" value={totalRejected} icon="x" variant="red" loading={loading} />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+                {FILTERS.map((f) => (
+                    <button
+                        key={f.value}
+                        type="button"
+                        onClick={() => changeFilter(f.value)}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            filter === f.value
+                                ? "bg-blue-600 text-white"
+                                : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                        }`}
+                    >
+                        {f.label}
+                        {f.value !== "all" ? (
+                            <span className="ml-1.5 opacity-70">
+                                ({data.filter((i) => i.status === f.value).length})
+                            </span>
+                        ) : null}
+                    </button>
+                ))}
+            </div>
+
+            <DataTable
+                columns={columns}
+                data={paginatedData}
+                loading={loading}
+                emptyMessage={
+                    filter === "all"
+                        ? "Belum ada pendaftaran masuk."
+                        : `Tidak ada pendaftaran dengan status “${FILTERS.find((f) => f.value === filter)?.label}”.`
+                }
+                pagination={
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        totalItems={filteredData.length}
+                        pageSize={PAGE_SIZE}
+                        syncUrl={false}
                     />
+                }
+            />
 
-                    <div className="main-section_body p-5">
-
-                        <div className="main-section_content">
-
-                            {/* ==========================================
-                                HEADER
-                            ========================================== */}
-
-                            <div className="content-head">
-                                <h1 className="text-xl font-bold text-gray-900 text-white">
-                                    Dashboard Pendaftaran
-                                </h1>
-
-                                <p className="text-sm text-gray-500 text-gray-400 mt-1">
-                                    Kelola pengajuan pendaftaran anggota COMIT
+            {/* Modal konfirmasi */}
+            {confirm ? (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4"
+                    onClick={() => setConfirm(null)}
+                >
+                    <div
+                        className="w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-start gap-3">
+                            <span
+                                className={`shrink-0 p-2.5 rounded-xl ${
+                                    confirm.status === "approved"
+                                        ? "bg-emerald-50 text-emerald-600"
+                                        : "bg-red-50 text-red-600"
+                                }`}
+                            >
+                                <Icon name={confirm.status === "approved" ? "check" : "x"} size={18} />
+                            </span>
+                            <div>
+                                <h3 className="text-base font-bold text-gray-900">
+                                    {confirm.status === "approved" ? "Terima pendaftar?" : "Tolak pendaftar?"}
+                                </h3>
+                                <p className="mt-1 text-sm text-gray-500">
+                                    {confirm.status === "approved"
+                                        ? "Akun anggota akan dibuat otomatis dengan password default berupa NPM."
+                                        : "Pendaftar dapat mendaftar kembali setelah ditolak."}
                                 </p>
                             </div>
-
-                            {/* ==========================================
-                                STATISTIK
-                            ========================================== */}
-
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-
-                                {/* TOTAL */}
-                                <div className="bg-blue-50/70 bg-blue-950/20 border border-blue-100 border-blue-900/40 rounded-xl p-4">
-                                    <p className="text-sm text-gray-500 text-gray-400">
-                                        Total Pendaftar
-                                    </p>
-
-                                    <h2 className="text-2xl font-bold text-blue-600 text-blue-400 mt-1">
-                                        {totalPendaftar}
-                                    </h2>
-                                </div>
-
-                                {/* PENDING */}
-                                <div className="bg-yellow-50/70 bg-yellow-950/20 border border-yellow-100 border-yellow-900/40 rounded-xl p-4">
-                                    <p className="text-sm text-gray-500 text-gray-400">
-                                        Menunggu
-                                    </p>
-
-                                    <h2 className="text-2xl font-bold text-yellow-600 text-yellow-400 mt-1">
-                                        {totalPending}
-                                    </h2>
-                                </div>
-
-                                {/* APPROVED */}
-                                <div className="bg-green-50/70 bg-green-950/20 border border-green-100 border-green-900/40 rounded-xl p-4">
-                                    <p className="text-sm text-gray-500 text-gray-400">
-                                        Diterima
-                                    </p>
-
-                                    <h2 className="text-2xl font-bold text-green-600 text-green-400 mt-1">
-                                        {totalApproved}
-                                    </h2>
-                                </div>
-
-                                {/* REJECTED */}
-                                <div className="bg-red-50/70 bg-red-950/20 border border-red-100 border-red-900/40 rounded-xl p-4">
-                                    <p className="text-sm text-gray-500 text-gray-400">
-                                        Ditolak
-                                    </p>
-
-                                    <h2 className="text-2xl font-bold text-red-600 text-red-400 mt-1">
-                                        {totalRejected}
-                                    </h2>
-                                </div>
-                            </div>
-
-
-                            {/* ==========================================
-                                DATA PENDAFTAR
-                            ========================================== */}
-
-                            <div className="content-body mt-8">
-
-                                {/* HEADER DATA */}
-
-                                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-5">
-
-                                    <div>
-
-                                        <h2 className="font-bold text-lg">
-                                            Data Pendaftar
-                                        </h2>
-
-                                        <p className="text-sm text-gray-500 mt-1">
-                                            Menampilkan maksimal 10 data per halaman
-                                        </p>
-
-                                    </div>
-
-
-                                    {/* EXPORT */}
-
-                                    <button
-                                        type="button"
-                                        onClick={exportExcel}
-                                        className="w-full lg:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition"
-                                    >
-
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="17"
-                                            height="17"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        >
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                            <polyline points="14 2 14 8 20 8" />
-                                            <path d="M8 13h8" />
-                                            <path d="M8 17h5" />
-                                        </svg>
-
-                                        Export Excel
-
-                                    </button>
-
-                                </div>
-
-
-                                {/* ==========================================
-                                    FILTER
-                                ========================================== */}
-
-                                <div className="flex flex-wrap gap-2 mb-5">
-
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            changeFilter("all")
-                                        }
-                                        className={`px-4 py-2 rounded-lg text-sm transition ${
-                                            filter === "all"
-                                                ? "bg-blue-500 text-white"
-                                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                        }`}
-                                    >
-                                        Semua
-                                    </button>
-
-
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            changeFilter("pending")
-                                        }
-                                        className={`px-4 py-2 rounded-lg text-sm transition ${
-                                            filter === "pending"
-                                                ? "bg-yellow-500 text-white"
-                                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                        }`}
-                                    >
-                                        Pending
-                                    </button>
-
-
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            changeFilter("approved")
-                                        }
-                                        className={`px-4 py-2 rounded-lg text-sm transition ${
-                                            filter === "approved"
-                                                ? "bg-green-500 text-white"
-                                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                        }`}
-                                    >
-                                        Diterima
-                                    </button>
-
-
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            changeFilter("rejected")
-                                        }
-                                        className={`px-4 py-2 rounded-lg text-sm transition ${
-                                            filter === "rejected"
-                                                ? "bg-red-500 text-white"
-                                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                        }`}
-                                    >
-                                        Ditolak
-                                    </button>
-
-                                </div>
-
-
-                                {/* ==========================================
-                                    TABLE
-                                ========================================== */}
-
-                                <div className="w-full overflow-x-auto rounded-xl border border-gray-200">
-
-                                    <table className="w-full min-w-[1000px] text-sm">
-
-                                        <thead className="bg-gray-50">
-
-                                            <tr>
-
-                                                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                                                    No
-                                                </th>
-
-                                                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                                                    Nama
-                                                </th>
-
-                                                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                                                    NPM
-                                                </th>
-
-                                                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                                                    WhatsApp
-                                                </th>
-
-                                                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                                                    Jurusan
-                                                </th>
-
-                                                <th className="px-4 py-3 text-left font-semibold text-gray-600">
-                                                    Alasan
-                                                </th>
-
-                                                <th className="px-4 py-3 text-center font-semibold text-gray-600">
-                                                    Status
-                                                </th>
-
-                                                <th className="px-4 py-3 text-center font-semibold text-gray-600">
-                                                    Aksi
-                                                </th>
-
-                                            </tr>
-
-                                        </thead>
-
-
-                                        <tbody>
-
-                                            {loading ? (
-
-                                                <tr>
-
-                                                    <td
-                                                        colSpan="8"
-                                                        className="text-center py-10 text-gray-500"
-                                                    >
-                                                        Memuat data...
-                                                    </td>
-
-                                                </tr>
-
-                                            ) : paginatedData.length === 0 ? (
-
-                                                <tr>
-
-                                                    <td
-                                                        colSpan="8"
-                                                        className="text-center py-10 text-gray-500"
-                                                    >
-                                                        Tidak ada data pendaftaran
-                                                    </td>
-
-                                                </tr>
-
-                                            ) : (
-
-                                                paginatedData.map(
-                                                    (
-                                                        item,
-                                                        index
-                                                    ) => (
-
-                                                        <tr
-                                                            key={
-                                                                item.id
-                                                            }
-                                                            className="border-t border-gray-100 hover:bg-gray-50"
-                                                        >
-
-                                                            {/* NO */}
-
-                                                            <td className="px-4 py-4">
-                                                                {startIndex +
-                                                                    index +
-                                                                    1}
-                                                            </td>
-
-
-                                                            {/* NAMA */}
-
-                                                            <td className="px-4 py-4 font-medium">
-                                                                {item.nama}
-                                                            </td>
-
-
-                                                            {/* NPM */}
-
-                                                            <td className="px-4 py-4">
-                                                                {item.npm}
-                                                            </td>
-
-
-                                                            {/* WHATSAPP */}
-
-                                                            <td className="px-4 py-4">
-                                                                {item.no_telpon}
-                                                            </td>
-
-
-                                                            {/* JURUSAN */}
-
-                                                            <td className="px-4 py-4">
-                                                                {item.jurusan}
-                                                            </td>
-
-
-                                                            {/* ALASAN */}
-
-                                                            <td className="px-4 py-4 max-w-xs">
-
-                                                                <p className="line-clamp-2">
-                                                                    {
-                                                                        item.alasan
-                                                                    }
-                                                                </p>
-
-                                                            </td>
-
-
-                                                            {/* STATUS */}
-
-                                                            <td className="px-4 py-4 text-center">
-
-                                                                {item.status ===
-                                                                    "pending" && (
-
-                                                                    <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
-                                                                        Pending
-                                                                    </span>
-
-                                                                )}
-
-
-                                                                {item.status ===
-                                                                    "approved" && (
-
-                                                                    <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                                                        Diterima
-                                                                    </span>
-
-                                                                )}
-
-
-                                                                {item.status ===
-                                                                    "rejected" && (
-
-                                                                    <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                                                                        Ditolak
-                                                                    </span>
-
-                                                                )}
-
-                                                            </td>
-
-
-                                                            {/* AKSI */}
-
-                                                            <td className="px-4 py-4">
-
-                                                                {item.status ===
-                                                                "pending" ? (
-
-                                                                    <div className="flex justify-center gap-2">
-
-                                                                        {/* ACC */}
-
-                                                                        <button
-                                                                            type="button"
-                                                                            disabled={
-                                                                                processingId ===
-                                                                                item.id
-                                                                            }
-                                                                            onClick={() =>
-                                                                                updateStatus(
-                                                                                    item.id,
-                                                                                    "approved"
-                                                                                )
-                                                                            }
-                                                                            className="px-3 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white rounded-lg text-xs font-medium transition"
-                                                                        >
-                                                                            {processingId ===
-                                                                            item.id
-                                                                                ? "..."
-                                                                                : "ACC"}
-                                                                        </button>
-
-
-                                                                        {/* TOLAK */}
-
-                                                                        <button
-                                                                            type="button"
-                                                                            disabled={
-                                                                                processingId ===
-                                                                                item.id
-                                                                            }
-                                                                            onClick={() =>
-                                                                                updateStatus(
-                                                                                    item.id,
-                                                                                    "rejected"
-                                                                                )
-                                                                            }
-                                                                            className="px-3 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white rounded-lg text-xs font-medium transition"
-                                                                        >
-                                                                            Tolak
-                                                                        </button>
-
-                                                                    </div>
-
-                                                                ) : (
-
-                                                                    <div className="text-center text-gray-400 text-xs">
-                                                                        -
-                                                                    </div>
-
-                                                                )}
-
-                                                            </td>
-
-                                                        </tr>
-
-                                                    )
-                                                )
-
-                                            )}
-
-                                        </tbody>
-
-                                    </table>
-
-
-                                    {/* ==========================================
-                                        PAGINATION
-                                    ========================================== */}
-
-                                    {!loading &&
-                                        filteredData.length >
-                                            0 && (
-
-                                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-4 border-t border-gray-200 bg-white">
-
-                                                {/* INFO */}
-
-                                                <p className="text-sm text-gray-500">
-
-                                                    Menampilkan{" "}
-
-                                                    <span className="font-medium text-gray-700">
-                                                        {startIndex +
-                                                            1}
-                                                    </span>
-
-                                                    {" - "}
-
-                                                    <span className="font-medium text-gray-700">
-                                                        {Math.min(
-                                                            startIndex +
-                                                                itemsPerPage,
-                                                            filteredData.length
-                                                        )}
-                                                    </span>
-
-                                                    {" dari "}
-
-                                                    <span className="font-medium text-gray-700">
-                                                        {
-                                                            filteredData.length
-                                                        }
-                                                    </span>
-
-                                                    {" data"}
-
-                                                </p>
-
-
-                                                {/* BUTTON */}
-
-                                                <div className="flex items-center justify-center gap-2">
-
-                                                    {/* PREVIOUS */}
-
-                                                    <button
-                                                        type="button"
-                                                        disabled={
-                                                            currentPage ===
-                                                            1
-                                                        }
-                                                        onClick={
-                                                            previousPage
-                                                        }
-                                                        className="px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                                                    >
-                                                        Previous
-                                                    </button>
-
-
-                                                    {/* PAGE */}
-
-                                                    <div className="min-w-[70px] text-center px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg">
-
-                                                        {currentPage}
-
-                                                        {" / "}
-
-                                                        {totalPages ||
-                                                            1}
-
-                                                    </div>
-
-
-                                                    {/* NEXT */}
-
-                                                    <button
-                                                        type="button"
-                                                        disabled={
-                                                            currentPage >=
-                                                            totalPages
-                                                        }
-                                                        onClick={
-                                                            nextPage
-                                                        }
-                                                        className="px-3 py-2 text-sm rounded-lg bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
-                                                    >
-                                                        Next
-                                                    </button>
-
-                                                </div>
-
-                                            </div>
-
-                                        )}
-
-                                </div>
-
-                            </div>
-
                         </div>
 
+                        <div className="mt-6 flex justify-end gap-2">
+                            <Button variant="secondary" onClick={() => setConfirm(null)}>
+                                Batal
+                            </Button>
+                            <Button
+                                variant={confirm.status === "approved" ? "success" : "danger"}
+                                onClick={confirmUpdateStatus}
+                            >
+                                {confirm.status === "approved" ? "Ya, terima" : "Ya, tolak"}
+                            </Button>
+                        </div>
                     </div>
+                </div>
+            ) : null}
 
-                </section>
+            {/* Toast */}
+            {toast ? (
+                <div className="fixed bottom-4 right-4 z-50 max-w-sm">
+                    <div
+                        className={`flex items-start gap-2.5 px-4 py-3 rounded-xl shadow-lg border text-sm ${
+                            toast.type === "success"
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                : "bg-red-50 text-red-700 border-red-200"
+                        }`}
+                    >
+                        <Icon name={toast.type === "success" ? "check" : "alert"} size={16} className="mt-0.5" />
+                        <span>{toast.message}</span>
+                        <button
+                            type="button"
+                            onClick={() => setToast(null)}
+                            className="ml-1 text-current opacity-50 hover:opacity-100"
+                            aria-label="Tutup"
+                        >
+                            <Icon name="x" size={14} />
+                        </button>
+                    </div>
+                </div>
+            ) : null}
+        </PageContainer>
     );
 }

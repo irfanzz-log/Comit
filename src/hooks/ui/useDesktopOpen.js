@@ -1,28 +1,30 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from 'react'
-import useMenuOpen from './useMenuOpen';
+import { useCallback, useEffect, useState } from "react";
 
+const DESKTOP_BREAKPOINT = 768;
+
+/**
+ * Menu state for the public navbar: tracks whether the mobile menu is open
+ * and whether the viewport is in desktop range (menu auto-collapses on resize).
+ */
 export default function useDesktopOpen() {
-    const {isMenuOpen, toggleMenu} = useMenuOpen();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
 
-     useEffect(() => {
+    useEffect(() => {
         const handleResize = () => {
-          if (window.innerWidth >= 768 && isMenuOpen) {
-            setIsDesktop(true);
-          } else {
-            setIsDesktop(false);
-          }
-        }
-    
-        handleResize(); // Initial check
-    
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-      })
+            setIsDesktop(window.innerWidth >= DESKTOP_BREAKPOINT);
+        };
 
-    return (
-       { isDesktop, isMenuOpen, toggleMenu }
-    )
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    const toggleMenu = useCallback(() => {
+        setIsMenuOpen((prev) => !prev);
+    }, []);
+
+    return { isDesktop, isMenuOpen, toggleMenu };
 }

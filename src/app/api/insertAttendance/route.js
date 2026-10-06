@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
-import { requireRole, getAuthPayload } from "@/lib/auth";
+import { requireRole } from "@/lib/auth";
 
 const VALID_STATUS = ["Hadir", "Izin", "Sakit", "Alpha"];
 

@@ -1,244 +1,208 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import HeaderSectionBody from "@/component/internal/HeaderSectionBody";
-import Aside from "@/component/internal/Aside";
+import { apiFetch, ApiError } from "@/lib/api";
+import PageContainer from "@/component/internal/PageContainer";
+import { TextField, TextArea, SelectField } from "@/component/internal/FormField";
+import Button from "@/component/internal/Button";
+import Icon from "@/component/internal/Icon";
 import { useAuth } from "@/app/context/AuthContext";
+import { canManageCertificate } from "@/lib/constants";
 
-export default function Certificate() {
+const EMPTY_FORM = {
+    template_id: "",
+    certificate_number: "",
+    participant_name: "",
+    activity_name: "",
+    activity_info: "",
+    issue_date: "",
+    signer_name: "",
+    signer_position: "",
+    qr_code: "",
+};
+
+export default function Sertifikat() {
+    const { user } = useAuth();
+    const canManage = canManageCertificate(user?.user_role);
 
     const [templates, setTemplates] = useState([]);
-    const [selectedTemplate, setSelectedTemplate] = useState(null);
-    const [showTemplateDropdown, setShowTemplateDropdown] = useState(false);
-    const { user } = useAuth();
-
-    const [form, setForm] = useState({
-        template_id: "",
-        certificate_number: "",
-        participant_name: "",
-        activity_name: "",
-        activity_info: "",
-        issue_date: "",
-        signer_name: "",
-        signer_position: "",
-        qr_code: ""
-    });
+    const [form, setForm] = useState({ ...EMPTY_FORM });
+    const [loading, setLoading] = useState(false);
+    const [feedback, setFeedback] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
+        async function getTemplates() {
+            try {
+                const data = await apiFetch("/api/certificates/template");
+                setTemplates(data.data || []);
+            } catch (err) {
+                setError("Gagal memuat daftar template sertifikat.");
+                console.error("Error fetching templates:", err);
+            }
+        }
         getTemplates();
     }, []);
 
-    async function getTemplates() {
-        const res = await fetch("/api/certificates/template");
-        const data = await res.json();
-
-        if (res.ok) {
-            setTemplates(data.data);
-        }
-    }
-
     function handleChange(e) {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setFeedback(null);
 
-        const res = await fetch("/api/certificates", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(form)
-        });
+        if (!form.template_id) {
+            setFeedback({ type: "error", message: "Pilih template terlebih dahulu." });
+            return;
+        }
 
-        const data = await res.json();
-
-        if (res.ok) {
-            alert("Sertifikat berhasil dibuat");
-
-            setForm({
-                template_id: "",
-                certificate_number: "",
-                participant_name: "",
-                activity_name: "",
-                activity_info: "",
-                issue_date: "",
-                signer_name: "",
-                signer_position: "",
-                qr_code: ""
+        setLoading(true);
+        try {
+            await apiFetch("/api/certificates", {
+                method: "POST",
+                body: JSON.stringify(form),
             });
-        } else {
-            alert(data.message);
+
+            setFeedback({ type: "success", message: "Sertifikat berhasil dibuat." });
+            setForm({ ...EMPTY_FORM });
+        } catch (err) {
+            setFeedback({
+                type: "error",
+                message:
+                    err instanceof ApiError
+                        ? err.message
+                        : "Gagal membuat sertifikat. Nomor sertifikat mungkin sudah digunakan.",
+            });
+        } finally {
+            setLoading(false);
         }
     }
 
-    if (user?.user_role === 'developer' || user?.user_role === 'sekretaris' || user?.user_role === 'superadmin') {
-    } else {
-        return null;
+    if (!canManage) {
+        return (
+            <PageContainer title="Data Sertifikat" subtitle="Penerbitan sertifikat">
+                <div className="p-10 rounded-2xl border border-gray-200 bg-gray-50/60 text-center">
+                    <div className="inline-flex p-3 rounded-xl bg-amber-50 text-amber-600 mb-3">
+                        <Icon name="shield" size={22} />
+                    </div>
+                    <h3 className="text-base font-bold text-gray-900">Akses dibatasi</h3>
+                    <p className="mt-1 text-sm text-gray-500 max-w-sm mx-auto">
+                        Hanya developer, superadmin, dan sekretaris yang dapat mengelola
+                        sertifikat.
+                    </p>
+                </div>
+            </PageContainer>
+        );
+    }
+
+    if (error) {
+        return (
+            <PageContainer title="Data Sertifikat" subtitle="Penerbitan sertifikat">
+                <div className="px-4 py-3 rounded-lg bg-red-50 text-red-700 border border-red-200 text-sm flex items-center gap-2">
+                    <Icon name="alert" size={16} />
+                    {error}
+                </div>
+            </PageContainer>
+        );
     }
 
     return (
-        <div className="main relative w-full h-screen flex flex-row bg-gray-100 overflow-x-hidden">
-            <Aside />
-            <main className="py-2 px-2 scrollbar-hide w-full h-screen overflow-y-scroll">
-                <section className="main-section h-screen bg-white relative w-full rounded-lg">
-                    <HeaderSectionBody
-                        title="Data Sertifikat"
-                    />
-                    <div className="main-section_body bg-white mt-1 p-5">
+        <PageContainer
+            title="Data Sertifikat"
+            subtitle="Buat dan terbitkan sertifikat kegiatan"
+        >
+            {feedback ? (
+                <div
+                    className={`px-4 py-3 rounded-lg text-sm border flex items-center gap-2 ${
+                        feedback.type === "success"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            : "bg-red-50 text-red-700 border-red-200"
+                    }`}
+                >
+                    <Icon name={feedback.type === "success" ? "check" : "alert"} size={16} />
+                    {feedback.message}
+                </div>
+            ) : null}
 
-                        <div className="main-section_content bg-white mb-6">
-                            <h1 className="text-xl font-bold">
-                                Data Sertifikat
-                            </h1>
-
-                            <p className="text-gray-500">
-                                Informasi sertifikat
-                            </p>
-                        </div>
-
-                        <div className="rounded-lg">
-                            <h2 className="text-lg font-bold">Buat Sertifikat</h2>
-                            <form
-                            onSubmit={handleSubmit}
-                            className="grid md:grid-cols-2 gap-5"
-                        >
-
-                            <div>
-                                <label className="font-medium">
-                                    Template
-                                </label>
-
-                                <div className="flex flex-col relative">
-                                    <button type="button" className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3" onClick={() => { setShowTemplateDropdown(!showTemplateDropdown) }}>
-                                        {selectedTemplate ? selectedTemplate.name : "Pilih Template"}
-                                    </button>
-                                    <div className={`absolute top-15 left-0 w-full bg-white border-[0.5px] ${showTemplateDropdown ? 'block' : 'hidden'} border-gray-300 rounded-lg shadow-md z-10`}>
-                                        {templates.map((template) => (
-                                            <div
-                                                key={template.id}
-                                                className="p-3 hover:bg-gray-100 cursor-pointer"
-                                                onClick={() => {
-                                                    setForm({ ...form, template_id: template.id });
-                                                    setSelectedTemplate(template);
-                                                    setShowTemplateDropdown(false);
-                                                }}
-                                            >
-                                                {template.name}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label>Nomor Sertifikat</label>
-
-                                <input
-                                    type="text"
-                                    name="certificate_number"
-                                    value={form.certificate_number}
-                                    onChange={handleChange}
-                                    className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label>Nama Peserta</label>
-
-                                <input
-                                    type="text"
-                                    name="participant_name"
-                                    value={form.participant_name}
-                                    onChange={handleChange}
-                                    className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label>Nama Kegiatan</label>
-
-                                <input
-                                    type="text"
-                                    name="activity_name"
-                                    value={form.activity_name}
-                                    onChange={handleChange}
-                                    className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3"
-                                    required
-                                />
-                            </div>
-
-                            <div className="md:col-span-2">
-                                <label>Informasi Kegiatan</label>
-
-                                <textarea
-                                    rows="4"
-                                    name="activity_info"
-                                    value={form.activity_info}
-                                    onChange={handleChange}
-                                    className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3"
-                                />
-                            </div>
-
-                            <div>
-                                <label>Tanggal Terbit</label>
-
-                                <input
-                                    type="date"
-                                    name="issue_date"
-                                    value={form.issue_date}
-                                    onChange={handleChange}
-                                    className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label>Jabatan Penandatangan</label>
-
-                                <input
-                                    type="text"
-                                    name="signer_position"
-                                    value={form.signer_position}
-                                    onChange={handleChange}
-                                    className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3"
-                                />
-                            </div>
-
-                            <div>
-                                <label>Nama Penandatangan</label>
-
-                                <input
-                                    type="text"
-                                    name="signer_name"
-                                    value={form.signer_name}
-                                    onChange={handleChange}
-                                    className="mt-2 border-[0.5px] border-gray-300 rounded-lg w-full p-3"
-                                />
-                            </div>
-
-                            <div className="md:col-span-2 flex justify-end">
-
-                                <button
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
-                                >
-                                    Buat Sertifikat
-                                </button>
-
-                            </div>
-
-                        </form>
-                        </div>
-
+            {templates.length === 0 ? (
+                <div className="p-8 rounded-2xl border border-gray-200 bg-gray-50/60 text-center text-sm text-gray-500">
+                    <Icon name="inbox" size={28} className="mx-auto mb-2 text-gray-300" />
+                    Belum ada template sertifikat tersedia.
+                </div>
+            ) : (
+                <form onSubmit={handleSubmit} className="space-y-4 max-w-4xl">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <SelectField
+                            label="Template"
+                            name="template_id"
+                            options={templates.map((t) => ({ value: String(t.id), label: t.name }))}
+                            value={form.template_id}
+                            onChange={handleChange}
+                            placeholder="Pilih template"
+                            required
+                        />
+                        <TextField
+                            label="Nomor Sertifikat"
+                            name="certificate_number"
+                            value={form.certificate_number}
+                            onChange={handleChange}
+                            placeholder="Contoh: COMIT-2026-001"
+                            required
+                        />
+                        <TextField
+                            label="Nama Peserta"
+                            name="participant_name"
+                            value={form.participant_name}
+                            onChange={handleChange}
+                            required
+                        />
+                        <TextField
+                            label="Nama Kegiatan"
+                            name="activity_name"
+                            value={form.activity_name}
+                            onChange={handleChange}
+                            required
+                        />
+                        <TextField
+                            label="Tanggal Terbit"
+                            type="date"
+                            name="issue_date"
+                            value={form.issue_date}
+                            onChange={handleChange}
+                            required
+                        />
+                        <TextField
+                            label="Jabatan Penandatangan"
+                            name="signer_position"
+                            value={form.signer_position}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Nama Penandatangan"
+                            name="signer_name"
+                            value={form.signer_name}
+                            onChange={handleChange}
+                        />
                     </div>
-                </section>
-            </main>
 
-        </div>
+                    <TextArea
+                        label="Informasi Kegiatan"
+                        name="activity_info"
+                        value={form.activity_info}
+                        onChange={handleChange}
+                        placeholder="Deskripsi kegiatan dan peran peserta"
+                        rows={4}
+                    />
+
+                    <div className="flex justify-end pt-2">
+                        <Button type="submit" loading={loading}>
+                            Buat Sertifikat
+                        </Button>
+                    </div>
+                </form>
+            )}
+        </PageContainer>
     );
 }

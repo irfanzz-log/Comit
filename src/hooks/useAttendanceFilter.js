@@ -1,97 +1,95 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { apiFetch } from "@/lib/api";
 
-export default function useUserFilter() {
+const DEFAULT_POSISI = "Filter by posisi";
+const DEFAULT_STATUS = "Filter by status absen";
+const DEFAULT_ACARA = "Filter by acara";
+
+export default function useAttendanceFilter() {
     const searchParams = useSearchParams();
-    
-        const [dataAnggota, setDataAnggota] = useState([]);
-        const [page, setPage] = useState(1);
-        const [totalPages, setTotalPages] = useState(1);
-        const [totalUsers, setTotalUsers] = useState(0);
-        const [name, setName] = useState("");
-    
-        const posisiOptions = ["Ketua", "Wakil Ketua", "Sekretaris", "Bendahara", "Koordinator Akademik", "Koordinator Humas", "Koordinator SDM", "Koordinator Prasarana", "Koordinator Kominfo", "SDM", "Humas Internal", "Humas Eksternal", "Prasarana", "Kominfo", "Staff Programming", "Staff Design", "Staff Comnet", "Staff Office"];
-        const statusOptions = ["Hadir", "Izin", "Sakit"];
-        const [togglePosisi, setTogglePosisi] = useState('Filter by posisi');
-        const [toggleStatusAbsen, setToggleStatusAbsen] = useState('Filter by status absen');
-        const [toggleAcara, setToggleAcara] = useState('Filter by acara');
-        const [acaraOptions, setAcaraOptions] = useState([]);
 
-        const [filterOpen, setFilterOpen] = useState({
-            status_absen: false,
-            posisi: false,
-            acara: false
-        });
-    
-        function handleToggleFilter(e, type) {
-            e.stopPropagation();
-            setFilterOpen((prev) => ({
-                posisi: false,
-                status_absen: false,
-                acara: false,
-                [type]: !prev[type],
-            }));
-        }
-    
-        // sync URL → state
-        const pathPage = searchParams.get('page');
-        useEffect(() => {
-            if (pathPage) {
-                setPage(Number(pathPage));
-            }
-        }, [pathPage]);
-    
-        //search name
-        function handleSearch(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const searchName = formData.get('searchName');
-            setName(searchName);
-        }
-    
-        // fetch data saat page berubah
-        useEffect(() => {
-    
-            const params = new URLSearchParams();
-            if (name) params.set('name', name);
-            if (togglePosisi !== 'Filter by posisi') params.set('posisi', togglePosisi);
-            if (toggleStatusAbsen !== 'Filter by status absen') params.set('status_absen', toggleStatusAbsen);
-            if (toggleAcara !== 'Filter by acara') params.set('acara', toggleAcara);
-            params.set('page', page);
-    
-            fetch(`/api/userAttendance?${params.toString()}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setDataAnggota(data.users);
-                    setTotalPages(data.totalPages);
-                    setTotalUsers(data.totalUsers);
-                    setAcaraOptions(data.acara.map(user => user.acara).filter((value, index, self) => value && self.indexOf(value) === index)); // Extract unique acara options
-                })
-                .catch((error) => console.error('Error fetching data:', error));
-    
-            window.history.replaceState(null, '', `?${params.toString()}`);
-        }, [page, name, togglePosisi, toggleStatusAbsen, toggleAcara]);
+    const [dataAnggota, setDataAnggota] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [name, setName] = useState("");
+    const [loading, setLoading] = useState(true);
 
-        return {
-            dataAnggota,
-            page,
-            setPage,
-            totalPages,
-            totalUsers,
-            name,
-            setName,
-            posisiOptions,
-            statusOptions,
-            toggleStatusAbsen,
-            setToggleStatusAbsen,
-            togglePosisi,
-            setTogglePosisi,
-            filterOpen,
-            setFilterOpen,
-            handleToggleFilter,
-            handleSearch,
-            toggleAcara,
-            setToggleAcara,
-            acaraOptions
+    const [togglePosisi, setTogglePosisi] = useState(DEFAULT_POSISI);
+    const [toggleStatusAbsen, setToggleStatusAbsen] = useState(DEFAULT_STATUS);
+    const [toggleAcara, setToggleAcara] = useState(DEFAULT_ACARA);
+    const [acaraOptions, setAcaraOptions] = useState([]);
+
+    const pathPage = searchParams.get("page");
+    useEffect(() => {
+        if (pathPage) {
+            setPage(Number(pathPage));
+        }
+    }, [pathPage]);
+
+    function handleSearch(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        setName(formData.get("searchName"));
+    }
+
+    const posisiValue = togglePosisi !== DEFAULT_POSISI ? togglePosisi : "";
+    const statusValue = toggleStatusAbsen !== DEFAULT_STATUS ? toggleStatusAbsen : "";
+    const acaraValue = toggleAcara !== DEFAULT_ACARA ? toggleAcara : "";
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const params = new URLSearchParams();
+        if (name) params.set("name", name);
+        if (posisiValue) params.set("posisi", posisiValue);
+        if (statusValue) params.set("status_absen", statusValue);
+        if (acaraValue) params.set("acara", acaraValue);
+        params.set("page", String(page));
+
+        setLoading(true);
+        apiFetch(`/api/userAttendance?${params.toString()}`)
+            .then((data) => {
+                if (cancelled) return;
+                setDataAnggota(data.users || []);
+                setTotalPages(data.totalPages || 1);
+                setTotalUsers(data.totalUsers || 0);
+                setAcaraOptions(
+                    (data.acara || [])
+                        .map((a) => a.acara)
+                        .filter((v, i, arr) => v && arr.indexOf(v) === i)
+                );
+            })
+            .catch((error) => {
+                if (!cancelled) console.error("Error fetching data:", error);
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
+
+        window.history.replaceState(null, "", `?${params.toString()}`);
+        return () => {
+            cancelled = true;
         };
+    }, [page, name, posisiValue, statusValue, acaraValue]);
+
+    return {
+        dataAnggota,
+        loading,
+        page,
+        setPage,
+        totalPages,
+        totalUsers,
+        name,
+        setName,
+        togglePosisi,
+        setTogglePosisi,
+        toggleStatusAbsen,
+        setToggleStatusAbsen,
+        toggleAcara,
+        setToggleAcara,
+        acaraOptions,
+        handleSearch,
+    };
 }

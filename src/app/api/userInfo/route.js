@@ -71,8 +71,12 @@ export async function GET(req) {
         `;
 
         const dataRes = await query(dataQuery, [...values, limit, offset]);
+
+        // Hanya kirim field yang benar-benar dipakai client (avatar leaderboard
+        // di halaman absensi). Sebelumnya `SELECT *` membocorkan seluruh kolom
+        // users_info ke browser.
         const allUsersQuery = `
-            SELECT * FROM users_info
+            SELECT nama, linkimg FROM users_info
         `;
         const allUsersRes = await query(allUsersQuery);
         return NextResponse.json({

@@ -1,160 +1,140 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, getAuthPayload } from "@/lib/auth";
+
+const LIMIT = 10;
+const STAFF_ROLES = ["developer", "superadmin", "sekretaris", "staff", "bendahara"];
 
 export async function GET(req) {
     const unauthorized = requireAuth(req);
     if (unauthorized) return unauthorized;
+
+    // Identitas diverifikasi dari token — bukan dari query string — agar
+    // user tidak bisa membaca absensi user lain (IDOR).
+    const payload = getAuthPayload(req);
+    const selfId = payload?.id;
+    const isStaff = STAFF_ROLES.includes(payload?.role);
+
     const { searchParams } = new URL(req.url);
 
-    const page = parseInt(searchParams.get('page')) || 1;
-    const limit = 10;
-    const offset = (page - 1) * limit;
-    const userIdRaw = parseInt(searchParams.get('userId'));
-    const userId = userIdRaw ? parseInt(userIdRaw) : null;
+    const page = Math.max(1, parseInt(searchParams.get("page"), 10) || 1);
+    const offset = (page - 1) * LIMIT;
+
+    const conditions = [];
+    const values = [];
+    let idx = 1;
+
+    if (searchParams.get("name")) {
+        conditions.push(`ui.nama ILIKE $${idx}`);
+        values.push(`%${searchParams.get("name")}%`);
+        idx++;
+    }
+
+    if (searchParams.get("posisi")) {
+        conditions.push(`ui.posisi = $${idx}`);
+        values.push(searchParams.get("posisi"));
+        idx++;
+    }
+
+    if (searchParams.get("status_absen")) {
+        conditions.push(`a.status_absen = $${idx}`);
+        values.push(searchParams.get("status_absen"));
+        idx++;
+    }
+
+    if (searchParams.get("acara")) {
+        conditions.push(`a.acara = $${idx}`);
+        values.push(searchParams.get("acara"));
+        idx++;
+    }
 
     try {
-        let conditions = [];
-        let values = [];
-        let idx = 1;
-
-        // NAME
-        if (searchParams.get('name')) {
-            conditions.push(`ui.nama ILIKE $${idx}`);
-            values.push(`%${searchParams.get('name')}%`);
-            idx++;
-        }
-
-        // POSISI
-        if (searchParams.get('posisi')) {
-            conditions.push(`ui.posisi = $${idx}`);
-            values.push(searchParams.get('posisi'));
-            idx++;
-        }
-
-        // STATUS ABSEN
-        if (searchParams.get('status_absen')) {
-            conditions.push(`a.status_absen = $${idx}`);
-            values.push(searchParams.get('status_absen'));
-            idx++;
-        }
-        // ACARA
-        if (searchParams.get('acara')) {
-            conditions.push(`a.acara = $${idx}`);
-            values.push(searchParams.get('acara'));
-            idx++;
-        }
-
-        const whereClause = conditions.length
-            ? `WHERE ${conditions.join(' AND ')}`
-            : '';
-
-        // COUNT
-        const countQuery = `
-            SELECT COUNT(*) 
-            FROM attendance a 
-            INNER JOIN users_info ui ON a.user_id = ui.user_id
-            ${whereClause}
-        `;
-
-        // PAGE ALL
-        const countQueryAll = `
-            SELECT COUNT(*)
-            FROM users `
-            ;
-
-        const countAcara = `
-            SELECT a.acara
-            FROM attendance a 
-            INNER JOIN users_info ui ON a.user_id = ui.user_id
-        `;
-
-        // LEADERBOARD
-        const leaderboardQuery = `
-            SELECT 
+        // -----------------------------------------------------
+        // 1. Rekap kehadiran seluruh anggota (sekali jalan).
+        //    Dipakai untuk leaderboard top-3, leaderboard terpaginasi,
+        //    dan total baris — menggantikan 3 query hampir identik.
+        // -----------------------------------------------------
+        const recapRes = await query(`
+            SELECT
+                ui.id,
                 ui.nama,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Hadir') AS hadir,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Izin') AS izin,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Sakit') AS sakit,
-                COUNT(a.id) AS total_data
+                COUNT(a.id) FILTER (WHERE a.status_absen = 'Hadir')::int AS hadir,
+                COUNT(a.id) FILTER (WHERE a.status_absen = 'Izin')::int AS izin,
+                COUNT(a.id) FILTER (WHERE a.status_absen = 'Sakit')::int AS sakit,
+                COUNT(a.id) FILTER (WHERE a.status_absen = 'Alpha')::int AS alpha,
+                COUNT(a.id)::int AS total_data
             FROM users_info ui
             LEFT JOIN attendance a ON ui.user_id = a.user_id
             GROUP BY ui.id, ui.nama
-            ORDER BY hadir DESC, nama ASC
-            LIMIT 3
-        `;
+            ORDER BY hadir DESC, ui.nama ASC
+        `);
 
-        const LeaderboardAll = `
-            SELECT 
-                ui.nama,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Hadir') AS hadir,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Izin') AS izin,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Sakit') AS sakit,
-                COUNT(a.id) AS total_data
-            FROM users_info ui
-            LEFT JOIN attendance a ON ui.user_id = a.user_id
-            ${whereClause}
-            GROUP BY ui.id, ui.nama
-            ORDER BY hadir DESC, nama ASC
-            LIMIT $${idx} OFFSET $${idx + 1}
-        `;
+        const leaderboard = recapRes.rows.slice(0, 3);
+        const totalLeaderboard = recapRes.rows;
+        const leaderboardAll = recapRes.rows.slice(offset, offset + LIMIT);
+        const pageAll = Math.max(1, Math.ceil(recapRes.rows.length / LIMIT));
 
-        const leaderboardAllrows = `
-            SELECT 
-                ui.nama,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Hadir') AS hadir,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Izin') AS izin,
-                COUNT(a.id) FILTER (WHERE a.status_absen = 'Sakit') AS sakit,
-                COUNT(a.id) AS total_data
-            FROM users_info ui
-            LEFT JOIN attendance a ON ui.user_id = a.user_id
-            GROUP BY ui.id, ui.nama
-            ORDER BY hadir DESC, nama ASC
-        `;
+        // -----------------------------------------------------
+        // 2. Daftar acara unik untuk dropdown filter
+        // -----------------------------------------------------
+        const acaraRes = await query(
+            `SELECT DISTINCT acara FROM attendance WHERE acara IS NOT NULL ORDER BY acara ASC`
+        );
 
-        const leaderboardRes = await query(leaderboardQuery);
-        const leaderboard = leaderboardRes.rows;
+        // -----------------------------------------------------
+        // 3. Data absensi terfilter + total (paralel)
+        // -----------------------------------------------------
+        const scopeConditions = [...conditions];
+        const scopeValues = [...values];
+        let scopeIdx = idx;
 
-        const leaderboardAllRes = await query(LeaderboardAll, [...values, limit, offset]);
-        const leaderboardAll = leaderboardAllRes.rows;
+        // Non-staff hanya boleh melihat baris miliknya sendiri
+        if (!isStaff) {
+            scopeConditions.push(`a.user_id = $${scopeIdx}`);
+            scopeValues.push(selfId);
+            scopeIdx++;
+        }
 
-        const leaderboardAllRows = await query(leaderboardAllrows);
-        const totalLeaderboard = leaderboardAllRows?.rows || [];
+        const scopeWhere = scopeConditions.length
+            ? `WHERE ${scopeConditions.join(" AND ")}`
+            : "";
 
-        const countRes = await query(countQuery, values);
-        const totalUsers = parseInt(countRes.rows[0].count);
-        const totalPages = Math.ceil(totalUsers / limit);
-        const pageAllUsersRes = await query(countQueryAll);
-        const pageAllUsers = parseInt(pageAllUsersRes.rows[0].count);
-        const pageAll = Math.ceil(pageAllUsers / limit);
+        const [countRes, dataRes] = await Promise.all([
+            query(
+                `SELECT COUNT(*)::int AS total
+                 FROM attendance a
+                 INNER JOIN users_info ui ON a.user_id = ui.user_id
+                 ${scopeWhere}`,
+                scopeValues
+            ),
+            query(
+                `SELECT
+                    a.id,
+                    ui.nama,
+                    ui.posisi,
+                    a.status_absen,
+                    a.keterangan,
+                    a.acara,
+                    TO_CHAR(a.created_at, 'DD-MM-YYYY HH24:MI') AS waktu_absen
+                 FROM attendance a
+                 INNER JOIN users_info ui ON a.user_id = ui.user_id
+                 ${scopeWhere}
+                 ORDER BY a.created_at DESC
+                 LIMIT $${scopeIdx} OFFSET $${scopeIdx + 1}`,
+                [...scopeValues, LIMIT, offset]
+            ),
+        ]);
 
-        const acaraRes = await query(countAcara);
-        const acara = acaraRes.rows;
-        
+        const totalUsers = countRes.rows[0]?.total ?? 0;
+        const totalPages = Math.max(1, Math.ceil(totalUsers / LIMIT));
 
-        // DATA
-        const dataQuery = `
-           SELECT 
-            a.id, 
-            ui.nama, 
-            ui.posisi, 
-            a.status_absen, 
-            a.keterangan, 
-            a.acara,
-            TO_CHAR(a.created_at, 'DD-MM-YYYY HH24:MI') as waktu_absen
-            FROM attendance a 
-            INNER JOIN users_info ui ON a.user_id = ui.user_id
-            ${whereClause}
-            ORDER BY a.created_at DESC
-            LIMIT $${idx} OFFSET $${idx + 1}
-        `;
-
-        const dataAttendance = `
-        SELECT acara FROM attendance 
-        WHERE user_id = $1`;
-
-        const dataRes = await query(dataQuery, [...values, limit, offset]);
-        const resAttendance = await query(dataAttendance, [userId]);
+        // -----------------------------------------------------
+        // 4. Absensi sendiri — pengecekan "sudah absen" di Scanner
+        // -----------------------------------------------------
+        const selfAttendanceRes = await query(
+            `SELECT acara FROM attendance WHERE user_id = $1`,
+            [selfId]
+        );
 
         return NextResponse.json({
             users: dataRes.rows,
@@ -164,14 +144,13 @@ export async function GET(req) {
             leaderboard,
             leaderboardAll,
             totalLeaderboard,
-            acara,
-            resAttendance: resAttendance.rows
+            acara: acaraRes.rows,
+            resAttendance: selfAttendanceRes.rows,
         });
-
     } catch (error) {
-        console.error(error);
+        console.error("GET /api/userAttendance error:", error);
         return NextResponse.json(
-            { error: "Gagal mengambil data pengguna" },
+            { error: "Gagal mengambil data absensi" },
             { status: 500 }
         );
     }

@@ -1,93 +1,55 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { apiFetch, ApiError } from "@/lib/api";
+
+const EMPTY_FORM = {
+    namaUser: "",
+    user_id: "",
+    posisi: "",
+    status_absen: "",
+    keterangan: "",
+    acara: "",
+};
 
 export default function useAttendanceInput() {
     const [loading, setLoading] = useState(false);
-    const [userSuggestions, setUserSuggestions] = useState([]);
-    
-    const [form, setForm] = useState({
-        namaUser: '',
-        user_id: '',
-        posisi: '',
-        status_absen: '', 
-        keterangan: '',
-        acara: ''
-    });
+    const [form, setForm] = useState({ ...EMPTY_FORM });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
-
-        if (name === 'namaUser') {
-            if (value.length > 1) {
-                fetch(`/api/userSearch?query=${encodeURIComponent(value)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        setUserSuggestions(Array.isArray(data) ? data : []);
-                    })
-                    .catch(err => {
-                        console.error("Search error:", err);
-                        setUserSuggestions([]);
-                    });
-            } else {
-                setUserSuggestions([]);
-            }
-        }
-    };
-
-    const pilihUser = (user) => {
-        setForm(prev => ({
-            ...prev,
-            user_id: user.id, 
-            namaUser: user.nama,
-            posisi: user.posisi || prev.posisi
-        }));
-        setUserSuggestions([]); 
+        setForm((prev) => ({ ...prev, [name]: value }));
     };
 
     const submitAbsensi = async () => {
-        if (!form.namaUser || !form.status_absen) return alert("Nama dan Status wajib diisi!");
-        
+        if (!form.user_id || !form.status_absen) {
+            return { success: false, error: "Pilih anggota dan status terlebih dahulu." };
+        }
+
         setLoading(true);
         try {
-            const res = await fetch('/api/insertAttendance', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            await apiFetch("/api/insertAttendance", {
+                method: "POST",
                 body: JSON.stringify({
                     user_id: form.user_id,
-                    nama: form.namaUser,
                     status_absen: form.status_absen,
-                    keterangan: form.keterangan || '-',
-                    acara: form.acara
+                    keterangan: form.keterangan || "-",
+                    acara: form.acara || null,
                 }),
             });
 
-            if (res.ok) {
-                alert('Absensi berhasil dicatat!');
-                setForm({ 
-                    namaUser: '', 
-                    user_id: '', 
-                    posisi: '', 
-                    status_absen: '', 
-                    keterangan: '', 
-                    acara: '' 
-                });
-            } else {
-                alert('Gagal mencatat absensi.');
-            }
+            setForm({ ...EMPTY_FORM });
+            return { success: true };
         } catch (error) {
-            console.error("Submit error:", error);
+            const message =
+                error instanceof ApiError && error.status === 403
+                    ? "Anda tidak memiliki izin mencatat absensi."
+                    : error instanceof ApiError && error.status === 400
+                      ? "Data absensi tidak valid."
+                      : "Gagal mencatat absensi.";
+            return { success: false, error: message };
         } finally {
             setLoading(false);
         }
     };
 
-    return { 
-        form, 
-        handleChange, 
-        submitAbsensi, 
-        loading, 
-        userSuggestions, 
-        pilihUser,
-        setForm
-    };
+    return { form, setForm, handleChange, submitAbsensi, loading };
 }

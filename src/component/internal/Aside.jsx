@@ -35,7 +35,7 @@ export default function Aside() {
     const lastPath = useLastPath();
     const { isOpen, setIsOpen } = useSlideNav();
     const outFocusRef = useOutFocus(null);
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
 
     const showCertificate = canManageCertificate(user?.user_role);
 
@@ -173,7 +173,7 @@ export default function Aside() {
                                     .slice(0, 2)
                                     .toUpperCase()}
                             </div>
-                            <div className="min-w-0">
+                            <div className="min-w-0 flex-1">
                                 <p className="text-sm font-medium text-gray-900 truncate">
                                     {user.nama || "Pengguna"}
                                 </p>
@@ -181,6 +181,15 @@ export default function Aside() {
                                     {ROLE_LABELS[user.user_role] || user.user_role || "Anggota"}
                                 </p>
                             </div>
+                            <button
+                                type="button"
+                                onClick={() => logout()}
+                                className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                                title="Keluar"
+                                aria-label="Keluar"
+                            >
+                                <Icon name="logout" size={17} />
+                            </button>
                         </div>
                     </div>
                 ) : null}

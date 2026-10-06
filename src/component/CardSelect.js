@@ -23,10 +23,10 @@ export default function StaffFilter() {
     "Koordinator",
     "Prasarana",
     "Kominfo",
-    "Staff Programming",
-    "Staff Design Grafis",
-    "Staff Comp & Network",
-    "Staff Microsoft Office",
+    "Staff Program",
+    "Staff Design",
+    "Staff Comp. Network",
+    "Staff Ms. Office",
   ];
 
   const filteredStaff = pengurus.filter(
@@ -132,6 +132,7 @@ export default function StaffFilter() {
             nama={staff.nama}
             url={staff.imgUrl}
             divisi={staff.jabatan}
+            npm={staff.npm}
             imgStyle="staff-grid__image w-full object-cover rounded-xl"
             cardStyle="staff-grid__card flex justify-center items-center max-w-full mx-5 flex-col my-3 transform transition duration-300 hover:scale-125 cursor-pointer"
           />

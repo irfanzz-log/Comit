@@ -21,6 +21,7 @@ export default function MentorCard({
     url,
     nama,
     divisi,
+    npm,
     cardStyle,
     imgStyle,
     nameStyle,
@@ -210,6 +211,12 @@ export default function MentorCard({
                             "
                         />
                     </div>
+
+                    {npm ? (
+                        <p className="mt-1.5 text-[11px] font-medium text-gray-400 tracking-wide">
+                            {npm}
+                        </p>
+                    ) : null}
                 </motion.div>
 
                 {/* Bottom accent */}

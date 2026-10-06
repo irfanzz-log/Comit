@@ -131,7 +131,6 @@ async function main() {
   const templates = [];
   for (const t of [
     { name: "Template Standart", background: "/certificate/standart.png" },
-    { name: "Template Premium", background: "/certificate/premium.png" },
   ]) {
     templates.push(
       await prisma.certificateTemplate.upsert({

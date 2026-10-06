@@ -91,208 +91,38 @@ export const kegiatan = [
 ]
 
 export const pengurus = [
-  {
-    posisi: "Ketua & Wakil Ketua Umum",
-    nama: "Danang Prasetio",
-    jabatan: "Ketua Umum",
-    imgUrl: "/pengurus/ketua-umum.png"
-  },
-  {
-    posisi: "Ketua & Wakil Ketua Umum",
-    nama: "Erik Susanto",
-    jabatan: "Wakil Ketua Umum",
-    imgUrl: "/pengurus/wakil-ketua-umum.png"
-  },
-  {
-    posisi: "Sekretaris",
-    nama: "Abella Pinkan Ham",
-    jabatan: "Sekretaris 1",
-    imgUrl: "/pengurus/sekretaris-1.png"
-  },
-  {
-    posisi: "Sekretaris",
-    nama: "Putriyana",
-    jabatan: "Sekretaris 2",
-    imgUrl: "/pengurus/sekretaris-2.png"
-  },
-  {
-    posisi: "Bendahara",
-    nama: "Sofi Utami",
-    jabatan: "Bendahara 1",
-    imgUrl: "/pengurus/bendahara-1.png"
-  },
-  {
-    posisi: "Bendahara",
-    nama: "Eva Fauziah",
-    jabatan: "Bendahara 2",
-    imgUrl: "/pengurus/bendahara-2.png"
-  },
-  {
-    posisi: "SDM",
-    nama: "Ahmad Rohman",
-    jabatan: "SDM",
-    imgUrl: "/pengurus/sdm-1.png"
-  },
-  {
-    posisi: "SDM",
-    nama: "Crisvin",
-    jabatan: "SDM",
-    imgUrl: "/pengurus/sdm-2.png"
-  },
-  {
-    posisi: "SDM",
-    nama: "Dewi Fatimah Nurhasiya",
-    jabatan: "SDM",
-    imgUrl: "/pengurus/sdm-3.png"
-  },
-  {
-    posisi: "Humas Internal",
-    nama: "Dita Resty Pauji",
-    jabatan: "Humas Internal",
-    imgUrl: "/pengurus/humas-internal-1.png"
-  },
-  {
-    posisi: "Humas Internal",
-    nama: "Ihya Ulumudin",
-    jabatan: "Humas Internal",
-    imgUrl: "/pengurus/humas-internal-2.png"
-  },
-  {
-    posisi: "Humas Eksternal",
-    nama: "Komalasari",
-    jabatan: "Humas Eksternal",
-    imgUrl: "/pengurus/humas-eksternal-1.png"
-  },
-  {
-    posisi: "Humas Eksternal",
-    nama: "Ryan Adi Prasetyo",
-    jabatan: "Humas Eksternal",
-    imgUrl: "/pengurus/humas-eksternal-2.png"
-  },
-  {
-    posisi: "Humas Eksternal",
-    nama: "Chesa Aulia",
-    jabatan: "Humas Eksternal",
-    imgUrl: "/pengurus/humas-eksternal-3.png"
-  },
-  {
-    posisi: "Koordinator",
-    nama: "Muhammad Teuku Rizal",
-    jabatan: "Koordinator Humas",
-    imgUrl: "/pengurus/koor-humas.png"
-  },
-  {
-    posisi: "Koordinator",
-    nama: "M Irfansyah",
-    jabatan: "Koordinator Akademik",
-    imgUrl: "/pengurus/koor-akademik.png"
-  },
-  {
-    posisi: "Prasarana",
-    nama: "Bayu Indra Setiawan",
-    jabatan: "Prasarana",
-    imgUrl: "/pengurus/prasarana-1.png"
-  },
-  {
-    posisi: "Prasarana",
-    nama: "Muhammad Chandra Wijaya",
-    jabatan: "Prasarana",
-    imgUrl: "/pengurus/prasarana-2.png"
-  },
-  {
-    posisi: "Prasarana",
-    nama: "Agustian Sadovin",
-    jabatan: "Prasarana",
-    imgUrl: "/pengurus/prasarana-3.png"
-  },
-  {
-    posisi: "Kominfo",
-    nama: "Nufail Jazali",
-    jabatan: "Kominfo",
-    imgUrl: "/pengurus/kominfo-1.png"
-  },
-  {
-    posisi: "Kominfo",
-    nama: "Zunda Melandari",
-    jabatan: "Kominfo",
-    imgUrl: "/pengurus/kominfo-2.png"
-  },
-  {
-    posisi: "Staff Programming",
-    nama: "Galih Eza Kurniawansyah",
-    jabatan: "Staff Programming",
-    imgUrl: "/pengurus/program-1.png"
-  },
-  {
-    posisi: "Staff Programming",
-    nama: "Rifki Dwi Al Zari",
-    jabatan: "Staff Programming",
-    imgUrl: "/pengurus/program-2.png"
-  },
-  {
-    posisi: "Staff Programming",
-    nama: "Reva Andini",
-    jabatan: "Staff Programming",
-    imgUrl: "/pengurus/program-3.png"
-  },
-  {
-    posisi: "Staff Design Grafis",
-    nama: "Nabila Salsabila",
-    jabatan: "Staff Design Grafis",
-    imgUrl: "/pengurus/design-1.png"
-  },
-  {
-    posisi: "Staff Design Grafis",
-    nama: "Fikriyah",
-    jabatan: "Staff Design Grafis",
-    imgUrl: "/pengurus/design-2.png"
-  },
-  {
-    posisi: "Staff Design Grafis",
-    nama: "Meysha Shifa Ayudia",
-    jabatan: "Staff Design Grafis",
-    imgUrl: "/pengurus/design-3.png"
-  },
-  {
-    posisi: "Staff Comp & Network",
-    nama: "Haikal Rifalda",
-    jabatan: "Staff Comp & Network",
-    imgUrl: "/pengurus/comp-and-network-1.png"
-  },
-  {
-    posisi: "Staff Comp & Network",
-    nama: "Rusminah",
-    jabatan: "Staff Comp & Network",
-    imgUrl: "/pengurus/comp-and-network-2.png"
-  },
-  {
-    posisi: "Staff Comp & Network",
-    nama: "Ripki Dimas Andrea",
-    jabatan: "Staff Comp & Network",
-    imgUrl: "/pengurus/comp-and-network-3.png"
-  },
-  {
-    posisi: "Staff Microsoft Office",
-    nama: "Giany Syahnariza Haura",
-    jabatan: "Staff Microsoft Office",
-    imgUrl: "/pengurus/ms-office-1.png"
-  },
-  {
-    posisi: "Staff Microsoft Office",
-    nama: "Dona Raflina",
-    jabatan: "Staff Microsoft Office",
-    imgUrl: "/pengurus/ms-office-2.png"
-  },
-  {
-    posisi: "Staff Microsoft Office",
-    nama: "Andini  Rahmayati",
-    jabatan: "Staff Microsoft Office",
-    imgUrl: "/pengurus/ms-office-3.png"
-  },
-  {
-    posisi: "Staff Microsoft Office",
-    nama: "Yuliyanti",
-    jabatan: "Staff Microsoft Office",
-    imgUrl: "/pengurus/ms-office-4.png"
-  },
+  { posisi: "Ketua & Wakil Ketua Umum", nama: "Danang Prasetio", jabatan: "Ketua Umum", npm: "2023804102", imgUrl: "/pengurus/ketua-umum.png" },
+  { posisi: "Ketua & Wakil Ketua Umum", nama: "Erik Susanto", jabatan: "Wakil Ketua", npm: "2023804059", imgUrl: "/pengurus/wakil-ketua-umum.png" },
+  { posisi: "Sekretaris", nama: "Abella Pinkan Ham", jabatan: "Sekretaris I", npm: "2024102234", imgUrl: "/pengurus/sekretaris-1.png" },
+  { posisi: "Sekretaris", nama: "Putriyana", jabatan: "Sekretaris II", npm: "2024102181", imgUrl: "/pengurus/sekretaris-2.png" },
+  { posisi: "Bendahara", nama: "Sofi Utami", jabatan: "Bendahara I", npm: "2024804058", imgUrl: "/pengurus/bendahara-1.png" },
+  { posisi: "Bendahara", nama: "Eva Fauziah", jabatan: "Bendahara II", npm: "2024102189", imgUrl: "/pengurus/bendahara-2.png" },
+  { posisi: "SDM", nama: "Ahmad Rohman", jabatan: "SDM", npm: "2023804011", imgUrl: "/pengurus/sdm-1.png" },
+  { posisi: "SDM", nama: "Crisvin", jabatan: "SDM", npm: "2023804004", imgUrl: "/pengurus/sdm-2.png" },
+  { posisi: "SDM", nama: "Dewi Fatimah Nurhasiya", jabatan: "SDM", npm: "2024102191", imgUrl: "/pengurus/sdm-3.png" },
+  { posisi: "Humas Internal", nama: "Ihya Ulumudin", jabatan: "Humas Internal", npm: "2025804005", imgUrl: "/pengurus/humas-internal-1.png" },
+  { posisi: "Humas Internal", nama: "Dita Resty Pauji", jabatan: "Humas Internal", npm: "2024102037", imgUrl: "/pengurus/humas-internal-2.png" },
+  { posisi: "Humas Eksternal", nama: "Komalasari", jabatan: "Humas Eksternal", npm: "2024102034", imgUrl: "/pengurus/humas-eksternal-1.png" },
+  { posisi: "Humas Eksternal", nama: "Chesa Aulia", jabatan: "Humas Eksternal", npm: "2024102179", imgUrl: "/pengurus/humas-eksternal-2.png" },
+  { posisi: "Humas Eksternal", nama: "Ryan Adi Prasetyo", jabatan: "Humas Eksternal", npm: "2025102236", imgUrl: "/pengurus/humas-eksternal-3.png" },
+  { posisi: "Koordinator", nama: "Muhammad Teuku Rizal", jabatan: "Koor Humas", npm: "2023804070", imgUrl: "/pengurus/koor-humas.png" },
+  { posisi: "Koordinator", nama: "Muhammad Irfansyah", jabatan: "Koor Akademik", npm: "2023806076", imgUrl: "/pengurus/koor-akademik.png" },
+  { posisi: "Staff Design", nama: "Fikriyah", jabatan: "Staff Design", npm: "2024804175", imgUrl: "/pengurus/design-1.png" },
+  { posisi: "Staff Design", nama: "Meysha Shifa Ayudia", jabatan: "Staff Design", npm: "2025102011", imgUrl: "/pengurus/design-2.png" },
+  { posisi: "Staff Design", nama: "Nabila Salsabila", jabatan: "Staff Design", npm: "2025104052", imgUrl: "/pengurus/design-3.png" },
+  { posisi: "Staff Program", nama: "Rifki Dwi Al Zari", jabatan: "Staff Program", npm: "2025804010", imgUrl: "/pengurus/program-1.png" },
+  { posisi: "Staff Program", nama: "Galih Eza Kurniawansyah", jabatan: "Staff Program", npm: "2025806037", imgUrl: "/pengurus/program-2.png" },
+  { posisi: "Staff Program", nama: "Reva Andini", jabatan: "Staff Program", npm: "2025804018", imgUrl: "/pengurus/program-3.png" },
+  { posisi: "Staff Comp. Network", nama: "Ripki Dimas Andrea", jabatan: "Staff Com. Network", npm: "2024804153", imgUrl: "/pengurus/comp-and-network-1.png" },
+  { posisi: "Staff Comp. Network", nama: "Rusminah", jabatan: "Staff Com. Network", npm: "2024806015", imgUrl: "/pengurus/comp-and-network-2.png" },
+  { posisi: "Staff Comp. Network", nama: "Haikal Rifalda", jabatan: "Staff Com. Network", npm: "2024804101", imgUrl: "/pengurus/comp-and-network-3.png" },
+  { posisi: "Staff Ms. Office", nama: "Andini Rahmayati", jabatan: "Staff Ms. Office", npm: "2025104062", imgUrl: "/pengurus/ms-office-1.png" },
+  { posisi: "Staff Ms. Office", nama: "Yuliyanti", jabatan: "Staff Ms. Office", npm: "2025104063", imgUrl: "/pengurus/ms-office-2.png" },
+  { posisi: "Staff Ms. Office", nama: "Giany Syahnariza Haura", jabatan: "Staff Ms. Office", npm: "2024104086", imgUrl: "/pengurus/ms-office-3.png" },
+  { posisi: "Staff Ms. Office", nama: "Dona Raflina", jabatan: "Staff Ms. Office", npm: "2024104052", imgUrl: "/pengurus/ms-office-4.png" },
+  { posisi: "Kominfo", nama: "Nufail Jazali", jabatan: "Kominfo", npm: "2023804086", imgUrl: "/pengurus/kominfo-1.png" },
+  { posisi: "Kominfo", nama: "Zunda Melandari", jabatan: "Kominfo", npm: "2025804007", imgUrl: "/pengurus/kominfo-2.png" },
+  { posisi: "Prasarana", nama: "Agustian Sadovin", jabatan: "Prasarana", npm: "2025804015", imgUrl: "/pengurus/prasarana-1.png" },
+  { posisi: "Prasarana", nama: "Bayu Indra Setiawan", jabatan: "Prasarana", npm: "2023804165", imgUrl: "/pengurus/prasarana-2.png" },
+  { posisi: "Prasarana", nama: "Muhammad Chandra Wijaya", jabatan: "Prasarana", npm: "2025804028", imgUrl: "/pengurus/prasarana-3.png" },
 ]

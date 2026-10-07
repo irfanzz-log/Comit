@@ -99,7 +99,18 @@ export const metadata = {
 };
 
 
-export default function RootLayout({ children }) {
+// Next mengambil nonce dari request header `x-nonce` HANYA saat route
+// di-render secara dinamis. Route yang di-prerender saat build (○) tidak
+// pernah melihat request, jadi inline flight script-nya tidak dapat nonce
+// → CSP memblokir → halaman blank. Karena itu seluruh aplikasi harus
+// ter-render per-request.
+//
+// Trade-off: landing page tidak di-cache di CDN. Diterima di sini — sebagian
+// besar aplikasi (semua /internal/*) memang harus render per-request karena
+// sesi, dan API tetap di-cache di client (src/lib/apiCache.js).
+export const dynamic = "force-dynamic";
+
+export default async function RootLayout({ children }) {
   return (
     <html lang="id">
       <body

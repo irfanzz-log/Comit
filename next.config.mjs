@@ -37,13 +37,7 @@ const nextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=31536000; includeSubDomains; preload",
           },
-          {
-            // Batasi origin yang boleh memuat script/style/gambar. Tidak
-            // ada inline script di app ini (Next injects pun hashed), jadi
-            // 'unsafe-inline' tidak diperlukan.
-            key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://utfs.io data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'",
-          },
+
         ],
       },
     ];

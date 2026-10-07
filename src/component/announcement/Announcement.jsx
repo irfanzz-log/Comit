@@ -17,7 +17,10 @@ export default function Announcement() {
             .catch((err) => console.log(err));
     }, []);
 
-    // Filter acara eksternal
+    // Filter `tipe_acara !== "internal"` tetap dipertahankan sebagai defense
+    // in depth — server sudah menolak mengembalikan acara internal ke
+    // pengunjung non-staff (lihat GET /api/events), tapi render tidak boleh
+    // bergantung pada satu lapisan.
     const events = dataAcara?.filter(
         (data) => data.tipe_acara !== "internal"
     ) || [];

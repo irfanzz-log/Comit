@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, afterAll } from "vitest";
+import { cleanupTestData, closeCleanPool } from "../../helpers/cleanup.js";
 
 const BASE = process.env.TEST_BASE_URL || "http://localhost:3001";
 
@@ -253,7 +254,11 @@ describe("POST /api/insertAttendance — RBAC + validasi", () => {
     });
 });
 
+
 describe("POST /api/addEvents — RBAC", () => {
+    afterEach(() => cleanupTestData());
+    afterAll(() => closeCleanPool());
+
     it("mengizinkan sekretaris membuat acara", async () => {
         const { cookie } = await login(SEKRETARIS);
         const res = await fetch(

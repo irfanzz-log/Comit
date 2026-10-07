@@ -43,6 +43,26 @@ function parseDatabaseUrl(url) {
 
 const fromUrl = parseDatabaseUrl(process.env.DATABASE_URL);
 
+// ==========================================================================
+// Guard: jangan pernah menjalankan aplikasi dengan database test.
+//
+// Integration test diharapkan memakai TEST_DATABASE_URL (lihat
+// tests/helpers/cleanup.js). Jika app server start dengan database yang
+// sama, test akan menulis data uji ke DB produksi — persis kebocoran yang
+// pernah terjadi ("Test Event *" menumpang di tabel events).
+// Jalankan app test server dengan TEST_DATABASE_URL, bukan dengan
+// menimpa DATABASE_URL.
+// ==========================================================================
+if (process.env.TEST_DATABASE_URL && fromUrl) {
+    const testDb = new URL(process.env.TEST_DATABASE_URL).pathname.replace(/^\//, "");
+    if (testDb && testDb === fromUrl.database) {
+        throw new Error(
+            `Aplikasi tidak boleh berjalan dengan database test "${testDb}". ` +
+                `Gunakan DATABASE_URL produksi untuk app server; simpan database test hanya di TEST_DATABASE_URL.`
+        );
+    }
+}
+
 const pool = new Pool(
     fromUrl
         ? {

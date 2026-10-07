@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, afterAll } from "vitest";
+import { cleanupTestData, closeCleanPool } from "../../helpers/cleanup.js";
 
 const BASE = process.env.TEST_BASE_URL || "http://localhost:3001";
 
@@ -125,6 +126,9 @@ describe("contract: /api/transactions/summary", () => {
 });
 
 describe("contract: /api/enrollments (POST publik)", () => {
+    afterEach(() => cleanupTestData());
+    afterAll(() => closeCleanPool());
+
     it("sukses mengembalikan { success, message, data }", async () => {
         const res = await fetch(`${BASE}/api/enrollments`, {
             method: "POST",

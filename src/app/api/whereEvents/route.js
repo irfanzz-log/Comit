@@ -20,8 +20,11 @@ export async function GET(req) {
     }
 
     try {
+        // Hanya kolom yang dipakai client. Sebelumnya SELECT * membocorkan
+        // file_key (Uploadthing secret) dan user_id pembuat acara.
         const result = await query(
-            `SELECT * FROM events WHERE uuid = $1`,
+            `SELECT id, uuid, nama_acara, tanggal_acara, komentar, tipe_acara, file_url
+             FROM events WHERE uuid = $1`,
             [uuid.trim()]
         );
         return NextResponse.json(result.rows);

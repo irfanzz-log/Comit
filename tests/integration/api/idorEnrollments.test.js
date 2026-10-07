@@ -1,4 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import bcrypt from "bcrypt";
+import pg from "pg";
 
 // Regression test untuk IDOR fix di GET /api/enrollments.
 //
@@ -6,15 +8,41 @@ import { describe, it, expect } from "vitest";
 // bisa membaca seluruh data pendaftaran termasuk no_telpon dan alasan
 // milik orang lain. Sekarang: staff melihat semua, non-staff hanya
 // pendaftaran miliknya sendiri (dan tanpa kolom no_telpon/alasan).
+//
+// User uji dibuat sendiri oleh test ini lewat bcrypt + DB (library yang
+// sama dengan app), bukan insert manual yang bisa dibersihkan
+// sewaktu-waktu.
 
 const BASE = process.env.TEST_BASE_URL || "http://localhost:3001";
 
-// User uji yang dibuat untuk audit ini (role anggota, tidak punya
-// pendaftaran sendiri).
-const MEMBER_NPM = "9999999999";
+const MEMBER_NPM = "9999999991";
 const MEMBER_PASSWORD = "TESTIDOR123";
 const STAFF_NPM = "2024102234"; // sekretaris
 const STAFF_PASSWORD = "2024102234";
+
+const pool = new pg.Pool({
+    host: "localhost",
+    port: 5432,
+    user: "comit",
+    password: "comit123",
+    database: "comit_db",
+});
+
+beforeAll(async () => {
+    const hash = await bcrypt.hash(MEMBER_PASSWORD, 10);
+    await pool.query(
+        `INSERT INTO users (user_npm, password, user_role)
+         VALUES ($1, $2, 'anggota')
+         ON CONFLICT (user_npm) DO UPDATE SET password = EXCLUDED.password`,
+        [MEMBER_NPM, hash]
+    );
+});
+
+afterAll(async () => {
+    // Data uji tidak boleh tertinggal di DB.
+    await pool.query("DELETE FROM users WHERE user_npm = $1", [MEMBER_NPM]);
+    await pool.end();
+});
 
 async function login(npm, password, ip) {
     const res = await fetch(`${BASE}/api/auth/login`, {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
+import { getCached } from "@/lib/apiCache";
 
 export default function useTransactions({ tipe, kategori }) {
     const searchParams = useSearchParams();
@@ -38,7 +39,18 @@ export default function useTransactions({ tipe, kategori }) {
         if (kategori) params.set("kategori", kategori);
         params.set("page", page);
 
-        setLoading(true);
+        // apiFetch membaca dari cache dulu (render instan untuk halaman yang
+        // sudah pernah dibuka), lalu revalidate di background. Tidak perlu
+        // state loading lokal untuk yang itu — loading hanya true saat cache
+        // untuk kombinasi filter ini belum pernah dimuat.
+        const cached = getCached(`/api/transactions?${params.toString()}`);
+        if (cached) {
+            setDataAnggota(cached.users || []);
+            setTotalPages(cached.totalPages || 1);
+            setTotalUsers(cached.totalUsers || 0);
+        }
+        setLoading(cached ? false : true);
+
         apiFetch(`/api/transactions?${params.toString()}`)
             .then((data) => {
                 if (cancelled) return;

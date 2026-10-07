@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
+import { getCached } from "@/lib/apiCache";
 
 // Mengambil ringkasan keuangan dari agregat sisi server (satu request),
 // bukan menarik seluruh baris transaksi untuk dijumlahkan di client.
+// Cache short-TTL (30s) jadi dashboard tetap reaktif tapi tidak menekan
+// server setiap kali halaman dibuka.
 export default function useGetAmountTransactions() {
     const [pemasukkan, setPemasukkan] = useState(0);
     const [pengeluaran, setPengeluaran] = useState(0);
@@ -17,6 +20,21 @@ export default function useGetAmountTransactions() {
         let cancelled = false;
 
         async function fetchData() {
+            // Render dari cache dulu (mis. balik ke dashboard), revalidate
+            // di belakang layar.
+            const cached = getCached("/api/transactions/summary");
+            if (cached) {
+                setPemasukkan(cached.totalPemasukkan || 0);
+                setPengeluaran(cached.totalPengeluaran || 0);
+                setDataForChartByMonth(
+                    cached.byMonth || {
+                        Pemasukkan: Array(12).fill(0),
+                        Pengeluaran: Array(12).fill(0),
+                    }
+                );
+                setLoading(false);
+            }
+
             try {
                 const json = await apiFetch("/api/transactions/summary");
 

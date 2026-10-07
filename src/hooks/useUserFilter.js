@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
+import { getCached } from "@/lib/apiCache";
 
 const DEFAULT_STATUS = "Filter by status";
 const DEFAULT_POSISI = "Filter by posisi";
@@ -48,6 +49,15 @@ export default function useUserFilter() {
         params.set("page", String(page));
 
         setLoading(true);
+
+        const cached = getCached(`/api/userInfo?${params.toString()}`);
+        if (cached) {
+            setDataAnggota(cached.users || []);
+            setTotalPages(cached.totalPages || 1);
+            setTotalUsers(cached.totalUsers || 0);
+            setLoading(false);
+        }
+
         apiFetch(`/api/userInfo?${params.toString()}`)
             .then((data) => {
                 if (cancelled) return;

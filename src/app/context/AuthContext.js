@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { apiFetch, ApiError } from "@/lib/api";
+import { clearApiCache } from "@/lib/apiCache";
 
 const AuthContext = createContext();
 
@@ -40,6 +41,11 @@ export function AuthProvider({ children }) {
     }, []);
 
     async function login(npm, password, remembered) {
+        // Sebelumnya session lain mungkin menyimpan data di cache client.
+        // Login = ganti identitas, jadi cache lama harus dibuang agar user
+        // baru tidak melihat data milik user sebelumnya.
+        clearApiCache();
+
         try {
             await apiFetch('/api/auth/login', {
                 method: 'POST',
@@ -67,6 +73,10 @@ export function AuthProvider({ children }) {
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
+            // Cache client berisi data user ini. Jika tidak dibersihkan,
+            // login sebagai user berikutnya akan menampilkan data lama
+            // (bocor antar session di perangkat/shared browser).
+            clearApiCache();
             setUser(null);
             router.push('/internal/login');
         }

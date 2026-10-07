@@ -12,5 +12,5 @@ export async function GET(req) {
         ORDER BY name
     `);
 
-    return NextResponse.json({ data: result.rows });
+        return NextResponse.json({ data: result.rows });
 }

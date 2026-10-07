@@ -92,7 +92,7 @@ export async function POST(request) {
         const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "local";
         const rate = consumeRateLimit(`enroll:${ip}`, 3);
         if (!rate.allowed) {
-            return NextResponse.json(
+                return NextResponse.json(
                 { success: false, message: "Terlalu banyak pendaftaran dari jaringan ini. Coba lagi nanti." },
                 { status: 429 }
             );
@@ -118,7 +118,7 @@ export async function POST(request) {
             jurusan === undefined ||
             alasan === undefined
         ) {
-            return NextResponse.json(
+        return NextResponse.json(
                 {
                     success: false,
                     message: "Field tidak lengkap",
@@ -151,7 +151,7 @@ export async function POST(request) {
             jurusanValue === "" ||
             alasanValue === ""
         ) {
-            return NextResponse.json(
+        return NextResponse.json(
                 {
                     success: false,
                     message: "Semua field wajib diisi",
@@ -176,7 +176,7 @@ export async function POST(request) {
 
         if (existingUser.rows.length > 0) {
 
-            return NextResponse.json(
+        return NextResponse.json(
                 {
                     success: false,
                     message: "NPM tersebut sudah memiliki akun",

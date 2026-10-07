@@ -20,28 +20,29 @@ export default function Home() {
         let isMounted = true;
 
         async function loadDashboardMeta() {
-            try {
-                const [usersRes, enrollmentsRes, txRes] = await Promise.all([
-                    apiFetch("/api/userInfo?page=1"),
-                    apiFetch("/api/enrollments"),
-                    apiFetch("/api/transactions?page=1"),
-                ]);
+            // Tiga endpoint ini dipakai ulang di halaman lain (userInfo di
+            // data anggota, transactions di data_uang_kas). apiFetch
+            // mengembalikan cache hangat instan + revalidate background,
+            // jadi navigasi internal tidak menampilkan loading kosong.
+            const [usersRes, enrollmentsRes, txRes] = await Promise.all([
+                apiFetch("/api/userInfo?page=1"),
+                apiFetch("/api/enrollments"),
+                apiFetch("/api/transactions?page=1"),
+            ]);
 
-                if (!isMounted) return;
+            if (!isMounted) return;
 
-                setTotalUsers(usersRes.totalUsers || 0);
-                setPendingEnrollments(
-                    (enrollmentsRes.data || []).filter((e) => e.status === "pending").length
-                );
-                setRecentTransactions((txRes.users || []).slice(0, 5));
-            } catch (err) {
-                console.error("Gagal mengambil data dashboard:", err);
-            } finally {
-                if (isMounted) setLoadingMeta(false);
-            }
+            setTotalUsers(usersRes.totalUsers || 0);
+            setPendingEnrollments(
+                (enrollmentsRes.data || []).filter((e) => e.status === "pending").length
+            );
+            setRecentTransactions((txRes.users || []).slice(0, 5));
         }
 
-        loadDashboardMeta();
+        loadDashboardMeta().catch((err) => {
+            console.error("Gagal mengambil data dashboard:", err);
+            if (isMounted) setLoadingMeta(false);
+        });
         return () => {
             isMounted = false;
         };

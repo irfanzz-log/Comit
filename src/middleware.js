@@ -20,7 +20,23 @@ async function verifyTokenEdge(token, secret) {
 }
 
 export async function middleware(req) {
-    if (PUBLIC_INTERNAL_ROUTES.has(req.nextUrl.pathname)) {
+    const pathname = req.nextUrl.pathname;
+
+    // ---------------------------------------------------- /api/* → cache headers
+    // Semua endpoint API di-cache di client (src/lib/apiCache.js) yang
+    // sudah scoped per-user. Browser/proxy shared cache TIDAK boleh
+    // menyimpan respons ini — akan membocorkan data satu user ke user lain
+    // pada infra yang dipakai bersama (CDN, service worker, proxy kantor).
+    if (pathname.startsWith("/api/")) {
+        const res = NextResponse.next();
+        res.headers.set(
+            "Cache-Control",
+            "private, no-store, must-revalidate"
+        );
+        return res;
+    }
+
+    if (PUBLIC_INTERNAL_ROUTES.has(pathname)) {
         return NextResponse.next();
     }
 
@@ -41,5 +57,10 @@ export async function middleware(req) {
 }
 
 export const config = {
-    matcher: ["/internal/:path*"],
+    // /internal/:path* → proteksi autentikasi.
+    // /api/:path*     → lampirkan header cache pada respons API. Middleware
+    //                   membaca request, jadi kita bisa set header di satu
+    //                   tempat untuk semua endpoint, bukan duplikasi di
+    //                   12 file route.
+    matcher: ["/internal/:path*", "/api/:path*"],
 };

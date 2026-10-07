@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
+import { getCached } from "@/lib/apiCache";
 
 const DEFAULT_POSISI = "Filter by posisi";
 const DEFAULT_STATUS = "Filter by status absen";
@@ -49,6 +50,20 @@ export default function useAttendanceFilter() {
         params.set("page", String(page));
 
         setLoading(true);
+
+        const cached = getCached(`/api/userAttendance?${params.toString()}`);
+        if (cached) {
+            setDataAnggota(cached.users || []);
+            setTotalPages(cached.totalPages || 1);
+            setTotalUsers(cached.totalUsers || 0);
+            setAcaraOptions(
+                (cached.acara || [])
+                    .map((a) => a.acara)
+                    .filter((v, i, arr) => v && arr.indexOf(v) === i)
+            );
+            setLoading(false);
+        }
+
         apiFetch(`/api/userAttendance?${params.toString()}`)
             .then((data) => {
                 if (cancelled) return;

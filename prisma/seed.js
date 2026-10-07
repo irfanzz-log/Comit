@@ -199,12 +199,28 @@ async function main() {
   console.log(`✓ ${txCount} transactions`);
 
   // -------------------------------------------------------- Enrollments
-  const enrollmentSeed = [
-    { nama: "Mira Wulandari", npm: "20240001", jurusan: "Teknologi Informasi", status: "pending", day: 2 },
-    { nama: "Nanda Pradana", npm: "20240002", jurusan: "Sistem Informasi", status: "pending", day: 4 },
-    { nama: "Olivia Syafira", npm: "20240003", jurusan: "Manajemen", status: "approved", day: 6 },
-    { nama: "Putra Maheswara", npm: "20240004", jurusan: "Hukum", status: "rejected", day: 8 },
-  ];
+  // Data dummy pendaftaran HANYA untuk development — menampilkan ke 4
+  // pendaftar contoh di /internal/pendaftaran agar UI tidak kosong saat
+  // development.
+  //
+  // PRODUCTION: skip total. Kalau tidak, menjalankan `npm run db:seed`
+  // di VPS untuk membuat akun admin akan mengembalikan data pendaftar
+  // dummy yang sudah dihapus. Pengguna melihatnya sebagai "data hardcode
+  // yang tidak bisa dihilangkan".
+  //
+  // PENTING: Prisma TIDAK set NODE_ENV untuk kita — `prisma db seed`
+  // mewariskan NODE_ENV dari shell yang memanggilnya. Pastikan VPS
+  // mengekspornya (mis. `export NODE_ENV=production` di systemd unit /
+  // .env PM2) sebelum menjalankan db:seed, atau guard ini tidak aktif.
+  const isProduction = process.env.NODE_ENV === "production";
+  const enrollmentSeed = isProduction
+    ? []
+    : [
+        { nama: "Mira Wulandari", npm: "20240001", jurusan: "Teknologi Informasi", status: "pending", day: 2 },
+        { nama: "Nanda Pradana", npm: "20240002", jurusan: "Sistem Informasi", status: "pending", day: 4 },
+        { nama: "Olivia Syafira", npm: "20240003", jurusan: "Manajemen", status: "approved", day: 6 },
+        { nama: "Putra Maheswara", npm: "20240004", jurusan: "Hukum", status: "rejected", day: 8 },
+      ];
   for (const e of enrollmentSeed) {
     const existing = await prisma.enrollment.findFirst({ where: { npm: e.npm } });
     const data = {

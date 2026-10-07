@@ -22,7 +22,7 @@ const PATTERNS = {
     events: { column: "nama_acara", patterns: ["Test Event %"] },
     transactions: {
         column: "deskripsi",
-        patterns: ["Test kas integration", "Test created_by scoping"],
+        patterns: ["Test kas integration", "Test created_by scoping", "e2e cache check"],
     },
     attendance: { column: "acara", patterns: ["Test Acara Integration"] },
     enrollments: { column: "nama", patterns: ["Contract Test"] },

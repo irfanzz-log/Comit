@@ -1,6 +1,6 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { requireAuth, getAuthPayload } from "@/lib/auth";
+import { requireAuth, getAuthPayload, STAFF_ROLES } from "@/lib/auth";
 
 // Nilai `tipe` disimpan lowercase di DB (lihat POST /api/inserttransactions).
 const TIPE_ALIASES = {
@@ -21,6 +21,10 @@ function normalizeTipe(raw) {
 export async function GET(req) {
     const unauthorized = requireAuth(req);
     if (unauthorized) return unauthorized;
+
+    const authPayload = getAuthPayload(req);
+    const isStaff = STAFF_ROLES.includes(authPayload?.role);
+    const selfId = authPayload?.id;
 
     const { searchParams } = new URL(req.url);
 
@@ -55,6 +59,15 @@ export async function GET(req) {
         if (kategori) {
             conditions.push(`t.kategori = $${idx}`);
             values.push(kategori.toLowerCase());
+            idx++;
+        }
+
+        // Non-staff hanya boleh melihat transaksi miliknya sendiri
+        if (!isStaff) {
+            conditions.push(
+                `(t.target_user_id = $${idx} OR t.created_by = $${idx})`
+            );
+            values.push(selfId);
             idx++;
         }
 

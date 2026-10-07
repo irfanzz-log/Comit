@@ -21,6 +21,10 @@ export async function POST(req) {
             return NextResponse.json({ error: "Tipe tidak valid" }, { status: 400 });
         }
 
+        if (!VALID_KATEGORI.includes(kategori)) {
+            return NextResponse.json({ error: "Kategori tidak valid" }, { status: 400 });
+        }
+
         const jumlahNum = parseInt(jumlah, 10);
         if (isNaN(jumlahNum) || jumlahNum <= 0) {
             return NextResponse.json({ error: "Jumlah tidak valid" }, { status: 400 });

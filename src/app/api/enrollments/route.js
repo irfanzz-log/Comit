@@ -1,6 +1,7 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { requireAuth, getAuthPayload, STAFF_ROLES } from "@/lib/auth";
+import { consumeRateLimit } from "@/lib/rateLimit";
 
 
 // ======================================================
@@ -86,6 +87,16 @@ export async function GET(req) {
 
 export async function POST(request) {
     try {
+        // Form pendaftaran publik. Tanpa batasan, siapa pun bisa membanjiri
+        // antrian admin dengan ribuan pendaftaran spam. Batasi per IP.
+        const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "local";
+        const rate = consumeRateLimit(`enroll:${ip}`, 3);
+        if (!rate.allowed) {
+            return NextResponse.json(
+                { success: false, message: "Terlalu banyak pendaftaran dari jaringan ini. Coba lagi nanti." },
+                { status: 429 }
+            );
+        }
 
         const body = await request.json();
 

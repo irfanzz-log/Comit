@@ -23,6 +23,13 @@ export async function PUT(req) {
         );
     }
 
+    if (typeof old_password !== 'string' || old_password === '') {
+        return NextResponse.json(
+            { success: false, error: "Password lama wajib diisi" },
+            { status: 400 }
+        );
+    }
+
     if (typeof new_password !== 'string' || new_password.length < 8) {
         return NextResponse.json(
             { success: false, error: "Password baru minimal 8 karakter" },

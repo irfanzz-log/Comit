@@ -1,32 +1,63 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, getAuthPayload, STAFF_ROLES } from "@/lib/auth";
 
 
 // ======================================================
 // GET /api/enrollments
+//
+// Pendaftaran berisi data pribadi pendaftar (NPM, no telpon, alasan).
+// Sebelumnya hanya requireAuth — anggota biasa bisa membaca seluruh
+// pendaftaran. Sekarang di-scope: non-staff hanya melihat status miliknya
+// sendiri.
 // ======================================================
 
 export async function GET(req) {
     const unauthorized = requireAuth(req);
     if (unauthorized) return unauthorized;
 
+    const payload = getAuthPayload(req);
+    const isStaff = STAFF_ROLES.includes(payload?.role);
+
     try {
-        const result = await query(`
-            SELECT
-                id,
-                nama,
-                npm,
-                no_telpon,
-                jurusan,
-                alasan,
-                status,
-                created_at,
-                updated_at
-            FROM enrollments
-            ORDER BY created_at DESC
-            LIMIT 10
-        `);
+        let result;
+
+        if (isStaff) {
+            result = await query(`
+                SELECT
+                    id,
+                    nama,
+                    npm,
+                    no_telpon,
+                    jurusan,
+                    alasan,
+                    status,
+                    created_at,
+                    updated_at
+                FROM enrollments
+                ORDER BY created_at DESC
+                LIMIT 10
+            `);
+        } else {
+            // Anggota hanya boleh melihat pendaftarannya sendiri
+            result = await query(
+                `
+                SELECT
+                    id,
+                    nama,
+                    npm,
+                    jurusan,
+                    status,
+                    created_at,
+                    updated_at
+                FROM enrollments
+                WHERE npm = $1
+                ORDER BY created_at DESC
+                LIMIT 10
+                `,
+                [payload.npm]
+            );
+        }
 
         return Response.json({
             success: true,

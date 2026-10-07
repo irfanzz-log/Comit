@@ -372,10 +372,14 @@ describe("GET /api/whereEvents — pencarian publik by UUID", () => {
 });
 
 describe("POST /api/contact — form publik", () => {
+    // Pakai header IP unik per test agar tidak menghabiskan jatah rate
+    // limit (maks 5 kontak per 15 menit) sebelum semua skenario selesai.
+    const ip = (n) => `10.3.3.${n}`;
+
     it("menolak field kosong", async () => {
         const res = await fetch(`${BASE}/api/contact`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Forwarded-For": ip(1) },
             body: JSON.stringify({ name: "", email: "", message: "" }),
         });
         expect(res.status).toBe(400);
@@ -384,7 +388,7 @@ describe("POST /api/contact — form publik", () => {
     it("menolak email tidak valid", async () => {
         const res = await fetch(`${BASE}/api/contact`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Forwarded-For": ip(2) },
             body: JSON.stringify({
                 name: "Test",
                 email: "bukan-email",
@@ -397,7 +401,7 @@ describe("POST /api/contact — form publik", () => {
     it("menerima input valid (gagal kirim tanpa API key = 500, bukan crash)", async () => {
         const res = await fetch(`${BASE}/api/contact`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Forwarded-For": ip(3) },
             body: JSON.stringify({
                 name: "Test Integration",
                 email: "test@example.com",

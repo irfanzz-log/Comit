@@ -1,5 +1,10 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { consumeRateLimit } from "@/lib/rateLimit";
+
+// Form kontak publik — tanpa pembatasan, siapa pun bisa mengirim ribuan
+// email ke inbox COMIT (email bombing / abuse). Batasi per IP.
+const CONTACT_MAX = 5; // per 15 menit
 
 // Simple text sanitizer to prevent HTML injection in email content
 function sanitizeText(str) {
@@ -19,6 +24,18 @@ function isValidEmail(email) {
 
 export async function POST(req) {
     try {
+        // Batasi spam: maksimal CONTACT_MAX email per IP per 15 menit.
+        // Key dipisah dari login agar percobaan login tidak menghabiskan
+        // jatah kontak (dan sebaliknya).
+        const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "local";
+        const rate = consumeRateLimit(`contact:${ip}`, CONTACT_MAX);
+        if (!rate.allowed) {
+            return NextResponse.json(
+                { success: false, error: "Terlalu banyak pesan terkirim. Coba lagi nanti." },
+                { status: 429 }
+            );
+        }
+
         const { name, email, message } = await req.json();
 
         if (!name || !email || !message) {

@@ -30,6 +30,20 @@ const nextConfig = {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
           },
+          {
+            // Wajib di production: paksa HTTPS untuk kunjungan berikutnya
+            // dan subdomain. Tanpa ini cookie sesi bisa ter-capture lewat
+            // downgrade HTTP pertama (SSL stripping).
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            // Batasi origin yang boleh memuat script/style/gambar. Tidak
+            // ada inline script di app ini (Next injects pun hashed), jadi
+            // 'unsafe-inline' tidak diperlukan.
+            key: "Content-Security-Policy",
+            value: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://utfs.io data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'",
+          },
         ],
       },
     ];

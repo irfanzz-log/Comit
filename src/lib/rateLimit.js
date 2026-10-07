@@ -13,22 +13,25 @@ const attempts = new Map();
 /**
  * Catat percobaan untuk sebuah key (mis. IP). Kembalikan sisa
  * percobaan yang diizinkan dalam window ini, atau 0 jika sudah melebihi.
+ *
+ * `max` bisa di-override per endpoint (mis. form kontak lebih ketat dari
+ * login).
  */
-export function consumeRateLimit(key) {
+export function consumeRateLimit(key, max = maxAttempts) {
     const now = Date.now();
     const record = attempts.get(key);
 
     if (!record || now - record.windowStart > windowMs) {
         attempts.set(key, { windowStart: now, count: 1 });
-        return { allowed: true, remaining: maxAttempts - 1 };
+        return { allowed: true, remaining: max - 1 };
     }
 
     record.count += 1;
-    if (record.count > maxAttempts) {
+    if (record.count > max) {
         return { allowed: false, remaining: 0 };
     }
 
-    return { allowed: true, remaining: maxAttempts - record.count };
+    return { allowed: true, remaining: max - record.count };
 }
 
 /**

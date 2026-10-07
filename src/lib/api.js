@@ -86,7 +86,12 @@ export async function apiFetch(url, options = {}) {
         //   2. Mutasi sukses → INVALIDATION_MAP menghapus cache endpoint
         //      yang berubah, sehingga GET berikutnya (di komponen mana pun)
         //      mendapat data segar dari server.
-        if (cached !== null) {
+        //
+        // options.force = true → lewati cache. Dipakai tombol "Refresh"
+        // manual, karena data bisa berubah di luar aplikasi (DB diedit
+        // langsung, proses lain, sync dari sistem lain). Tanpa ini tombol
+        // refresh menampilkan data cache yang sama persis.
+        if (cached !== null && !options.force) {
             return cached;
         }
 

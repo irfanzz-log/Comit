@@ -18,6 +18,7 @@ const ICONS = {
     qr: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h3v3h-3z M19 19h2v2h-2z",
     camera: "M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
     chevron: "m6 9 6 6 6-6",
+    refresh: "M21 12a9 9 0 1 1-3-6.7 M21 3v6h-6 M3 12a9 9 0 1 0 3 6.7 M3 21v-6h6",
 };
 
 export default function Icon({ name, size = 18, className = "", strokeWidth = 2, ...props }) {

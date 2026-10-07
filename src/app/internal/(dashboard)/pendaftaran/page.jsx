@@ -29,11 +29,11 @@ export default function Pendaftaran() {
     const [confirm, setConfirm] = useState(null);
     const [toast, setToast] = useState(null);
 
-    async function fetchPendaftaran() {
+    async function fetchPendaftaran(force = false) {
         try {
             setLoading(true);
             setError(null);
-            const result = await apiFetch("/api/enrollments");
+            const result = await apiFetch("/api/enrollments", { force });
             setData(result.data || []);
         } catch (err) {
             setError(err instanceof ApiError ? err.message : "Gagal memuat data pendaftaran.");
@@ -152,6 +152,18 @@ export default function Pendaftaran() {
             title="Pendaftaran Anggota"
             subtitle="Kelola pengajuan pendaftaran anggota COMIT"
         >
+            <div className="flex items-center justify-end mb-1">
+                <Button
+                    size="sm"
+                    variant="secondary"
+                    loading={loading}
+                    onClick={() => fetchPendaftaran(true)}
+                >
+                    <Icon name="refresh" size={14} />
+                    <span className="ml-1.5">Refresh</span>
+                </Button>
+            </div>
+
             {error ? (
                 <div className="px-4 py-3 rounded-lg bg-red-50 text-red-700 border border-red-200 text-sm flex items-center gap-2">
                     <Icon name="alert" size={16} />

@@ -38,27 +38,32 @@ export const STATUS_ANGGOTA_OPTIONS = ["Aktif", "Tidak Aktif"];
 
 export const MINAT_OPTIONS = ["Programming", "Design", "Comnet", "Office"];
 
+// Sumber kebenaran adalah kolom `users_info.posisi` di database — bukan
+// daftar ini. Daftar ini sebelumnya ditulis tangan dan banyak yang tidak
+// cocok dengan data sebenarnya ("Bendahara" vs "Bendahara I", "Staff
+// Programming" vs "Staff Program", dll). Karena filter memakai exact match
+// (`posisi = $1`), opsi yang tidak cocok menghasilkan hasil kosong.
+//
+// JANGAN ubah label di sini tanpa update data `users_info.posisi`.
+// Kalau menambah jabatan baru, tambahkan ke daftar ini DAN ke seed/migrasi.
 export const POSISI_OPTIONS = [
     "Ketua Umum",
-    "Wakil Ketua Umum",
-    "Sekretaris",
-    "Bendahara",
-    "Koordinator Akademik",
-    "Koordinator Humas",
-    "Koordinator SDM",
-    "Koordinator Prasarana",
-    "Koordinator Kominfo",
-    "SDM",
+    "Wakil Ketua",
+    "Sekretaris I",
+    "Sekretaris II",
+    "Bendahara I",
+    "Bendahara II",
+    "Koor Akademik",
+    "Koor Humas",
     "Humas Internal",
     "Humas Eksternal",
-    "Prasarana",
+    "SDM",
     "Kominfo",
-    "Staff Programming",
+    "Prasarana",
+    "Staff Program",
     "Staff Design",
-    "Staff Comnet",
-    "Staff Office",
-    "Anggota",
-    "Alumni",
+    "Staff Com. Network",
+    "Staff Ms. Office",
 ];
 
 export const STATUS_ABSEN_OPTIONS = ["Hadir", "Izin", "Sakit", "Alpha"];

@@ -19,6 +19,43 @@ async function verifyTokenEdge(token, secret) {
     }
 }
 
+// ==========================================================================
+// Origin di balik reverse proxy (nginx, Caddy, Cloudflare, …)
+//
+// `req.url` selalu berisi origin internal Node — di VPS itu biasanya
+// `http://localhost:3000`. Middleware yang dipakai untuk NextResponse.redirect
+// akan mengirim browser ke origin itu, yang jelas tidak tercapai dari internet
+// (gejala: akses /internal di domain publik → redirect ke localhost → error).
+//
+// Origin publik yang sebenarnya direkonstruksi dari standar proxy headers:
+//   X-Forwarded-Host  / X-Forwarded-Proto  (nginx, Caddy, CF)
+//   Forwarded         (RFC 7239)
+// Dijaga eksplisit: hanya terima header ini bila request datang melalui proxy
+// (ada X-Forwarded-Host), untuk menghindari spoofing oleh client langsung.
+// ==========================================================================
+
+function resolveOrigin(req) {
+    const fwd = req.headers.get("forwarded");
+    if (fwd) {
+        // RFC 7239: "for=1.2.3.4; proto=https; host=example.com"
+        const host = /host="?([^;,"]+)"?/i.exec(fwd)?.[1];
+        const proto = /proto="?([^;,"]+)"?/i.exec(fwd)?.[1];
+        if (host) return `${(proto || "https").toLowerCase()}://${host}`;
+    }
+
+    const fwdHost = req.headers.get("x-forwarded-host");
+    if (fwdHost) {
+        const fwdProto = (
+            req.headers.get("x-forwarded-proto") || "https"
+        ).toLowerCase();
+        return `${fwdProto}://${fwdHost}`;
+    }
+
+    // Tidak ada proxy header → pakai origin apa adanya (dev lokal, atau
+    // Node ter-expose langsung tanpa reverse proxy).
+    return new URL(req.url).origin;
+}
+
 // App Router menuliskan payload RSC sebagai INLINE script
 // (`<script>self.__next_f.push([1,"…"])</script>`) — tidak di-hash, tidak
 // di-hosting di URL manapun. Karena itu `script-src 'self'` TANPA nonce
@@ -113,7 +150,7 @@ export async function middleware(req) {
         : null;
 
     if (!payload) {
-        const loginUrl = new URL("/internal/login", req.url);
+        const loginUrl = new URL("/internal/login", resolveOrigin(req));
         loginUrl.searchParams.set("from", req.nextUrl.pathname);
         const res = NextResponse.redirect(loginUrl);
         // Redirect juga harus membawa nonce dan CSP, bukan hanya halaman HTML.

@@ -2,11 +2,24 @@ import { query, pool } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
 import { hashPassword } from "@/lib/hash";
+import { randomBytes } from "crypto";
 
 // ======================================================
 // PATCH /api/enrollments/:id
 // ACC / Tolak pendaftaran
+//
+// Catatan keamanan: sebelumnya pengguna baru dibuat dengan
+// password = NPM. NPM adalah identifier semi-publik (tercetak di
+// sertifikat, daftar anggota, struktur pengurus) — siapa pun yang
+// tahu NPM bisa langsung login. Sekarang password sementara dibuat
+// acak (crypto.randomBytes) dan dikembalikan SEKALI kepada admin
+// yang menyetujui, untuk disampaikan ke anggota secara aman.
 // ======================================================
+
+// Password sementara: 12 byte acak base64url (~16 karakter).
+function generateTempPassword() {
+    return randomBytes(12).toString("base64url");
+}
 
 export async function PATCH(request, { params }) {
     const unauthorized = requireRole(request, ["developer", "superadmin", "sekretaris"]);
@@ -60,7 +73,8 @@ export async function PATCH(request, { params }) {
         // Dibungkus dalam transaction agar akun + info anggota + status
         // pendaftaran selalu konsisten (sebelumnya 3 query terpisah —
         // kegagalan di tengah meninggalkan data setengah jadi).
-        const hashedDefaultPassword = await hashPassword(enrollment.npm);
+        const tempPassword = generateTempPassword();
+        const hashedDefaultPassword = await hashPassword(tempPassword);
 
         await pool.connect().then(async (client) => {
             try {
@@ -117,7 +131,15 @@ export async function PATCH(request, { params }) {
             }
         });
 
-        return NextResponse.json({ success: true, message: "Pendaftar berhasil diterima sebagai anggota" });
+        return NextResponse.json({
+            success: true,
+            message: "Pendaftar berhasil diterima sebagai anggota",
+            // Password sementara hanya ditampilkan SEKALI di sini — tidak
+            // disimpan plaintext di mana pun. Admin harus menyalurkan ini
+            // ke anggota bersangkutan. Simpan di tempat aman.
+            temporary_password: tempPassword,
+            npm: enrollment.npm,
+        });
 
     } catch (error) {
         console.error("PATCH enrollments error:", error);

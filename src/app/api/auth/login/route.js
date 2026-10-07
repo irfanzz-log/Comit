@@ -4,6 +4,12 @@ import { query } from "@/lib/db";
 import { comparePassword } from "@/lib/hash";
 import { consumeRateLimit, resetRateLimit } from "@/lib/rateLimit";
 
+// Ambang kegagalan per akun (NPM). Lebih rendah dari limit per-IP: user
+// valid yang salah ketik tidak akan terkunci (resetRateLimit dipanggil
+// setelah login berhasil), tapi penyerang yang menebar tebakan ke banyak
+// IP untuk NPM yang sama akan terhenti di sini.
+const MAX_FAILS_PER_NPM = 5;
+
 export async function POST(req) {
     try {
         const { npm, password, remembered } = await req.json();
@@ -26,6 +32,19 @@ export async function POST(req) {
             );
         }
 
+        // Pertahanan kedua: batasi kegagalan per NPM. Tanpa ini, penyerang
+        // yang memakai banyak IP (rotating proxy / X-Forwarded-For palsu)
+        // bisa menejak NPM yang sama tanpa batas efektif. Ambang lebih
+        // rendah dari limit IP dan hanya mengunci sementara.
+        const npmFailKey = `loginfail:${String(npm).trim()}`;
+        const npmFail = consumeRateLimit(npmFailKey, MAX_FAILS_PER_NPM);
+        if (!npmFail.allowed) {
+            return NextResponse.json(
+                { error: "Akun ini terlalu banyak percobaan gagal. Coba lagi nanti." },
+                { status: 429 }
+            );
+        }
+
         //user
         const res = await query('SELECT id, user_npm, password, user_role FROM users WHERE user_npm = $1', [npm]);
         const user = res.rows[0];
@@ -44,6 +63,9 @@ export async function POST(req) {
         // Login berhasil: reset counter rate-limit IP ini agar user valid
         // tidak terpengaruh oleh tebakan gagal dari IP yang sama.
         resetRateLimit(rateKey);
+        // Login berhasil — hapus juga penghitung kegagalan NPM agar user
+        // yang sebelumnya salah ketik tidak terkunci setelah berhasil.
+        resetRateLimit(npmFailKey);
 
         //generate token
         const token = signToken({
